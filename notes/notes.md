@@ -12,4 +12,4 @@
   }
 
   ```
-- Run a program with `Ctrl+F5`
+- To run a program, move into a folder containing a `main.go` file, then run `go run main.go`
