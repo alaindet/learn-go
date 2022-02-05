@@ -7,7 +7,7 @@ package main
 
 import "fmt"
 
-func main() {
+func example() {
 
 	//** DECLARING VARIABLES **///
 
