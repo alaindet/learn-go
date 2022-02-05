@@ -15,6 +15,8 @@ func main() {
 	// Creates a new variables and assigns the value
 	// age = 30 => just assigns the value, no variable creation
 	// Short declarations are better for known initial values and 1-2 variables
+	// Short declarations CANNOT be used at package-level (oustide main())
+	// Short declarations CANNOT declare type explicitly
 	age := 30 // Creation and assignment
 	age = 31  // Assignment
 
