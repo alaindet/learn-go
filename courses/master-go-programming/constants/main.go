@@ -91,4 +91,41 @@ func main() {
 	var myVar1 int = f     // x constant is untyped, gets casted to int
 	var myVar2 float64 = f // x constant is untyped, gets casted to float64
 	fmt.Printf("myVar1 type is: %T, myVar2 type is %T\n", myVar1, myVar2)
+
+	const (
+		const1 = iota
+		const2 = iota
+		const3 = iota
+	)
+	fmt.Println(const1, const2, const3) // Prints 0 1 2
+
+	const (
+		const4 = iota
+		const5
+		const6
+	)
+	fmt.Println(const4, const5, const6) // Prints 0 1 2
+
+	const (
+		North = iota
+		East
+		South
+		West
+	)
+	fmt.Println(North, East, South, West) // Prints 0 1 2 3
+
+	const (
+		const7 = iota * 2
+		const8
+		const9
+	)
+	fmt.Println(const7, const8, const9) // Prnts 0 2 4
+
+	const (
+		const10 = -(iota + 2) // iota = 0 => -2
+		_                     // Skipped iota = 1
+		const11               // iota = 2 => -4
+		const12               // iota = 3 => -5
+	)
+	fmt.Println(const10, const11, const12) // Prints -2 -4 -5
 }
