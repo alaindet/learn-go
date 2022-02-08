@@ -27,7 +27,7 @@ func main() {
 	fmt.Printf("%T %T\n", parisToLondon, distanceInMiles) // main.km main.mile
 
 	type myType1 int32
-	type myType2 = myType1
+	type myType2 = myType1 // <-- Alias type declaration
 
 	var aa myType1 = 11
 	var bb myType2 = 22
@@ -35,4 +35,12 @@ func main() {
 	// This declaration does not throw error since myType1 and myType2 are aliases
 	var cc = aa + bb
 	fmt.Printf("%T\n", cc) // main.myType1
+
+	var a2 uint8 = 42
+	var b2 byte = a2 // Assignment works because byte is alias of uint8
+	_ = b2
+
+	var a3 rune = 'a'
+	var b3 int32 = a3 // Assignment works because rune is alias of int32
+	_ = b3
 }
