@@ -6,6 +6,11 @@ import (
 	"strconv"
 )
 
+/**
+ * If statements can contain simple statements preceding conditions
+ * Variables declared in simple statements are available in all if branches
+ * There is no ternary operator in Go
+ */
 func main() {
 
 	i1, err := strconv.Atoi("69")
