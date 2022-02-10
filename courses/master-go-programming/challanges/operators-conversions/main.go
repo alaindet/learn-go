@@ -29,11 +29,26 @@ func main() {
 	fmt.Printf("ss1 (%T): %v\n", ss1, ss1) // ss1 (float64): 3.14
 
 	// #3
-	// ...
+	x, y := 4, 5.1
+	z := float64(x) * y // It was z := x * y
+	fmt.Println(z)
+	a := 5
+	b := 6.2 * float64(a) // It was b := 6.2 * a
+	fmt.Println(b)
 
 	// #4
-	// ...
+	const sunEarthDistance = 149.6 // km
+	const speedOfLight = 299792458 // m/s
+	var sunEarthTravelTime = sunEarthDistance / (speedOfLight / 1000)
+	fmt.Printf("I takes ~%.4f seconds for light to travel from Sun to Earth\n", sunEarthTravelTime)
 
-	// #5
-	// ...
+	// #5 - result1 should be false, result2 should be true
+	xxx, yyy := 0.1, 5
+	var zzz float64 = 0
+
+	// Write the correct logical operator (&&, || , !)
+	// inside the expression so that result1 will be false and result2 will be true.
+	result1 := !(float64(xxx) < zzz) && int(xxx) != int(zzz)
+	result2 := yyy == 1*5 || int(zzz) != 0
+	fmt.Println(result1, result2)
 }
