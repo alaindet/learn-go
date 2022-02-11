@@ -90,7 +90,47 @@ func arrayOperations() {
 	fmt.Println(n == m) // false
 }
 
+func arraysKeyedElements() {
+	grades := [3]int{
+		1: 10,
+		0: 5,
+		2: 7,
+	}
+	fmt.Println(grades) // [5 10 7]
+
+	accounts := [3]int{2: 50}
+	fmt.Println(accounts) // [0 0 50]
+
+	names := [...]string{
+		5: "John",
+	}
+	fmt.Println(names, len(names)) // [     John] 6 (Notice empty strings)
+
+	cities := [...]string{
+		3:        "Paris",
+		"London", // Follows last keyed element, which is 3, so index = 4
+		1:        "New York",
+	}
+	fmt.Printf("%#v\n", cities) // [5]string{"", "New York", "", "Paris", "London"}
+
+	weekend := [7]bool{5: true, 6: true}
+	fmt.Println(weekend) // [false false false false false true true]
+
+	// Declare only some parts of the array
+	stuff := [...]string{
+		8: "ccc",
+		"ddd",
+		"eee",
+		1: "Hello",
+		"World",
+		5: "aaa",
+		"bbb",
+	}
+	fmt.Printf("%#v\n", stuff) // [11]string{"", "Hello", "World", "", "", "aaa", "bbb", "", "ccc", "ddd", "eee"}
+}
+
 func main() {
 	arrayDeclarations()
 	arrayOperations()
+	arraysKeyedElements()
 }
