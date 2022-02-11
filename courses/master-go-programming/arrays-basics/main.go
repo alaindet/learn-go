@@ -74,7 +74,20 @@ func arrayOperations() {
 	}
 
 	// Comparison
-	// ...
+	// Two arrays are equal if
+	// - they have the same length
+	// - they have the same elements
+	// - elements are in the same order
+	m := [3]int{1, 2, 3}
+
+	// NOTE:
+	// When assigning an array to another array, a copy is made
+	// When assigning a slice to another slice, a reference is made
+
+	n := m              // Creates a copy, it's NOT a reference
+	fmt.Println(n == m) // true
+	m[0] = 42           // This changes m, does not affect n
+	fmt.Println(n == m) // false
 }
 
 func main() {
