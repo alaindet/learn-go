@@ -100,8 +100,41 @@ func slicesOperations() {
 	fmt.Println(t3, c3)         // [] 0
 }
 
+func slicesExpressions() {
+	a := [5]int{1, 2, 3, 4, 5}  // This is an array
+	b := a[0:4]                 // This is a slice, from index 0 up to index 4 of the array
+	fmt.Printf("%v %T\n", a, a) // [1 2 3 4 5] [5]int
+	fmt.Printf("%v %T\n", b, b) // [1 2 3 4] []int
+
+	s1 := []int{1, 2, 3, 4, 5, 6}
+	s2 := s1[1:3]
+	fmt.Println(s2) // [2 3]
+
+	// Missing start index
+	// Equivalent is s3 := s1[2:len(s1)]
+	s3 := s1[2:]    // From index 2 to the end
+	fmt.Println(s3) // [3 4 5 6]
+
+	// Equivalent to s4 := s1[0:3]
+	s4 := s1[:3]    // From start to index 3 (not including index 3)
+	fmt.Println(s4) // [1 2 3]
+
+	s5 := s1[:]     // Creates a copy
+	fmt.Println(s5) // [1 2 3 4 5]
+
+	// s6 := s1[:100] // Run time error: out of bound
+
+	// Take the first 4 elements of s1, append 100 to them
+	s1 = append(s1[:4], 100)
+	fmt.Println(s1) // [1 2 3 4 100]
+
+	s1 = append(s1[:4], 200)
+	fmt.Println(s1) // [1 2 3 4 200]
+}
+
 func main() {
 	slicesDeclarations()
 	slicesCompare()
 	slicesOperations()
+	slicesExpressions()
 }
