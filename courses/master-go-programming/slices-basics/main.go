@@ -164,13 +164,13 @@ func slicesInternals() {
 	// So, changing newSlice[0] to 42 affects s4 as well
 	newSlice = s4[2:5]
 	fmt.Println(len(newSlice), cap(newSlice)) // 3 3
-	fmt.Println(cap(s4), cap(newSlice))       // 5 3 TODO: Why?!
+	fmt.Println(cap(s4), cap(s4))             // 5 5
 	fmt.Printf("%p\n", &s4)                   // 0xc00000c2a0
 	fmt.Printf("%p != %p\n", &s4, &newSlice)  // 0xc00000c2a0 != 0xc00000c2b8
 	newSlice[0] = 42
 	fmt.Println(s4) // [10 20 42 40 50]
 
-	// Change memory size
+	// Check memory size
 	// TODO: Why slice is smaller?!
 	arr2 := [5]int{1, 2, 3, 4, 5}
 	s5 := []int{1, 2, 3, 4, 5}

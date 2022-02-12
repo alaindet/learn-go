@@ -35,3 +35,9 @@ Slices cannot be compared, a custom for loop or a function is needed
 - The **nil slice** is a slice without a backing array
 
 - Any *slice expression* (e.g. `s[0:4]`) returns a new slice based on the same *backing array*
+
+## `append()`
+- When using `append()` to add an element to a slice, Go expands the backing array
+by recreating it with a length equal to the next power of 2
+- For example, adding an element to a slice of size 4 will expand the backing array to size 8, not just 5
+- `append()` is not very efficient when adding a lot of elements to a slice
