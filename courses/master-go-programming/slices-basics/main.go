@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unsafe"
+)
 
 func slicesDeclarations() {
 	var cities []string
@@ -35,6 +38,8 @@ func slicesDeclarations() {
 
 	// Slices can be assigned to each other if they share the exact same type
 	// The assigned variable becomes A REFERENCE of the assigned slice
+	// Two slices assigned to each other share the same *backing array*
+	// which is an internal structure Go uses to store a slice's elements
 	var n1 []int = nums
 	nums[0] = 42
 	fmt.Println(n1) // [1 2 3 4 5]
@@ -132,9 +137,52 @@ func slicesExpressions() {
 	fmt.Println(s1) // [1 2 3 4 200]
 }
 
+func slicesInternals() {
+	// Backing array
+	s1 := []int{10, 20, 30, 40, 50}
+	s2, s3 := s1[0:2], s1[1:3]
+	s3[1] = 42              // Change the underlying array
+	fmt.Println(s1, s2, s3) // [10 20 42 40 50] [10 20] [20 42]
+
+	// If you create a slice from an array, the array becomes the backing array
+	arr1 := [4]int{10, 20, 30, 40}
+	slice1, slice2 := arr1[0:2], arr1[1:3]
+	arr1[1] = 2
+	fmt.Println(slice1, slice2) // [10 2] [2 30]
+
+	cars := []string{"Ford", "Honda", "Ferrari", "Audi"}
+	newCars := []string{}
+	newCars = append(newCars, cars[0:2]...)
+	cars[0] = "Nissan"
+	fmt.Println(cars, newCars) // [Nissan Honda Ferrari Audi] [Ford Honda]
+
+	s4 := []int{10, 20, 30, 40, 50}
+	newSlice := s4[0:3]
+	fmt.Println(len(newSlice), cap(newSlice)) // 3 5
+
+	// These two slices have different pointers, but they both share the same backing array
+	// So, changing newSlice[0] to 42 affects s4 as well
+	newSlice = s4[2:5]
+	fmt.Println(len(newSlice), cap(newSlice)) // 3 3
+	fmt.Println(cap(s4), cap(newSlice))       // 5 3 TODO: Why?!
+	fmt.Printf("%p\n", &s4)                   // 0xc00000c2a0
+	fmt.Printf("%p != %p\n", &s4, &newSlice)  // 0xc00000c2a0 != 0xc00000c2b8
+	newSlice[0] = 42
+	fmt.Println(s4) // [10 20 42 40 50]
+
+	// Change memory size
+	// TODO: Why slice is smaller?!
+	arr2 := [5]int{1, 2, 3, 4, 5}
+	s5 := []int{1, 2, 3, 4, 5}
+	_ = s5
+	fmt.Printf("Array: %d bytes\n", unsafe.Sizeof(arr2)) // Array: 40 bytes
+	fmt.Printf("Slice: %d bytes\n", unsafe.Sizeof(s5))   // Slice: 24 bytes
+}
+
 func main() {
 	slicesDeclarations()
 	slicesCompare()
 	slicesOperations()
 	slicesExpressions()
+	slicesInternals()
 }
