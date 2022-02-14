@@ -132,7 +132,27 @@ func stringsPackage2() {
 
 	s2 := strings.Split("a,b,c", ",")
 	fmt.Printf("%T\n") // []string
-	fmt.Println(s2)    // [a b c]
+	p(s2)              // [a b c]
+
+	arr := []string{"I", "love", "programming"}
+	s = strings.Join(arr, " ")
+	p(s) // I love programming
+
+	// Split a string by whitespace and new lines
+	s = "Orange Green \n Blue Yellow"
+	fields := strings.Fields(s)
+	fmt.Printf("%T\n", fields)  // []string
+	fmt.Printf("%#v\n", fields) // []string{"Orange", "Green", "Blue", "Yellow"}
+	p(fields)                   // [Orange Green Blue Yellow]
+
+	// Just trim white space (space, new line, tabs etc.)
+	s = strings.TrimSpace("\t \n this is some content \t\t\n")
+	p(s) // this is some content
+
+	// Trim 1+ characters from haystack
+	// Example: Trim all instances of %, $ and ( from the input
+	s = strings.Trim("/%$some-url(/", "/%$(")
+	p(s) // some-url
 }
 
 func main() {
