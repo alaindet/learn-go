@@ -69,7 +69,7 @@ func readAllFromBuffer2() {
 }
 
 func readEachLine() {
-	file, err := os.Open("this-is-just.to-say.txt")
+	file, err := os.Open("this-is-just-to-say.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -106,6 +106,24 @@ func readEachLine() {
 func readFromStdInput() {
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Printf("%T\n", scanner) // *bufio.Scanner
+
+	// Read one line from the user
+	// scanner.Scan() // Prompts the user for input, scan one line by default
+	// readText := scanner.Text()
+	// readBytes := scanner.Bytes()
+	// fmt.Println("Input text: ", readText)   // hello
+	// fmt.Println("Input bytes: ", readBytes) // [104 101 108 108 111]
+
+	// Scan for user input until user enters "exit"
+	for scanner.Scan() {
+		text := scanner.Text()
+		fmt.Println("You typed: ", text)
+		if text == "exit" {
+			fmt.Println("Exiting the scanner...")
+			break
+		}
+	}
+	fmt.Println("Reached past loop")
 }
 
 func main() {
