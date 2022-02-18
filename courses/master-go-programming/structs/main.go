@@ -134,8 +134,9 @@ func anonymousStructs() {
 
 func embeddedStructs() {
 	type Contact struct {
-		email, address string
-		phone          int
+		email   string
+		address string
+		phone   string
 	}
 
 	type Employee struct {
@@ -150,12 +151,25 @@ func embeddedStructs() {
 		contactInfo: Contact{
 			email:   "john.doe@example.com",
 			address: "Street 20, London",
-			phone:   55512345,
+			phone:   "555-123-456",
 		},
 	}
 
 	// {name:John Doe salary:40000 contactInfo:{email:john.doe@example.com address:Street 20, London phone:55512345}}}
+	// https://pkg.go.dev/fmt#hdr-Printing
+	// %+v shows default format, %+v adds field names for printing structs
 	fmt.Printf("%+v\n", emp)
+	fmt.Println(emp.contactInfo.email) // john.doe@example.com
+
+	emp.contactInfo.email = "newemail@example.com"
+	fmt.Println(emp.contactInfo.email) // newemail@example.com
+
+	myContact := Contact{
+		email:   "someguy@example.com",
+		phone:   "555-321-321",
+		address: "Some address...",
+	}
+	_ = myContact
 }
 
 func main() {
