@@ -37,3 +37,22 @@
   s1 := mySum(2, 3)
   fmt.Println(s1) // 5
   ```
+
+## Deferred statement
+- A deferred statement starts with the keyword `defer`
+- It executes when the surrounding functions *terminates*, either by returning a value, or when a *panic* error happens (fatal)
+- `defer` statements in the same function run in reverse order from last to first appearing in the code
+- Defer statements follow a stack (**LIFO**: Last In, First Out) - reverse order
+
+```go
+func main() {
+  fmt.Println("One")
+  defer fmt.Println("Three - Deferred")
+  defer fmt.Println("Four - Deferred")
+  fmt.Println("Two")
+}
+// One
+// Two
+// Four - Deferred
+// Three - Deferred
+```
