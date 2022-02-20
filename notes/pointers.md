@@ -69,3 +69,9 @@
 - However, passing a pointer as argument allows the function to modify the "referenced" value
 - This is improperly defined as **pass by reference** in Go
 - Please note that a pointer argument is still a copy of the given pointer
+
+### Pass by value or by reference?
+- In general, avoid passing any array to functions as they're copied
+- Passing by value (default) is cheaper and easier, but can end up taking much memory
+- Passing by reference puts pressure on the garbage collector, but it does not occupy other memory for copying arguments
+- Start with the default, and pass by reference only if necessary
