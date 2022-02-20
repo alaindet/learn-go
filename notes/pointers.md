@@ -6,6 +6,7 @@
 - The address is called **memory location**
 - Each cell is a single value, CPU "simply" gets and sets values into cells
 - GO does not allow any pointer arithmetic, unlike C
+- A function can return a pointer, unlike C
 
 ## Pointers and variables
 - A *variable* is a label for a memory location
@@ -62,3 +63,9 @@
 ## Comparison
 - Pointers can reference to other pointers and be compared to anything
 - Pointers are equal if they point to the same variable (they have the same address) or if they are both `nil`
+
+## Pointers and functions
+- There is no concept of *pass by reference* in Go since every argument is copied
+- However, passing a pointer as argument allows the function to modify the "referenced" value
+- This is improperly defined as **pass by reference** in Go
+- Please note that a pointer argument is still a copy of the given pointer
