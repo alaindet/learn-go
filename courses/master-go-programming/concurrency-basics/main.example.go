@@ -10,7 +10,7 @@ import (
 	"runtime"
 )
 
-func main() {
+func example() {
 	// NumCPU returns the number of logical CPUs or cores usable by the current process.
 	fmt.Println("No. of CPUs:", runtime.NumCPU()) // => No. of CPUs: 4
 
