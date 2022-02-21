@@ -101,8 +101,44 @@ func lessonTypeSwitches() {
 	// main.rectangle{width:16, height:9} is a rectangle
 }
 
+/**
+ * Any type is an interface
+ * It can represent any value
+ * GO interface{} ~= TypeScript any
+ * func hello(a ...interface{}) means "Any number of args of any type"
+ */
+type theEmptyInterface interface{}
+
+type person struct {
+	info interface{}
+}
+
+func lessonEmptyInterface() {
+	var empty theEmptyInterface
+
+	// "empty" variable can hold any value
+	empty = 5
+	empty = "hello world"
+	empty = []string{"Hello", "World"}
+
+	// But it cannot be used on len() since no type is guaranteed
+	fmt.Printf("%T\n", empty) // []string
+	// fmt.Println(len(empty))   // Error: Invalid argument for len
+	emptyAsSlice := empty.([]string)
+	fmt.Println(len(emptyAsSlice)) // 2
+
+	// type "person" has "info" field in which you can store anything!
+	aGuy := person{}
+	aGuy.info = "I am Iron Man"
+	aGuy.info = 42
+	aGuy.info = []string{"I", "am", "Iron", "Man"}
+	aGuy.info = aGuy // Store itself!
+	// ...
+}
+
 func main() {
 	lessonDynamicType()
 	lessonTypeAssertions()
 	lessonTypeSwitches()
+	lessonEmptyInterface()
 }

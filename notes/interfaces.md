@@ -64,3 +64,23 @@ case rectangle:
 ## Embedding
 - GO explicitly does not support inheritance
 - Interfaces can be **embedded** to extend another interface, it happens at compile time
+- Interfaces creating a circular embedding circle will not compile
+
+## The empty interface
+- This is single-handedly the most dangerous feature of GO
+- Please avoid using it or use with extreme caution
+- Since interface implementation is implicit, **ANY** named type implements the empty interface `interface{}`, so coding against `iunterface{}` means the type can be anything!
+- The empty interface is equivalent to TypeScript's `any` type
+- The empty interface **moves typing at run time**
+- Example, this is all valid!!!
+  ```go
+  type person struct {
+    info interface{}
+  }
+
+  p := person{info:"Hello World"}
+  p.info = 42
+  p.info = []string{"I", "am", "Iron", "Man"}
+  p.info = p
+  p.info = [4]int{1, 2, 3, 4}
+  ```
