@@ -59,3 +59,7 @@ func main() {
 // f1() stopped
 // main() stopped
 ```
+
+## Race condition and thread safety
+- If two or more goroutines try to read and/or write on the same memory location, a **data race** can happen, meaning the final value of all the operations depends on the unpredictable order of data accessing and writing
+- **thread safety** implies mechanisms to avoid any *race condition* and be able to predict the final result
