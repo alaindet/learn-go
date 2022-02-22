@@ -6,16 +6,16 @@ import (
 )
 
 func unbufferedChannel() {
-	ch1 := make(chan int)
+	ch := make(chan int)
 
 	go func(ch chan int) {
 		fmt.Println("Start sending data to channel")
 		ch <- 10
 		fmt.Println("Stop sending data to channel")
-	}(ch1)
+	}(ch)
 
 	time.Sleep(time.Second * 2)
-	d := <-ch1
+	d := <-ch
 	time.Sleep(time.Second * 2)
 	fmt.Println("d:", d)
 	// Start sending data to channel
@@ -24,21 +24,31 @@ func unbufferedChannel() {
 }
 
 func bufferedChannel() {
-	ch2 := make(chan int, 3)
+	ch := make(chan int, 3)
 
+	// Write into channel
 	go func(ch chan int) {
 		for i := 1; i <= 5; i++ {
-			fmt.Println("Start sending data to channel")
 			ch <- i
-			fmt.Println("Stop sending data to channel")
+			fmt.Println("Value written to channel:", i)
 		}
-		close(ch) // Close is explicit here since we're signaling we're done
-	}(ch2)
+		close(ch) // <-- This explicits the data is over
+	}(ch)
 
-	time.Sleep(time.Second * 2)
-	for v := range ch2 {
-		fmt.Println("Received from channel:", v)
+	// Read from channel
+	for val := range ch {
+		fmt.Println("Value read from channel:", val)
 	}
+	// Value written to channel: 1
+	// Value written to channel: 2
+	// Value written to channel: 3
+	// Value written to channel: 4
+	// Value read from channel: 1
+	// Value read from channel: 2
+	// Value read from channel: 3
+	// Value read from channel: 4
+	// Value read from channel: 5 // <-- WTF?
+	// Value written to channel: 5 // <-- WTF?
 }
 
 func main() {

@@ -94,3 +94,10 @@ func main() {
 ch1 := make(chan int) // Unbuffered channel
 ch2 := make(chan int, 3) // Buffered channel
 ```
+
+### Buffered channel
+- The *capacity* of a channel is the number of values it can store before becoming full
+- The *sender* blocks only when the buffer is full
+- So, the *sender* keeps writing until the buffer is full
+- The *receiver* blocks only when the buffer is empty
+- So, the *receiver* keeps reading until the buffer is empty
