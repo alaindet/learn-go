@@ -88,3 +88,9 @@ func main() {
   c1 := make(<- chan string) // Receive-only
   c2 := make(chan <- string) // Send-only
   ```
+
+### Unbuffered channel
+```go
+ch1 := make(chan int) // Unbuffered channel
+ch2 := make(chan int, 3) // Buffered channel
+```

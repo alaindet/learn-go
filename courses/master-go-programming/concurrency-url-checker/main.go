@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strings"
 	"sync"
+	"time"
 )
 
 func checkAndSaveBody(wg *sync.WaitGroup, url string) {
@@ -143,7 +144,8 @@ func checkUrl(url string, ch chan string) {
 		msg += fmt.Sprintf("%s is UP\n", url)
 	}
 
-	ch <- msg
+	fmt.Println(msg)
+	ch <- url
 }
 
 /**
@@ -154,15 +156,25 @@ func urlCheckerWithChannelsAndAnonymousFunctions() {
 
 	urls := []string{
 		"https://www.google.com",
-		"https://go.dev",
-		"http://nonexistingwebsite.com",
-		"https://www.medium.com",
 	}
 
 	ch := make(chan string)
 
-	for {
-		go checkUrl(<-ch, ch)
+	for _, url := range urls {
+		go checkUrl(url, ch)
+	}
+
+	// for url := range ch {
+	// 	time.Sleep(time.Second * 2)
+	// 	go checkUrl(url, ch)
+	// }
+
+	// Alternative
+	for url := range ch {
+		go func(innerUrl string) {
+			time.Sleep(time.Second * 2)
+			checkUrl(innerUrl, ch)
+		}(url)
 	}
 
 	fmt.Println("Finished urlCheckerWithChannelsAndAnonymousFunctions()")
