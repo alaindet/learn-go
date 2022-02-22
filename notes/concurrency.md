@@ -63,3 +63,28 @@ func main() {
 ## Race condition and thread safety
 - If two or more goroutines try to read and/or write on the same memory location, a **data race** can happen, meaning the final value of all the operations depends on the unpredictable order of data accessing and writing
 - **thread safety** implies mechanisms to avoid any *race condition* and be able to predict the final result
+- Go offers a solution called *race detector*, which is enabled with a flag in the CLI and creates a report of detected race conditions, ex.:
+  ```
+  go run -race main.go
+  ```
+- The race detector makes "guesses" based on timestamps and code behavior while measuring the run time of the application, which means the run time conditions and realistic workloads are important to catch race conditions
+- Solutions to data race include using **mutexes** and **channels**
+
+## Mutex
+- Mutex (Mutual Exclusion Object) is an explicit synchronization mechanism for goroutines
+- It's a *synchronization primitive*
+- Strictly speaking, a mutex is a **locking mechanism** used to synchronize access to a resource. Only one thread can acquire the mutex. It means there is ownership associated with a mutex, and only the owner can release the lock (mutex)
+- Mutex can produce deadlocks (anomalous states where threads lock each other indefinetely) and starvation (impossibility of gaining lock due to deadlocks)
+
+## Channels
+- It's a synchronization mechanism to communicate between goroutines
+- In GO, they act similarly to pointers
+- Main operations are
+  - **send** sends a value through the channel to a goroutine using the corresponding receive command
+  - **receive** receives a value through the channel that was previously sent
+  - **close** closes the channel (no more sent/received messages), any subsequent *receive* operation will yield the zero value of the channel
+- *Unidirectional channels* can only receive or can only send data
+  ```go
+  c1 := make(<- chan string) // Receive-only
+  c2 := make(chan <- string) // Send-only
+  ```
