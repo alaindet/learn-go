@@ -51,7 +51,41 @@ func bufferedChannel() {
 	// Value written to channel: 5 // <-- WTF?
 }
 
+func selectStatements() {
+	ch1 := make(chan string)
+	ch2 := make(chan string)
+	start := time.Now().UnixNano() / 1000000
+
+	go func() {
+		time.Sleep(time.Second * 2)
+		ch1 <- "Hello"
+	}()
+
+	go func() {
+		time.Sleep(time.Second * 2)
+		ch2 <- "Salve"
+	}()
+
+	for i := 0; i < 2; i++ {
+		select {
+		case msg1 := <-ch1:
+			fmt.Println("Received from ch1:", msg1)
+		case msg2 := <-ch2:
+			fmt.Println("Received from ch2:", msg2)
+		default:
+			fmt.Println("No activity")
+		}
+	}
+
+	end := time.Now().UnixNano() / 1000000
+	fmt.Printf("It took %d milliseconds\n", end-start)
+	// Received from ch1: Hello
+	// Received from ch2: Salve
+	// It tooks 2001 milliseconds
+}
+
 func main() {
 	// unbufferedChannel()
-	bufferedChannel()
+	// bufferedChannel()
+	selectStatements()
 }
