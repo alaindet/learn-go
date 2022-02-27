@@ -35,6 +35,14 @@ func arraysExamples() {
 	otherThings := things
 	things[0] = "Something new"
 	fmt.Printf("%#v\n", otherThings) // [3]string{"Spoon", "Table", "Backpack"}
+
+	// Loops on arrays
+	for index, thing := range otherThings {
+		fmt.Printf("#%d => %s\n", index, thing)
+	}
+	// #0 => Spoon
+	// #1 => Table
+	// #2 => Backpack
 }
 
 func main() {
