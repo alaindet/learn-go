@@ -263,9 +263,15 @@ func mapsExamples3() {
 }
 
 func stringsAsCollection1() {
+
 	var price string = "$48.95"
+
+	// This is fundamentally flawed, as it assumes the first char actually occupies
+	// Only one byte. That is true for dollars (ASCII 36 is "$"), but not for euros!
+	// Note: "€" occupies 3 bytes!
 	var currency byte = price[0]
-	fmt.Println("Currency:", currency) // 36 <-- This is ASCII value of '$'
+	// ASCII: 36 => String: "$"
+	fmt.Printf("ASCII: %d => String: %s\n", currency, string(currency))
 	var amountString string = price[1:]
 
 	// Amount: (string) "48.95"
@@ -274,10 +280,74 @@ func stringsAsCollection1() {
 	amount, err := strconv.ParseFloat(amountString, 64)
 
 	if err != nil {
+		fmt.Println("Parse Error:", err)
 		os.Exit(1)
 	}
 
 	fmt.Printf("Amount: (%T) %.2f\n", amount, amount) // Amount: (float64) 48.95
+}
+
+/**
+ * If you need to manipulate single characters of a string, it's highly
+ * recommeded to convert the string to a collection of runes instead of a collection
+ * of bytes as default
+ *
+ * A rune is just an alias for an int32 integer representing a Unicode code point
+ *
+ * For example, the € symbol is
+ * DEC -> .......0 .....226 .....130 .....172
+ * BIN -> 00000000 11100010 10000010 10101100
+ */
+func stringsAsCollection2() {
+
+	var _price string = "€48.95"
+	var price []rune = []rune(_price)
+
+	fmt.Println("Price:", price) // Price: [8364 52 56 46 57 53]
+
+	var currency string = string(price[0])
+	var amountString string = string(price[1:])
+
+	amount, err := strconv.ParseFloat(amountString, 64)
+
+	fmt.Println("Length in runes", len(price)) // Length in runes: 6
+	fmt.Println("Currency:", currency)         // Currency: €
+
+	if err != nil {
+		fmt.Println("Parse Error:", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Amount:", amount) // Amount: 48.95
+}
+
+func stringsAsCollection3() {
+	price := "€48.95"
+
+	// Print chars
+	for index, char := range price {
+		fmt.Printf("%d => %s (%d)\n", index, string(char), char)
+	}
+	// NOTE: index jumped from 0 to 3 since € symbol occupies 3 bytes (0, 1 and 2)!
+	// 0 => € (8364)
+	// 3 => 4 (52)
+	// 4 => 8 (56)
+	// 5 => . (46)
+	// 6 => 9 (57)
+	// 7 => 5 (53)
+
+	// Print explicit bytes!
+	for index, char := range []byte(price) {
+		fmt.Printf("%d => %d\n", index, char)
+	}
+	// 0 => 226
+	// 1 => 130
+	// 2 => 172
+	// 3 => 52
+	// 4 => 56
+	// 5 => 46
+	// 6 => 57
+	// 7 => 53
 }
 
 func main() {
@@ -295,5 +365,7 @@ func main() {
 	// mapsExamples2()
 	// mapsExamples3()
 
-	stringsAsCollection1()
+	// stringsAsCollection1()
+	// stringsAsCollection2()
+	stringsAsCollection3()
 }
