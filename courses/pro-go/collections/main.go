@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"sort"
+	"strconv"
 )
 
 func arraysExamples() {
@@ -225,6 +227,59 @@ func mapsExamples2() {
 	fmt.Println(products) // map[aa:1.1 cc:3.3]
 }
 
+func mapsExamples3() {
+	prods := map[string]float64{
+		"cc": 3.3,
+		"aa": 1.1,
+		"bb": 2.2,
+	}
+
+	// NOTE: Order is not guaranteed
+	for key, value := range prods {
+		fmt.Printf("%s => %.2f\n", key, value)
+	}
+	// bb => 2.20
+	// aa => 1.10
+	// cc => 3.30
+
+	// Create a slice containing keys from the map
+	keys := make([]string, 0, len(prods))
+
+	// Store keys in the new slice
+	for key, _ := range prods {
+		keys = append(keys, key)
+	}
+
+	// Sort keys
+	sort.Strings(keys)
+
+	// Loop on sorted keys
+	for _, key := range keys {
+		fmt.Printf("%s => %.2f\n", key, prods[key])
+	}
+	// aa => 1.10
+	// bb => 2.20
+	// cc => 3.30
+}
+
+func stringsAsCollection1() {
+	var price string = "$48.95"
+	var currency byte = price[0]
+	fmt.Println("Currency:", currency) // 36 <-- This is ASCII value of '$'
+	var amountString string = price[1:]
+
+	// Amount: (string) "48.95"
+	fmt.Printf("Amount: (%T) %s\n", amountString, amountString)
+
+	amount, err := strconv.ParseFloat(amountString, 64)
+
+	if err != nil {
+		os.Exit(1)
+	}
+
+	fmt.Printf("Amount: (%T) %.2f\n", amount, amount) // Amount: (float64) 48.95
+}
+
 func main() {
 	// arraysExamples()
 
@@ -237,5 +292,8 @@ func main() {
 	// slicesExamples7()
 
 	// mapsExamples()
-	mapsExamples2()
+	// mapsExamples2()
+	// mapsExamples3()
+
+	stringsAsCollection1()
 }
