@@ -172,13 +172,70 @@ func slicesExamples7() {
 	fmt.Println(p1)    // [aa bb cc dd]
 }
 
+func mapsExamples() {
+	// In this example:
+	// string => Key type
+	// float64 => Value type
+	// 10 => Initial Size
+	products := make(map[string]float64, 10)
+
+	products["Kayak"] = 279
+	products["Lifejacket"] = 48.95
+
+	fmt.Println("Map size:", len(products))  // Map size: 2
+	fmt.Println("Price:", products["Kayak"]) // Price: 279
+
+	// NOTE: The value of a non-existing key is the zero value
+	fmt.Println("Price:", products["Hat"]) // Price: 0
+
+	// Alternative: Literal syntax
+	prods := map[string]float64{
+		"Kayak":      279,
+		"Lifejacket": 48.95,
+	}
+	_ = prods
+
+	// Reading non-existing values with the COMMA OK technique
+	key := "Nope"
+	value, ok := prods[key]
+
+	if ok {
+		fmt.Println("Value is:", value)
+	} else {
+		fmt.Printf("Value with key %q does not exist\n", key) // <-- This prints out
+	}
+
+	// Alternative of the "comma ok" technique
+	if value, ok := prods[key]; ok {
+		fmt.Println("Value is:", value)
+	} else {
+		fmt.Printf("Value with key %q does not exist\n", key) // <-- This prints out
+	}
+}
+
+func mapsExamples2() {
+	products := map[string]float64{
+		"aa": 1.1,
+		"bb": 2.2,
+		"cc": 3.3,
+	}
+
+	delete(products, "bb")
+
+	fmt.Println(products) // map[aa:1.1 cc:3.3]
+}
+
 func main() {
 	// arraysExamples()
+
 	// slicesExamples()
 	// slicesExamples2()
 	// slicesExamples3()
 	// slicesExamples4()
 	// slicesExamples5()
 	// slicesExamples6()
-	slicesExamples7()
+	// slicesExamples7()
+
+	// mapsExamples()
+	mapsExamples2()
 }
