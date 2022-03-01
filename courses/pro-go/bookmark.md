@@ -1,2 +1,2 @@
-230
-Understanding Function Variable Scope
+243
+Defining Structs

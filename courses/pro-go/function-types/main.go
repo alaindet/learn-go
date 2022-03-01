@@ -70,7 +70,73 @@ func examplesWithComparison() {
 	fmt.Println(myFunc == nil) // false
 }
 
+/**
+ * This creates a closure around the "count" variable, or
+ * The anonymous function returned "closes" on counterFactory()
+ */
+func counterFactory(initialValue int) func() int {
+	count := initialValue
+	return func() int {
+		count++
+		return count
+	}
+}
+
+func myFactory(initialMode string) (func(), func(), func() string) {
+
+	mode := initialMode
+
+	changeToModeA := func() {
+		mode = "a"
+	}
+
+	changeToModeB := func() {
+		mode = "b"
+	}
+
+	getMode := func() string {
+		return mode
+	}
+
+	return changeToModeA, changeToModeB, getMode
+}
+
+func myFactory2(mode *string) func() string {
+	return func() string {
+		return fmt.Sprintf("Current mode is %q", *mode)
+	}
+}
+
+/**
+ * Functions defined literally can reference variables from their scope through
+ * a feature called **closure**
+ */
+func examplesWithFunctionClosure() {
+	counter := counterFactory(0)
+	fmt.Println(counter()) // 1
+	fmt.Println(counter()) // 2
+	fmt.Println(counter()) // 3
+
+	// Closed variables are evaluated at each invokation of the closure
+	changeToA, changeToB, getMode := myFactory("b")
+	fmt.Println(getMode()) // b
+	changeToA()
+	fmt.Println(getMode()) // a
+	changeToB()
+	fmt.Println(getMode()) // b
+
+	// Closure with pointers
+	mode := "a"
+	getMode2 := myFactory2(&mode)
+	fmt.Println(getMode2()) // Current mode is "a"
+	mode = "b"
+	fmt.Println(getMode2()) // Current mode is "b"
+	mode = "c"
+	fmt.Println(getMode2()) // Current mode is "c"
+}
+
 func main() {
-	examplesWithBasicFunctionTypes()
-	examplesWithComparison()
+	// examplesWithBasicFunctionTypes()
+	// examplesWithComparison()
+	examplesWithFunctionClosure()
 }
