@@ -1,2 +1,2 @@
-243
-Defining Structs
+257
+Creating Arrays, Slices, and Maps Containing Struct Values
