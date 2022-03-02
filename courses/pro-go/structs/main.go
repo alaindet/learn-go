@@ -158,10 +158,104 @@ func anonymousStructsExample() {
 	fmt.Println(builder.String()) // {"ProductName":"Kayak","ProductPrice":275}
 }
 
+/**
+ * When creating literla arrays, slices or maps you can omit explicit use of the
+ * name of the struct when creating it
+ */
+func createStructInCollections() {
+	arr := [1]Product{
+		{"Kayak", "Watersports", 275.00},
+	}
+
+	m := map[string]Product{
+		"kayak": {"Kayak", "Watersports", 275.00},
+	}
+
+	fmt.Println(arr) // [{Kayak Watersports 275}]
+	fmt.Println(m)   // map[kayak:{Kayak Watersports 275}]
+}
+
+func copyAndPoints() {
+	p1 := Product{"Kayak", "Watersports", 275.00}
+	p2 := p1  // <-- This is a copy
+	p3 := &p1 // <-- This is a reference
+
+	p2.price = 300          // This affects only p2
+	(*p3).name = "New name" // This affects p1 and p3
+	p1.price = 199          // This affects p1 and p3
+
+	fmt.Println(p1)  // {New name Watersports 199}
+	fmt.Println(p2)  // {Kayak Watersports 300}
+	fmt.Println(*p3) // {New name Watersports 199}
+}
+
+/**
+ * Go automatically follows pointers when accessing struct fields
+ * It only works with pointers to structs
+ */
+func pointersConvenienceSyntax() {
+	printPrice := func(product *Product) {
+
+		price := product.price // This is the struct pointer convenience syntax
+		// price := (*product).price // This is the equivalent
+
+		fmt.Println("Price:", price)
+	}
+
+	changePrice := func(product *Product) {
+		product.price = 300
+	}
+
+	p := Product{"Kayak", "Watersports", 275.00}
+	changePrice(&p)
+	printPrice(&p)
+
+	// Anonymous functions and pointers to literal values in action
+	func(prod *Product) {
+		fmt.Println("Anonymous product:", prod)
+	}(&Product{"A Name", "A Category", 100})
+}
+
+/**
+ * Conventionally, Go uses factory functions to create structs called
+ * **constructor functions**
+ * - Named is prefixed with "New"
+ * - Parameters follow order and type of fields, unless calculation is needed
+ * - The struct is created and returned via pointer, otherwise a copy would be created
+ *
+ * Ex.: NewProduct() creates a new Product struct
+ */
+func structConstructors() {
+	// This is a constructor function for Product struct
+	NewProduct := func(name, category string, price float64) *Product {
+		return &Product{name, category, price}
+	}
+
+	p := NewProduct("Kayak", "Watersports", 275)
+	fmt.Println(p)
+
+	// Here is a constructor factory applying discounts
+	NewProductFactory := func(
+		discount float64,
+	) func(name, category string, price float64) *Product {
+		return func(name, category string, price float64) *Product {
+			return &Product{name, category, price * (1 - discount)}
+		}
+	}
+
+	NewProduct2 := NewProductFactory(0.2)
+	p2 := NewProduct2("Kayak", "Watersports", 275)
+	fmt.Println(p2.price) // 220 // <-- This is discounted by 20%!
+}
+
 func main() {
 	// structsBasics()
 	// createStructViaNew()
 	// structsComparison()
 	// structsConversion()
-	anonymousStructsExample()
+	// anonymousStructsExample()
+	// createStructInCollections()
+	// copyAndPoints()
+	// pointersConvenienceSyntax()
+	structConstructors()
 }
