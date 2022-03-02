@@ -219,7 +219,7 @@ func pointersConvenienceSyntax() {
 /**
  * Conventionally, Go uses factory functions to create structs called
  * **constructor functions**
- * - Named is prefixed with "New"
+ * - Named is prefixed with "New" (if exported) or "new" (if private)
  * - Parameters follow order and type of fields, unless calculation is needed
  * - The struct is created and returned via pointer, otherwise a copy would be created
  *
@@ -248,6 +248,53 @@ func structConstructors() {
 	fmt.Println(p2.price) // 220 // <-- This is discounted by 20%!
 }
 
+func structWithPointerFields() {
+
+	type Supplier struct {
+		name, city string
+	}
+
+	type Product struct {
+		name, category string
+		price          float64
+		*Supplier
+	}
+
+	newProduct := func(name, category string, price float64, supplier *Supplier) *Product {
+		return &Product{name, category, price - 10, supplier}
+	}
+
+	copyProduct := func(product *Product) Product {
+		p := *product
+		s := *product.Supplier
+		p.Supplier = &s
+		return p
+	}
+
+	acme := &Supplier{"Acme Co", "New York"}
+	p1 := newProduct("Kayak", "Watersports", 275, acme)
+
+	// This will copy p1 into p2, **BUT** it will not copy the supplier
+	// Hence p1 and p2 are independent values but they both point to the same supplier
+	p2 := *p1
+
+	// This is actually copied altogether
+	p3 := copyProduct(p1)
+
+	p1.name = "Original Kayak"
+	p1.Supplier.name = "BoatCo"
+
+	for _, p := range []Product{*p1, p2, p3} {
+		fmt.Println("Name:", p.name, "Supplier:", p.Supplier.name, p.Supplier.city)
+	}
+	// Name: Original Kayak Supplier: BoatCo New York
+	// Name: Kayak Supplier: BoatCo New York
+	// Name: Kayak Supplier: Acme Co New York
+
+	// NOTE: p3 is a "deep" copy of p1 so that changing p1 name and supplier name
+	// did not impact p3 at all
+}
+
 func main() {
 	// structsBasics()
 	// createStructViaNew()
@@ -257,5 +304,6 @@ func main() {
 	// createStructInCollections()
 	// copyAndPoints()
 	// pointersConvenienceSyntax()
-	structConstructors()
+	// structConstructors()
+	structWithPointerFields()
 }
