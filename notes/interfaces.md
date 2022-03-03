@@ -14,7 +14,11 @@
 - Conceptually, this is **duck typing**
 - The zero value of interfaces is `nil`
 - Interfaces values are a pair of a **concrete value** and a **dynamic type**
-- An interface "absorbs" the concrete value and type of the value you assign it
+
+- A variable containing an interface has *two types* at the same time, a **static type** and a **dynamic type**
+- The *static type* is interface type per se and cannot be changed
+- The *dynamic type* is the type implementing the interface
+- An interface "absorbs" the dynamic value and type of the value you assign it
   ```go
   // ... Previously defined "shape" interface, "circle" type, "rectangle" type
   var s shape
@@ -35,7 +39,8 @@
 - Basically, an interface is a contract objects adhere to so that if an object implements an interface, it *must* have what the interface prescribes
 
 ## Type Assertion
-- It provides access to an interface's concrete value
+- It can only be performed on interfaces
+- It provides access to an interface's dynamic type
 ```go
 // Imported "log"
 // Declared shape interface, circle type, volume method on circle
@@ -84,3 +89,10 @@ case rectangle:
   p.info = p
   p.info = [4]int{1, 2, 3, 4}
   ```
+
+## Implementation
+- Methods implementing an interface must only match these
+  - Same name
+  - Same parameters types
+  - Same result types
+- This means methods can have **different parameter names and named results**
