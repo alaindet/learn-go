@@ -7,6 +7,12 @@ type Product struct {
 	price          float64
 }
 
+type Products []Product
+
+type Supplier struct {
+	name, city string
+}
+
 /*
 Here is a **method**, which is a function with a so called **receiver**
 - A receiver is a struct from which you can call this function
@@ -20,6 +26,17 @@ func (product *Product) printDetails() {
 		product.name,
 		product.category,
 		product.price,
+	)
+}
+
+/*
+Methods can have the same name as long as they have a different receiver type
+*/
+func (supplier *Supplier) printDetails() {
+	fmt.Printf(
+		"Name: %s, City: %s\n",
+		supplier.name,
+		supplier.city,
 	)
 }
 
@@ -38,6 +55,17 @@ Here is a private constructor
 */
 func newProduct(name, category string, price float64) *Product {
 	return &Product{name, category, price}
+}
+
+/*
+This is a method for a slice
+*/
+func (products *Products) calcCategoryTotals() map[string]float64 {
+	totals := make(map[string]float64)
+	for _, product := range *products {
+		totals[product.category] += product.price
+	}
+	return totals
 }
 
 func main() {
@@ -62,4 +90,12 @@ func main() {
 	// ###
 	// Name: cc, Category: cat 1, price: 300.00
 	// 360
+
+	// Alternative: You can invoke methods via the receiver type as well
+	// This is not a "static" method
+	(*Product).printDetails(p1)
+
+	productsList := Products{*p1, *p2, *p3}
+
+	fmt.Println(productsList.calcCategoryTotals()) // map[cat 1:400 cat 2:200]
 }
