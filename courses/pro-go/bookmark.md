@@ -1,2 +1,2 @@
-351
-Using Goroutines and Channels
+373
+Closing a Channel
