@@ -1,2 +1,2 @@
-331
-Type and Interface Composition
+351
+Using Goroutines and Channels
