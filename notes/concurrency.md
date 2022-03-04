@@ -132,7 +132,8 @@ func main() {
 ch1 := make(chan int) // Unbuffered channel
 ch2 := make(chan int, 3) // Buffered channel
 ```
-- Unbuffered channels are also called *synchronous channels* as any write or read operation blocks the execution
+- Unbuffered channels are also called *synchronous channels* as any write or read operation **blocks the execution**
+- Unbuffered channels can be seen as buffered channels with capacity = 1
 
 ### Buffered channel
 - The *capacity* of a channel is the number of values it can store before becoming full
