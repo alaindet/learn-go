@@ -4,7 +4,7 @@
 - A *goroutine* is a thread of execution
 - By definition, **concurrency** is the act of loading 2+ more *goroutines* at the same time. If one *goroutine* stops, another one is picked up and started
 - Single-core CPU can run only ONE concurrent application
-- **parallelism** is the execution of 2+ *goroutines* at the same time, it required multi-core CPUs necessarily
+- **parallelism** is the execution of 2+ *goroutines* at the same time, it requires multi-core CPUs necessarily
 
 Concurrency, in general, deals with independently execution of processes, while parallelism is just a consequence of it.
 
@@ -78,7 +78,8 @@ func main() {
 
 ## Channels
 - It's a synchronization mechanism to communicate between goroutines
-- In GO, they act similarly to pointers
+- A channel is shared between goroutines and holds only one data type
+- In Go, they act similarly to pointers
 - Main operations are
   - **send** sends a value through the channel to a goroutine using the corresponding receive command
   - **receive** receives a value through the channel that was previously sent
@@ -88,6 +89,43 @@ func main() {
   c1 := make(<- chan string) // Receive-only
   c2 := make(chan <- string) // Send-only
   ```
+
+Example
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	fmt.Println("main start")
+	c := make(chan string)
+
+	go func(c chan string) {
+		fmt.Println("goroutine start")
+		time.Sleep(time.Second * 2)
+		c <- "Hello World"
+    time.Sleep(time.Second * 1)
+
+    // This is never executed, because after you write into the channel, the main
+    // function resumes and it finishes before this goroutine reaches here
+    // NOTE: The main function takes it all and stops execution
+		fmt.Println("goroutine end")
+	}(c)
+
+	message := <-c
+
+	fmt.Println("message:", message)
+	fmt.Println("main end")
+}
+// main start
+// goroutine start
+// [T+2000ms]
+// message: Hello World
+// main end
+```
 
 ### Unbuffered channel
 ```go
