@@ -10,16 +10,9 @@ import (
 // 	fmt.Println("main function complete")
 // }
 
-func main() {
-
-	// Create a buffered channel of capacity 100
-	dispatchChannel := make(chan DispatchNotification, 100)
-
-	// Write random orders in the channel
-	go DispatchOrders(dispatchChannel)
-
-	for {
-		order := <-dispatchChannel
+// This function declares a read-only channel as argument
+func receiveDispatches(channel <-chan DispatchNotification) {
+	for order := range channel {
 		fmt.Printf(
 			"Dispatch to %s: %d x %s\n",
 			order.Customer,
@@ -27,4 +20,38 @@ func main() {
 			order.Product.Name,
 		)
 	}
+
+	fmt.Println("Channel has been closed")
+
+	// Alternative
+	// for {
+	// 	order, open := <-channel
+
+	// 	if !open {
+	// 		fmt.Println("Channel has been closed")
+	// 		break
+	// 	}
+
+	// 	fmt.Printf(
+	// 		"Dispatch to %s: %d x %s\n",
+	// 		order.Customer,
+	// 		order.Quantity,
+	// 		order.Product.Name,
+	// 	)
+	// }
+}
+
+func main() {
+
+	// Create a buffered bidirectional channel of capacity 100
+	dispatchChannel := make(chan DispatchNotification, 10)
+
+	// Split the channel to two unidirectional opposite channels
+	var sendOnlyChannel chan<- DispatchNotification = dispatchChannel
+	var receiveOnlyChannel <-chan DispatchNotification = dispatchChannel
+
+	// Write random orders in the channel
+	go DispatchOrders(sendOnlyChannel)
+
+	receiveDispatches(receiveOnlyChannel)
 }

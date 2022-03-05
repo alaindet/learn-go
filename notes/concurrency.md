@@ -86,9 +86,10 @@ func main() {
   - **close** closes the channel (no more sent/received messages), any subsequent *receive* operation will yield the zero value of the channel
 - *Unidirectional channels* can only receive or can only send data
   ```go
-  c1 := make(<- chan string) // Receive-only
-  c2 := make(chan <- string) // Send-only
+  c1 := make(<-chan string) // Receive-only
+  c2 := make(chan<- string) // Send-only
   ```
+- Bidirectional channel can be *restricted* automatically when assigned to functions expecting unidirectional channel, which means that a bidirectional channel can be assigned as a send-only channel to a function
 
 Example
 ```go
@@ -141,6 +142,28 @@ ch2 := make(chan int, 3) // Buffered channel
 - So, the *sender* keeps writing until the buffer is full
 - The *receiver* blocks only when the buffer is empty
 - So, the *receiver* keeps reading until the buffer is empty
+
+### The `range` keyword
+When using `range` on a channel, it subscribes to the channel, reads all available data and remains listening for new values until the channel is closed via `close`. If the channel is not closed, a **deadlock** error arises and the program stops
+
+Example
+```go
+func sendValue(c chan string, repetitions int, _ int) {
+	for i := 0; i < repetitions; i++ {
+		c <- "Hello World"
+	}
+  // Without this, it breaks
+	// close(c)
+}
+
+func main() {
+	c := make(chan string, 10)
+	go sendValue(c, 3, 2)
+	for val := range c {
+		fmt.Println("Value:", val)
+	}
+}
+```
 
 ### Select statement
 - It is only used with channels

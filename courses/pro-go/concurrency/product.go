@@ -25,6 +25,7 @@ var ProductList = []*Product{
 	{"Bling-Bling King", "Chess", 1200},
 }
 
+// This gets populated via init()
 var Products = make(ProductData)
 
 func init() {

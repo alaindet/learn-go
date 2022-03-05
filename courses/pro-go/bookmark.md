@@ -1,2 +1,2 @@
-373
-Closing a Channel
+379
+Restricting Channel Argument Direction
