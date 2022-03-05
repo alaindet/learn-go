@@ -166,4 +166,11 @@ func main() {
 ```
 
 ### Select statement
-- It is only used with channels
+- Groups operations on channels
+- A `select` statement has a similar structure to a switch statement, except that the case statements are channel operations
+- Runs all channel operations in `case` statements and if none is matched the `default` case is performed
+- This allows for non-blocking reads and writes from and into the channel
+- `select` statements are executed only once, so they're usually used within loops
+- It is used also to access multiple channels at a time
+- **WARNING**: since reading from a closed channel gives the zero-value of the channel, closed channel **should be assigned the `nil` value** so that reading cannot be performed and its select case fails
+- If no case matches and there is no default statement, the `select` statements **blocks** the execution until some case matches
