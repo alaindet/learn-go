@@ -9,5 +9,7 @@ func main() {
 	// stringsTrim()
 	// stringsReplace()
 	// stringsBuild1()
-	stringsBuild2()
+	// stringsBuild2()
+
+	regex1()
 }
