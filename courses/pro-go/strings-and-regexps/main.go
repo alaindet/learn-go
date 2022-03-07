@@ -11,5 +11,8 @@ func main() {
 	// stringsBuild1()
 	// stringsBuild2()
 
-	regex1()
+	// regexBasicMatching()
+	// regexCompiledPattern()
+	// regexSplit()
+	regexSubexpressions()
 }
