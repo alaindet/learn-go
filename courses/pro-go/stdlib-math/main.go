@@ -1,5 +1,10 @@
 package main
 
 func main() {
-	mathBasics()
+	// mathBasics()
+	// randomBasics()
+	// shuffling()
+
+	// sortingBasics()
+	searchValuesInSlices()
 }
