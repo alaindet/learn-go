@@ -1,2 +1,2 @@
-461
-Scanning Strings
+471
+Generating Random Numbers

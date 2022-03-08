@@ -5,5 +5,6 @@ func main() {
 	// numbersFormatting()
 	// stringsFormatting2()
 
-	scanBasics() {
+	scanFromStandardInput()
+	// scanIntoSlice()
 }

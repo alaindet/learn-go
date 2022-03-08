@@ -59,4 +59,19 @@ func main() {
 ```
 
 ## Scanning
-Scanning means capturing strings from user input or other streams, like a file
+Scanning means capturing strings from user input or other readers, like a file. Functions can be grouped in 3 groups
+
+- Read from standard input
+  - `fmt.Scan(...vals)`: Read everything, newlines are like spaces, split by spaces
+  - `fmt.Scanf(template, ...vals)`: Like `Scan()`, but scans through a template
+  - `fmt.Scanln(...vals)`: Like `Scan()`, but newline terminates scanning
+
+- Read from a reader (can be a file)
+  - `fmt.Fscan(reader, ...vals)`: Equivalent to `Scan()` but uses a reader
+  - `fmt.Fscanf(reader, template, ...vals)`: Equivalent to `Scanf()` but uses a reader
+  - `fmt.Fscanln(reader, ...vals)`: Equivalent to `Scanln()` but uses a reader
+
+- Read from a value
+  - `fmt.Sscan(str, ...vals)`: Equivalent to `Scan()` but uses a direct value
+  - `fmt.Sscanf(str, template, ...vals)`: Equivalent to `Scanf()` but uses a direct value
+  - `fmt.Sscanln(str, template, ...vals)`: Equivalent to `Scanln()` but uses a direct value
