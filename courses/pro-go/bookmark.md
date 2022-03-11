@@ -1,2 +1,2 @@
-487
-Dates, Times, and Durations
+504
+Creating Durations from Strings

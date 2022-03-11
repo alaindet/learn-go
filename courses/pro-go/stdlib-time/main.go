@@ -2,5 +2,11 @@ package main
 
 func main() {
 	// createDatesBasics()
-	timeInstanceBasics()
+	// timeInstanceBasics()
+	// formattingTime()
+	// parsingTime()
+	// changingTime()
+	// timeDurationsBasics()
+	// durationRelativeToPointInTime()
+	durationFromStrings()
 }
