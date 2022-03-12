@@ -64,7 +64,54 @@ func afterExample() {
 	fmt.Println("The end")
 }
 
+func afterExample2() {
+	nameChannel := make(chan string)
+
+	// NOTE
+	// delay > timeout => Timeout triggers and shuts down
+	// timeout > delay => Works normally
+	delay := time.Millisecond * 500
+	timeout := time.Millisecond * 400
+
+	// Asynchronous function that writes into the channel
+	go func(ch chan<- string) {
+		names := []string{"Alice", "Bob", "Charlie", "Dora"}
+		time.Sleep(delay)
+
+		for _, name := range names {
+			ch <- name
+			time.Sleep(delay)
+		}
+
+		close(ch)
+	}(nameChannel)
+
+	// Synchronous function that reads from the channel
+	func() {
+		for {
+			select {
+			case name, ok := <-nameChannel:
+				if !ok {
+					nameChannel = nil
+					return
+				}
+				fmt.Println("Name:", name)
+			// NOTE
+			// This timeout is restarted every time the select statement executes
+			// If delay < timeout this gets never called
+			case <-time.After(timeout):
+				fmt.Println("Timeout of channel inactivity")
+				nameChannel = nil
+				return
+			}
+		}
+	}()
+
+	fmt.Println("The end")
+}
+
 func timeAndConcurrency() {
 	// sleepExample()
-	afterExample()
+	// afterExample()
+	afterExample2()
 }

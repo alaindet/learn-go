@@ -1,2 +1,2 @@
-505
-Using the Time Features for Goroutines and Channels
+510
+Stopping and Resetting Timers
