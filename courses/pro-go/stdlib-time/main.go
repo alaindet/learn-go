@@ -6,7 +6,10 @@ func main() {
 	// formattingTime()
 	// parsingTime()
 	// changingTime()
+
 	// timeDurationsBasics()
+	// changingTimeWithDurations()
 	// durationRelativeToPointInTime()
-	durationFromStrings()
+	// durationFromStrings()
+	timeAndConcurrency()
 }

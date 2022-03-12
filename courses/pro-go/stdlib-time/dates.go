@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"time"
 )
 
@@ -126,42 +125,7 @@ func changingTime() {
 		today.Before(tomorrow),  // true
 		today.Equal(todayAgain), // false (but very close)
 	)
-}
 
-func timeDurationsBasics() {
-	var d time.Duration = time.Hour + (30 * time.Minute)
-	r := d.Round(time.Hour)    // 2 hours
-	t := d.Truncate(time.Hour) // 1 hour
-
-	fmt.Printf("Hours: %v\n", d.Hours())              // Hours: 1.5
-	fmt.Printf("Mins: %v\n", d.Minutes())             // Mins: 90
-	fmt.Printf("Seconds: %v\n", d.Seconds())          // Seconds: 5400
-	fmt.Printf("Millseconds: %v\n", d.Milliseconds()) // Millseconds: 5400000
-
-	fmt.Println(strings.Repeat("-", 10))
-	fmt.Printf("Rounded Hours: %v\n", r.Hours())  // Rounded Hours: 2
-	fmt.Printf("Rounded Mins: %v\n", r.Minutes()) // Rounded Mins: 120
-
-	fmt.Println(strings.Repeat("-", 10))
-	fmt.Printf("Truncated Hours: %v\n", t.Hours())  // Truncated Hours: 1
-	fmt.Printf("Truncated Mins: %v\n", t.Minutes()) // Truncated Mins: 60
-}
-
-func durationRelativeToPointInTime() {
-	future := time.Date(2050, 0, 0, 0, 0, 0, 0, time.UTC)
-	past := time.Date(1950, 0, 0, 0, 0, 0, 0, time.UTC)
-
-	toYears := func(d time.Duration) int {
-		return int(d.Hours() / (24 * 365))
-	}
-
-	yearsFromNow := toYears(time.Until(future))
-	yearsPassed := toYears(time.Since(past))
-
-	fmt.Printf("2050 is %d years from now\n", yearsFromNow) // 2050 is 27 years from now
-	fmt.Printf("1950 was %d years ago\n", yearsPassed)      // 1950 was 72 years ago
-}
-
-func durationFromStrings() {
-	// TODO...
+	// This accepts a time.Time and returns a time.Duration
+	fmt.Println(t.Sub(tomorrow)) // -24h0m0.000094651s
 }

@@ -1,2 +1,2 @@
-504
-Creating Durations from Strings
+505
+Using the Time Features for Goroutines and Channels
