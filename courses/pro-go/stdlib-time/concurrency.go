@@ -110,8 +110,40 @@ func afterExample2() {
 	fmt.Println("The end")
 }
 
+func timerExample() {
+	nameChannel := make(chan string)
+
+	go func(ch chan<- string) {
+		timer := time.NewTimer(time.Second * 10)
+
+		go func() {
+			time.Sleep(time.Second * 1) // Wait for 1 second
+			timer.Reset(time.Second)    // Reset timer
+			fmt.Println("Timer reset")
+		}()
+
+		fmt.Println("1 second initial delay")
+		<-timer.C
+		fmt.Println("About to send to channel")
+
+		names := []string{"Alice", "Bob", "Charlie", "Dora"}
+		for _, name := range names {
+			ch <- name
+		}
+
+		close(ch)
+	}(nameChannel)
+
+	for name := range nameChannel {
+		fmt.Printf("Read name: %v\n", name)
+	}
+
+	fmt.Println("Ciao")
+}
+
 func timeAndConcurrency() {
 	// sleepExample()
 	// afterExample()
-	afterExample2()
+	// afterExample2()
+	timerExample()
 }
