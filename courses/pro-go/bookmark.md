@@ -1,2 +1,2 @@
-528
-Echoing Reads to a Writer
+547
+Encoding Arrays and Slices

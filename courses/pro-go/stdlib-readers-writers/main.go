@@ -5,5 +5,7 @@ func main() {
 	// writerExamples()
 	// ioExtraExamples()
 	// pipeExamples()
-	multipleReadersWriters()
+	// multipleReadersWriters()
+	// bufferExamples()
+	scanningExamples()
 }

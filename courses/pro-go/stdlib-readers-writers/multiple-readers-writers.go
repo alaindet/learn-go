@@ -29,8 +29,24 @@ func multipleWritersExample() {
 	p("Writer #3: %v", w3.String())
 }
 
+func limitedReaderExample() {
+	r1 := strings.NewReader("Kayak")
+	r2 := strings.NewReader("Lifejacket")
+	r3 := strings.NewReader("Canoe")
+
+	concatReader := io.MultiReader(r1, r2, r3)
+
+	var maxReadBytes int64 = 5
+	p("Only %d bytes will be read from this reader!", maxReadBytes)
+
+	limited := io.LimitReader(concatReader, maxReadBytes)
+
+	ConsumeData(limited)
+}
+
 // See data.go
 func multipleReadersWriters() {
 	// multipleReadersExample()
-	multipleWritersExample()
+	// multipleWritersExample()
+	limitedReaderExample()
 }
