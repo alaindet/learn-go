@@ -3,5 +3,7 @@ package main
 func main() {
 	// readerExamples()
 	// writerExamples()
-	ioExtraExamples()
+	// ioExtraExamples()
+	// pipeExamples()
+	multipleReadersWriters()
 }
