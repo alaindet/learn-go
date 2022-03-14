@@ -115,20 +115,21 @@ func timerExample() {
 
 	go func(ch chan<- string) {
 		timer := time.NewTimer(time.Second * 10)
+		names := []string{"Alice", "Bob", "Charlie", "Dora"}
 
 		go func() {
-			time.Sleep(time.Second * 1) // Wait for 1 second
-			timer.Reset(time.Second)    // Reset timer
-			fmt.Println("Timer reset")
+			time.Sleep(time.Second * 1)  // Wait for 1 second
+			timer.Reset(time.Second * 2) // Reset timer to 2 seconds
+			fmt.Println("Timer reset to 2 seconds")
 		}()
 
 		fmt.Println("1 second initial delay")
 		<-timer.C
 		fmt.Println("About to send to channel")
 
-		names := []string{"Alice", "Bob", "Charlie", "Dora"}
 		for _, name := range names {
 			ch <- name
+			time.Sleep(time.Millisecond * 500)
 		}
 
 		close(ch)
@@ -138,12 +139,63 @@ func timerExample() {
 		fmt.Printf("Read name: %v\n", name)
 	}
 
-	fmt.Println("Ciao")
+	fmt.Println("The end")
+}
+
+func periodicTimerExample() {
+	nameChannel := make(chan string)
+
+	go func(ch chan<- string) {
+		names := []string{"Alice", "Bob", "Charlie", "Dora"}
+		tickChannel := time.Tick(time.Millisecond * 500)
+		index := 0
+
+		for {
+			<-tickChannel
+			nameChannel <- names[index]
+			index++
+			if index == len(names) {
+				close(ch)
+				return
+			}
+		}
+	}(nameChannel)
+
+	for name := range nameChannel {
+		fmt.Printf("Read name: %v\n", name)
+	}
+}
+
+func periodicTimerExample2() {
+	nameChannel := make(chan string)
+
+	go func(ch chan<- string) {
+		names := []string{"Alice", "Bob", "Charlie", "Dora"}
+		ticker := time.NewTicker(time.Millisecond * 500)
+		index := 0
+
+		for {
+			<-ticker.C
+			nameChannel <- names[index]
+			index++
+			if index == len(names) {
+				ticker.Stop()
+				close(ch)
+				return
+			}
+		}
+	}(nameChannel)
+
+	for name := range nameChannel {
+		fmt.Printf("Read name: %v\n", name)
+	}
 }
 
 func timeAndConcurrency() {
 	// sleepExample()
 	// afterExample()
 	// afterExample2()
-	timerExample()
+	// timerExample()
+	// periodicTimerExample()
+	periodicTimerExample2()
 }

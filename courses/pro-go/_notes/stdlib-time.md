@@ -32,3 +32,13 @@ func main() {
 ## Duration
 - The `time.Duration` type is an alias of `int64` used to represent time durations in milliseconds
 - Durations are widely used by the `time` package to change dates by adding/subtracting time
+
+## Timers
+- Timers are instances of `time.Timer` struct and they can be simple **timers** (triggers once after a duration) or **tickers** (triggers periodically after a duration)
+- They allow to perform delayed and/or periodical operations
+- They can be created, respectively, with `time.NewTimer(time.Duration)` and `time.NewTicker(time.Duration)`
+- They both return `*time.Timer`, which exports
+  - `C` The channel sending a `time.Time` value
+  - `Stop()` Stops the timer
+  - `Reset(duration)` Restarts the timer with the new duration
+- **WARNING**: `time.Tick()` and `time.After()` are wrappers for the previous creator methods, but especially in the case of tickers `time.NewTicker()` is preferred since there is no way to stop a ticker created with `time.Tick()` and the garbage collector cannot erase it
