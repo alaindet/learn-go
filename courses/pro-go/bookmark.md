@@ -1,2 +1,2 @@
-547
-Encoding Arrays and Slices
+558
+Specifying Types for Decoding
