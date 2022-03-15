@@ -2,5 +2,7 @@ package main
 
 func main() {
 	// readingFilesExamples()}
-	writingFilesExamples()
+	// writingFilesExamples()
+	// pathsExamples()
+	managingFilesExamples()
 }
