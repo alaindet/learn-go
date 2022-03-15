@@ -1,2 +1,2 @@
-595
-Using HTML and Text Templates
+603
+Understanding Template Actions
