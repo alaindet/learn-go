@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"os"
-	"text/template"
 )
 
 func singleHtmlTemplateExample() {
@@ -41,13 +41,49 @@ func lookUpHtmlTemplates() {
 	htmlTemplates, err := template.ParseGlob("templates/*.html")
 	_ = err
 
-	htmlTemplate := htmlTemplates.Lookup("extras.html")
+	htmlTemplate := htmlTemplates.Lookup("template.html")
 	err = htmlTemplate.Execute(os.Stdout, &Kayak)
+	// <ul>
+	// 	<li>Template value as string: {Kayak Watersports 279}</li>
+	// 	<li>Name: Kayak</li>
+	// 	<li>Category: Watersports</li>
+	// 	<li>Price: $279.00</li>
+	// 	<li>Tax: $334.80</li>
+	// 	<li>Discoun Price: $269.00</li>
+	// </ul>
+}
+
+func htmlTemplatesWithLoops() {
+	htmlTemplates, err := template.ParseGlob("templates/*.html")
+	_ = err
+	htmlTemplate := htmlTemplates.Lookup("loops.html")
+	err = htmlTemplate.Execute(os.Stdout, &Products)
+	// <p>There are 8 products</p>
+	// <p>There are less than 10 products</p>
+	// <p>First product: Kayak</p>
+	// <ul>
+	//   <li>Name: Kayak, Price: $279.00</li>
+	//   <li>Name: Lifejacket, Price: $49.95</li>
+	//   <li>Name: Soccer Ball, Price: $19.50</li>
+	//   <li>Name: Corner Flags, Price: $34.95</li>
+	//   <li>Name: Stadium, Price: $79500.00</li>
+	//   <li>Name: Thinking Cap, Price: $16.00</li>
+	//   <li>Name: Unsteady Chair, Price: $75.00</li>
+	//   <li>Name: Bling-Bling King, Price: $1200.00</li>
+	// </ul>
+
+	// err = htmlTemplate.Execute(os.Stdout, &[]Product{})
+	// <p>There are 0 products</p>
+	// <p>There are less than 10 products</p>
+	// <ul>
+	//   <li>No products</li>
+	// </ul>
 }
 
 func htmlTemplatesExamples() {
 	// singleHtmlTemplateExample()
 	// multipleHtmlTemplatesExample()
 	// listingHtmlTemplates()
-	lookUpHtmlTemplates()
+	// lookUpHtmlTemplates()
+	htmlTemplatesWithLoops()
 }

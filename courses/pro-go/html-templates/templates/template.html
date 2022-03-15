@@ -1,2 +1,20 @@
-<!-- The {{ . }} thingy is an "action" -->
-<h1>Template {{ . }}</h1>
+<ul>
+  <!-- Whole value as string -->
+  <li>Template value as string: {{ . }}</li>
+  <!-- Field -->
+
+  {{- "" -}}
+  <!-- ^^^ This above trims whitespace on both sides and prints "" -->
+
+  <li>Name: {{ .Name }}</li>
+  <li>Category: {{ .Category }}</li>
+  <li>Price: {{ printf "$%.2f" .Price }}</li>
+  <!-- Method -->
+  <li>Tax: {{ printf "$%.2f" .AddTax }}</li>
+  <!-- Method + argument -->
+  <li>Discount Price: {{ .ApplyDiscount 10 | printf "$%.2f" }}</li>
+  <!--
+  Equivalent
+  <li>Discount Price: {{ printf "$%.2f" (.ApplyDiscount 10) }}</li>
+  -->
+</ul>

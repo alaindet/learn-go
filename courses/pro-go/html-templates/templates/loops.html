@@ -1,0 +1,17 @@
+<p>There are {{ len . }} products</p>
+
+{{ if lt (len .) 10 }}
+  <p>There are less than 10 products</p>
+{{ end }}
+
+{{ if gt (len . ) 0 }}
+  <p>First product: {{ (index . 0).Name }}</p>
+
+  <ul>
+    {{ range . }}
+      <li>Name: {{ .Name }}, Price: {{ printf "$%.2f" .Price }}</li>
+    {{ else }}
+      <li>No products</li>
+    {{ end }}
+  </ul>
+{{ end }}
