@@ -1,0 +1,49 @@
+<!-- Template: currency -->
+{{ define "currency" }}
+  {{ printf "$%.2f" . }}
+{{ end }}
+
+<!-- Template: productInfo -->
+{{ define "productInfo" }}
+  Name: {{ .Name }}, Category: {{ .Category }}, Price: {{ template "currency" .Price }}
+{{ end }}
+
+<!-- Template: cheapProduct -->
+{{ define "cheapProduct" }}
+  [Cheap Product]
+  {{ template "productInfo" . }}
+{{ end }}
+
+<!-- Template: midrangeProduct -->
+{{ define "midrangeProduct" }}
+  [Midrange Product]
+  {{ template "productInfo" . }}
+{{ end }}
+
+<!-- Template: expensiveProduct -->
+{{ define "expensiveProduct" }}
+  [Expensive Product]
+  {{ template "productInfo" . }}
+{{ end }}
+
+<!-- Template: mainTemplate -->
+{{ define "mainTemplate" }}
+
+  <!-- Include a template from another file -->
+  {{ template "customTemplate" }}
+
+  <p>There are {{ len . }} products in the source data.</p>
+  <p>First product: {{ index . 0 }}</p>
+
+  <ul>
+    {{ range . }}
+      {{ if lt .Price 100.00 }}
+        <li>{{ template "cheapProduct" . }}</li>
+      {{ else if lt .Price 1500.00 }}
+        <li>{{ template "midrangeProduct" . }}</li>
+      {{ else -}}
+        <li>{{ template "expensiveProduct" . }}</li>
+      {{ end -}}
+    {{ end }}
+  </ul>
+{{ end }}

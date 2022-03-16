@@ -1,0 +1,12 @@
+{{ define "mainTemplate" }}
+  {{ $categories := getCategories . }}
+  {{ $categoriesLen := len $categories }}
+  <p>Some random content...</p>
+  <p>{{ lower "ALL CAPS! WAIT, WHAT?" }}</p>
+  <p>There are {{ $categoriesLen }} categories</p>
+  <ul>
+    {{ range $categories }}
+      <li>Category: {{ . }}</li>
+    {{ end }}
+  </ul>
+{{ end }}
