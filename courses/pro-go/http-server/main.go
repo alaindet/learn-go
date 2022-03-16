@@ -25,8 +25,16 @@ func inspectHTTPRequest(request *http.Request) {
 }
 
 func inspectHTTPRequestURL(url *url.URL) {
-	// TODO...
-	fmt.Println("URL Inspection...")
+	fmt.Println(strings.Repeat("=", 20))
+	fmt.Println("URL Schema:", url.Scheme)
+	fmt.Println("URL Host:", url.Host)
+	fmt.Println("URL RawQuery:", url.RawQuery)
+	fmt.Println("URL Path:", url.Path)
+	fmt.Println("URL Fragment:", url.Fragment)
+	fmt.Println("URL Hostname:", url.Hostname())
+	fmt.Println("URL Port:", url.Port())
+	fmt.Println("URL Query:", url.Query())
+	fmt.Println("URL:", url.String())
 }
 
 // Implements the http.Handler interface
@@ -35,9 +43,16 @@ func (sh StringHandler) ServeHTTP(
 	request *http.Request,
 ) {
 	// inspectHTTPRequest(request)
-	inspectHTTPRequestURL(request.URL)
+	// inspectHTTPRequestURL(request.URL)
 
-	io.WriteString(writer, sh.message)
+	switch request.URL.Path {
+	case "/favicon.ico":
+		http.NotFound(writer, request)
+	case "/message":
+		io.WriteString(writer, sh.message)
+	default:
+		http.Redirect(writer, request, "/message", http.StatusTemporaryRedirect)
+	}
 }
 
 func main() {
