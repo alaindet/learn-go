@@ -4,5 +4,6 @@ func main() {
 	// simpleHTTPServerExamsple()
 	// HTTPSServerExample()
 	// serveStaticFilesExample()
-	dynamicTemplatesExample()
+	// dynamicTemplatesExample()
+	jsonResponseExample()
 }
