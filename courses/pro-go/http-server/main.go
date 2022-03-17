@@ -2,5 +2,7 @@ package main
 
 func main() {
 	// simpleHTTPServerExamsple()
-	HTTPSServerExample()
+	// HTTPSServerExample()
+	// serveStaticFilesExample()
+	dynamicTemplatesExample()
 }
