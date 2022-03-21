@@ -5,5 +5,7 @@ func main() {
 	// selectQueriesExamples()
 	// placeholderStatementExample()
 	// selectSingleRowsExample()
-	insertProductExample()
+	// insertProductExample()
+	// preparedStatementExample()
+	transactionExample()
 }
