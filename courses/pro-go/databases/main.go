@@ -3,5 +3,7 @@ package main
 func main() {
 	// listDrivers()
 	// selectQueriesExamples()
-	preparedStatementExample()
+	// placeholderStatementExample()
+	// selectSingleRowsExample()
+	insertProductExample()
 }

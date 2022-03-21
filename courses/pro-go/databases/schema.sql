@@ -7,6 +7,9 @@ CREATE TABLE IF NOT EXISTS Categories (
   Name TEXT
 );
 
+ALTER TABLE `Categories`
+CHANGE `Id` `Id` int(11) NOT NULL AUTO_INCREMENT FIRST;
+
 CREATE TABLE IF NOT EXISTS Products (
   Id INTEGER NOT NULL PRIMARY KEY,
   Name TEXT,
@@ -14,6 +17,9 @@ CREATE TABLE IF NOT EXISTS Products (
   Price decimal(8, 2),
   CONSTRAINT CatRef FOREIGN KEY(Category) REFERENCES Categories (Id)
 );
+
+ALTER TABLE `Products`
+CHANGE `Id` `Id` int(11) NOT NULL AUTO_INCREMENT FIRST;
 
 INSERT INTO
   Categories (Id, Name)

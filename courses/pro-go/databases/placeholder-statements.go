@@ -34,7 +34,7 @@ func selectProductsFromDatabaseWithPlaceholders(db *sql.DB) []Product {
 	return products
 }
 
-func preparedStatementExample() {
+func placeholderStatementExample() {
 	db, err := connectToDatabase()
 
 	if err != nil {
