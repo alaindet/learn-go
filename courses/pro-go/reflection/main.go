@@ -2,5 +2,6 @@ package main
 
 func main() {
 	// reflectionBasicsExample()
-	reflectionTypeBasicsExample()
+	// reflectionTypeBasicsExample()
+	reflectionValueBasicsExample()
 }
