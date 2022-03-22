@@ -8,3 +8,8 @@ type Product struct {
 type Customer struct {
 	Name, City string
 }
+
+type Payment struct {
+	Currency string
+	Amount   float64
+}
