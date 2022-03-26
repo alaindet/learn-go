@@ -1,5 +1,7 @@
 # Learn Go
 
+![Go Logo](https://raw.githubusercontent.com/alaindet/learn-go/main/go-logo.jpg)
+
 ## Goals
 
 This repository contains the learning material, demo, tests and everything I use to learn [Go](https://go.dev/)
