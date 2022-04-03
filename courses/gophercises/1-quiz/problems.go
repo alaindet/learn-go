@@ -1,10 +1,32 @@
 package main
 
-import "strings"
+import (
+	"encoding/csv"
+	"fmt"
+	"os"
+	"strings"
+)
 
 type problem struct {
 	question string
 	answer   string
+}
+
+func loadProblems(csvFilename *string) []problem {
+	file, err := os.Open(*csvFilename)
+
+	if err != nil {
+		exit(fmt.Sprintf("Failed to open the CSV file: %s\n", *csvFilename))
+	}
+
+	r := csv.NewReader(file)
+	lines, err := r.ReadAll()
+
+	if err != nil {
+		exit(fmt.Sprintf("Failed to parse %s\n", *csvFilename))
+	}
+
+	return parseLines(lines)
 }
 
 func parseLines(lines [][]string) []problem {

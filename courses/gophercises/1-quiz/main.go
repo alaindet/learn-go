@@ -1,48 +1,66 @@
 package main
 
 import (
-	"encoding/csv"
 	"flag"
 	"fmt"
-	"os"
 	"strconv"
+	"time"
 )
 
 func main() {
-	csvFilename := flag.String("csv", "problems.csv", "a csv file in the format of question,answer")
+
+	// Input
+	csvFilename := flag.String(
+		"csv",          // Flag name
+		"problems.csv", // Default value
+		"a csv file in the format of question,answer", // Description
+	)
+	timeLimit := flag.Int(
+		"limit",
+		30,
+		"the time limit for the whole quiz in seconds",
+	)
 	flag.Parse()
-	file, err := os.Open(*csvFilename)
 
-	if err != nil {
-		exit(fmt.Sprintf("Failed to open the CSV file: %s\n", *csvFilename))
-	}
-
-	r := csv.NewReader(file)
-	lines, err := r.ReadAll()
-
-	if err != nil {
-		exit(fmt.Sprintf("Failed to parse %s\n", *csvFilename))
-	}
-
-	problems := parseLines(lines)
+	// Setup game
+	problems := loadProblems(csvFilename)
 	score := 0
+	answerCh := make(chan string)
 	problemsCount := len(problems)
 	problemsDigits := countDigits(problemsCount)
+	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
 
+	// Play
 	for i, problem := range problems {
 		counter := padLeft(strconv.Itoa(i+1), problemsDigits, "0")
 		fmt.Printf("Problem %s/%d: %s = ", counter, problemsCount, problem.question)
-		var answer string
-		fmt.Scanf("%s", &answer)
 
-		if answer != problem.answer {
-			fmt.Println("Nope")
-			continue
+		// Listen to user input concurrently
+		go func(ch chan<- string) {
+			var answer string
+			fmt.Scanf("%s", &answer)
+			ch <- answer
+		}(answerCh)
+
+		select {
+		case <-timer.C: // Timeout
+			fmt.Printf("\nTime's up. You score is %d out of %d\n", score, problemsCount)
+			return
+		case answer := <-answerCh: // Process answer
+			if answer != problem.answer {
+				fmt.Println("Nope")
+			} else {
+				fmt.Println("Yep")
+				score++
+			}
 		}
-
-		fmt.Println("Yep")
-		score++
 	}
 
-	fmt.Printf("You score is %d out of %d\n", score, len(problems))
+	// Result
+	if score == problemsCount {
+		fmt.Printf("PERFECT! You guessed all %d questions!\n", problemsCount)
+		return
+	}
+
+	fmt.Printf("You score is %d out of %d\n", score, problemsCount)
 }

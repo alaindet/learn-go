@@ -12,8 +12,8 @@ func exit(message string) {
 	os.Exit(1)
 }
 
-// TODO: Refactor with generics or interface{}
 func padLeft(s string, length int, padding string) string {
+
 	count := utf8.RuneCountInString(s)
 	remaining := length - count
 
