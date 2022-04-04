@@ -27,3 +27,71 @@
   ```
 - Please note that `n` is available only inside the conditional blocks, not outside
 - *WARNING* Generating random numbers without a seed returns hard-coded values!
+
+## `for` blocks
+
+- The `for` keyword is the only looping keyword in Go
+- However, it can be used in 4 ways
+  - Complete `for` loop
+  - Condition-only `for` loop
+  - Infinite `for` loop
+  - `for-range` loop
+
+### Complete `for` loop
+```go
+for i := 0; i < 10; i++ {
+    fmt.Println(i)
+}
+```
+
+### Condition-only `for` loop
+- Equivalent to `while` in other programming languages
+
+```go
+i := 0
+for i < 10 {
+    fmt.Println(i)
+    i++
+}
+
+```
+
+### Infinite `for` loop
+- Best for games and listening to channels
+- Can only be exited via `break`
+
+```go
+for {
+    // ...
+    if someCondition {
+        break
+    }
+}
+```
+
+### `for-range` loop
+- The most idiomatic loop in Go, preferred if possible
+- Iterates on every iterable built-in type, like arrays, slices and maps, as well as compound types derived from said types
+- Returns two variables per iteration: index and value for slices and arrays, key and value for maps
+
+```go
+// Slices
+for index, value := range []int{1, 3, 5, 7, 9} {
+    fmt.Println(index, value)
+}
+
+// Maps
+for key, value := range map[string]int{ "Alice": 20, "Bob": 30, "Charlie": 40 } {
+    fmt.Println(key, value)
+}
+
+// Ignoring index
+for _, value := range []int{1, 3, 5, 7, 9} {
+    fmt.Println(index, value)
+}
+
+// Ignoring value
+for key := range map[string]int{ "Alice": 20, "Bob": 30, "Charlie": 40 } {
+    fmt.Println(key)
+}
+```
