@@ -1,0 +1,3 @@
+myapp/tmp/myapp
+myapp/vendor/
+!myapp/vendor/modules.txt
