@@ -1,3 +1,6 @@
+package gomitolo
+
+var envExampleTemplate = `
 # Give your application a unique name (no spaces)
 APP_NAME=myapp
 
@@ -54,4 +57,4 @@ SMTP_FROM=gomitolo@gomitolo.com
 RENDERER=jet
 
 # the encryption key; must be exactly 32 characters long
-KEY=rHbaqmfdhmdrDDPIytYhwSRzcvpOesjZ
+KEY=rHbaqmfdhmdrDDPIytYhwSRzcvpOesjZ`

@@ -2,7 +2,7 @@ package gomitolo
 
 import "os"
 
-func (g *Gomitolo) CreateDirIfNotExists(path string) error {
+func CreateDirIfNotExists(path string) error {
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		const mode = 0755
@@ -16,7 +16,7 @@ func (g *Gomitolo) CreateDirIfNotExists(path string) error {
 	return nil
 }
 
-func (g *Gomitolo) CreateFileIfNotExists(path string) error {
+func CreateFileIfNotExists(path string) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		file, err := os.Create(path)
 
@@ -28,5 +28,6 @@ func (g *Gomitolo) CreateFileIfNotExists(path string) error {
 			_ = file.Close()
 		}(file)
 	}
+
 	return nil
 }
