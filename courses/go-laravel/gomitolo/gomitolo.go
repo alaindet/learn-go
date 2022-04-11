@@ -3,13 +3,21 @@ package gomitolo
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
+	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 )
 
 const version = "0.1.0"
+
+type config struct {
+	port     string
+	renderer string
+}
 
 type Gomitolo struct {
 	AppName  string
@@ -18,11 +26,8 @@ type Gomitolo struct {
 	ErrorLog *log.Logger
 	InfoLog  *log.Logger
 	RootPath string
-}
-
-type config struct {
-	port     string
-	renderer string
+	Routes   *chi.Mux
+	config   config
 }
 
 func (g *Gomitolo) New(rootPath string) error {
@@ -57,6 +62,8 @@ func (g *Gomitolo) Init(p initPaths) error {
 	g.InitFolders(p)
 	g.InitEnv()
 	g.InfoLog, g.ErrorLog = g.InitLoggers()
+	g.InitConfig()
+	g.Routes = g.routes().(*chi.Mux)
 
 	return nil
 }
@@ -113,4 +120,27 @@ func (g *Gomitolo) InitLoggers() (*log.Logger, *log.Logger) {
 	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	return infoLog, errorLog
+}
+
+func (g *Gomitolo) InitConfig() {
+	g.config = config{
+		port:     os.Getenv("PORT"),
+		renderer: os.Getenv("RENDERER"),
+	}
+}
+
+func (g *Gomitolo) ListenAndServe() {
+	server := &http.Server{
+		Addr:         fmt.Sprintf(":%s", os.Getenv("PORT")),
+		ErrorLog:     g.ErrorLog,
+		Handler:      g.routes(),
+		IdleTimeout:  30 * time.Second,
+		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 600 * time.Second,
+	}
+
+	g.InfoLog.Printf("Listening on port %s", os.Getenv("PORT"))
+
+	err := server.ListenAndServe()
+	g.ErrorLog.Fatal(err)
 }
