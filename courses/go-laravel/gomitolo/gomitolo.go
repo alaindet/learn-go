@@ -2,6 +2,7 @@ package gomitolo
 
 import (
 	"fmt"
+	"gomitolo/render"
 	"log"
 	"net/http"
 	"os"
@@ -25,6 +26,7 @@ type Gomitolo struct {
 	Version  string
 	ErrorLog *log.Logger
 	InfoLog  *log.Logger
+	Render   *render.Render
 	RootPath string
 	Routes   *chi.Mux
 	config   config
