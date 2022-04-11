@@ -1,5 +1,5 @@
 myapp/tmp/myapp
 myapp/vendor/
 !myapp/vendor/modules.txt
-myapp/.env.*
+myapp/.env*
 !myapp/.env.example

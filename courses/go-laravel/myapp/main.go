@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/alaindet/gomitolo"
 )
 
@@ -12,5 +10,4 @@ type application struct {
 
 func main() {
 	initApplication()
-	fmt.Println("Hello World")
 }
