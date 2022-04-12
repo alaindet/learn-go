@@ -49,6 +49,7 @@ func (g *Render) GoPage(
 	view string,
 	data interface{},
 ) error {
+
 	tmpl, err := template.ParseFiles(
 		fmt.Sprintf("%s/views/%s.page.tmpl", g.RootPath, view),
 	)

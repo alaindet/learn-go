@@ -2,13 +2,13 @@ package gomitolo
 
 import (
 	"fmt"
-	"gomitolo/render"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/alaindet/gomitolo/render"
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 )
@@ -146,7 +146,7 @@ func (g *Gomitolo) ListenAndServe() {
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%s", os.Getenv("PORT")),
 		ErrorLog:     g.ErrorLog,
-		Handler:      g.routes(),
+		Handler:      g.Routes,
 		IdleTimeout:  30 * time.Second,
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 600 * time.Second,

@@ -1,11 +1,14 @@
 package main
 
 import (
+	"myapp/handlers"
+
 	"github.com/alaindet/gomitolo"
 )
 
 type application struct {
-	App *gomitolo.Gomitolo
+	App      *gomitolo.Gomitolo
+	Handlers *handlers.Handlers
 }
 
 func main() {
