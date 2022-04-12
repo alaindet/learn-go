@@ -13,7 +13,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const version = "0.1.0"
+const version = "0.1.0" // TODO: Get from .env
 
 type config struct {
 	port     string
@@ -64,11 +64,10 @@ func (g *Gomitolo) Init(p initPaths) error {
 	g.RootPath = p.rootPath
 	g.InitFolders(p)
 	g.InitEnv()
-
-	g.InfoLog, g.ErrorLog = g.createLoggers()
-	g.config = g.createConfig()
-	g.Render = g.createRenderer()
-	g.Routes = g.routes().(*chi.Mux)
+	g.InitLoggers()
+	g.InitConfig()
+	g.InitRenderer()
+	g.InitRoutes()
 
 	return nil
 }
@@ -117,29 +116,34 @@ func (g *Gomitolo) InitEnv() error {
 	return nil
 }
 
-func (g *Gomitolo) createLoggers() (*log.Logger, *log.Logger) {
+func (g *Gomitolo) InitLoggers() {
 	var infoLog *log.Logger
 	var errorLog *log.Logger
 
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
-	return infoLog, errorLog
+	g.InfoLog = infoLog
+	g.ErrorLog = errorLog
 }
 
-func (g *Gomitolo) createConfig() config {
-	return config{
+func (g *Gomitolo) InitConfig() {
+	g.config = config{
 		port:     os.Getenv("PORT"),
 		renderer: os.Getenv("RENDERER"),
 	}
 }
 
-func (g *Gomitolo) createRenderer() *render.Render {
-	return &render.Render{
+func (g *Gomitolo) InitRenderer() {
+	g.Render = &render.Render{
 		Renderer: g.config.renderer,
 		RootPath: g.RootPath,
 		Port:     g.config.port,
 	}
+}
+
+func (g *Gomitolo) InitRoutes() {
+	g.Routes = g.NewRouter()
 }
 
 func (g *Gomitolo) ListenAndServe() {
