@@ -14,6 +14,7 @@ This repository contains the learning material, demo, tests and everything I use
 
 ### Courses
 - [Master Go (Golang) Programming:The Complete Go Bootcamp 2022](https://www.udemy.com/course/master-go-programming-complete-golang-bootcamp)
+- [Let's Build a Go version of Laravel](https://www.udemy.com/course/lets-build-a-go-version-of-laravel)
 
 ### Books
 - [Pro Go - The Complete Guide to Programming Reliable and Efficient Software Using Golang](https://link.springer.com/book/10.1007/978-1-4842-7355-5)
