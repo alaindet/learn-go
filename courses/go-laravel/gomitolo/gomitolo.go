@@ -33,21 +33,22 @@ type Gomitolo struct {
 }
 
 func (g *Gomitolo) New(rootPath string) error {
-	pathConfig := initPaths{
-		rootPath: rootPath,
-		folderNames: []string{
-			"handlers",
-			"migrations",
-			"views",
-			"data",
-			"public",
-			"tmp",
-			"logs",
-			"middleware",
-		},
-	}
 
-	err := g.Init(pathConfig)
+	err := g.Init(
+		initPaths{
+			rootPath: rootPath,
+			folderNames: []string{
+				"handlers",
+				"migrations",
+				"views",
+				"data",
+				"public",
+				"tmp",
+				"logs",
+				"middleware",
+			},
+		},
+	)
 
 	if err != nil {
 		return err
@@ -63,8 +64,10 @@ func (g *Gomitolo) Init(p initPaths) error {
 	g.RootPath = p.rootPath
 	g.InitFolders(p)
 	g.InitEnv()
-	g.InfoLog, g.ErrorLog = g.InitLoggers()
-	g.InitConfig()
+
+	g.InfoLog, g.ErrorLog = g.createLoggers()
+	g.config = g.createConfig()
+	g.Render = g.createRenderer()
 	g.Routes = g.routes().(*chi.Mux)
 
 	return nil
@@ -114,7 +117,7 @@ func (g *Gomitolo) InitEnv() error {
 	return nil
 }
 
-func (g *Gomitolo) InitLoggers() (*log.Logger, *log.Logger) {
+func (g *Gomitolo) createLoggers() (*log.Logger, *log.Logger) {
 	var infoLog *log.Logger
 	var errorLog *log.Logger
 
@@ -124,10 +127,18 @@ func (g *Gomitolo) InitLoggers() (*log.Logger, *log.Logger) {
 	return infoLog, errorLog
 }
 
-func (g *Gomitolo) InitConfig() {
-	g.config = config{
+func (g *Gomitolo) createConfig() config {
+	return config{
 		port:     os.Getenv("PORT"),
 		renderer: os.Getenv("RENDERER"),
+	}
+}
+
+func (g *Gomitolo) createRenderer() *render.Render {
+	return &render.Render{
+		Renderer: g.config.renderer,
+		RootPath: g.RootPath,
+		Port:     g.config.port,
 	}
 }
 
