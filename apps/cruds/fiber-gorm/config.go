@@ -3,9 +3,13 @@ package main
 import "github.com/spf13/viper"
 
 type config struct {
-	PORT     string
-	VERSION  string
-	APP_NAME string
+	PORT                   string
+	VERSION                string
+	APP_NAME               string
+	DATABASE_ROOT_PASSWORD string
+	DATABASE_NAME          string
+	DATABASE_USER          string
+	DATABASE_PASSWORD      string
 }
 
 func loadConfig() config {
