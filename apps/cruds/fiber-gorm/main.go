@@ -1,41 +1,47 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
+	"time"
+
+	"github.com/gofiber/fiber/v2"
 )
 
+type todoApp struct {
+	config config
+	db     *sql.DB
+}
+
+var appData ciccio = ciccio{}
+
 func main() {
-	c := loadConfig()
 
-	db, err := connectToDatabase(c)
+	// Init config
+	config := loadConfig()
+	appData.config = config
 
-	if err != nil {
-		panic(err)
-	}
-
-	defer db.Close()
-	fmt.Println("Connected to database")
-
-	rows, err := db.Query("SELECT 42")
+	// Init db
+	db, err := connectToDatabase(config)
 
 	if err != nil {
-		log.Fatal("Cannot select from database")
+		log.Fatal("Cannot connect to database")
 		return
 	}
 
-	fmt.Println("rows", rows)
+	appData.db = db
 
-	// app := fiber.New(fiber.Config{
-	// 	Prefork:       true,
-	// 	CaseSensitive: true,  // "/Foo" is NOT equal to "/foo"
-	// 	StrictRouting: false, // "/foo/" is equal to "/foo"
-	// 	ServerHeader:  "Fiber",
-	// 	AppName:       c.APP_NAME,
-	// 	ReadTimeout:   time.Second * 10,
-	// 	WriteTimeout:  time.Second * 10,
-	// })
+	app := fiber.New(fiber.Config{
+		Prefork:       true,
+		CaseSensitive: true,  // "/Foo" is NOT equal to "/foo"
+		StrictRouting: false, // "/foo/" is equal to "/foo"
+		ServerHeader:  "Fiber",
+		AppName:       c.APP_NAME,
+		ReadTimeout:   time.Second * 10,
+		WriteTimeout:  time.Second * 10,
+	})
 
-	// app = setupRoutes(app, c)
-	// app.Listen(fmt.Sprintf(":%s", c.PORT))
+	app = setupRoutes(app, c)
+	app.Listen(fmt.Sprintf(":%s", c.PORT))
 }
