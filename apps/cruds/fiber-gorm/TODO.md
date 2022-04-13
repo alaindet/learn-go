@@ -1,0 +1,2 @@
+- [ ] Add Makefile
+- [ ] Add GORM
