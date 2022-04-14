@@ -1,2 +1,3 @@
 - [ ] Add Makefile
 - [ ] Add GORM
+- [ ] Refactor with packages
