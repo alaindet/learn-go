@@ -13,7 +13,7 @@ func readTodoHandlerFn(a *AppContext) func(c *fiber.Ctx) error {
 		id, err := strconv.Atoi(c.Params("id"))
 		_ = err
 
-		todo, err := getTodoById(a.db, int64(id))
+		todo, err := a.repositories.todos.getById(int64(id))
 
 		// TODO: Check HTTP error
 		if err != nil {
@@ -33,7 +33,7 @@ func readTodoHandlerFn(a *AppContext) func(c *fiber.Ctx) error {
 func readTodosHandlerFn(a *AppContext) func(c *fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
 
-		todos, err := getTodos(a.db)
+		todos, err := a.repositories.todos.getAll()
 
 		// TODO: Check HTTP error
 		if err != nil {

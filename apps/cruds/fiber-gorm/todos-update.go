@@ -13,7 +13,7 @@ func updateTodoHandlerFn(a *AppContext) func(c *fiber.Ctx) error {
 		id, err := strconv.Atoi(c.Params("id"))
 		_ = err
 
-		todo, err := updateTodo(a.db, &UpdateTodoDto{
+		todo, err := a.repositories.todos.update(&UpdateTodoDto{
 			Id:     int64(id),
 			Name:   "Updated name", // TODO: Get from request
 			IsDone: true,           // TODO: Get from request

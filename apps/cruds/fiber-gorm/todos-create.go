@@ -9,7 +9,7 @@ import (
 func createTodoHandlerFn(a *AppContext) func(c *fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
 
-		todo, err := createTodo(a.db, &CreateTodoDto{
+		todo, err := a.repositories.todos.create(&CreateTodoDto{
 			Name: "A new todo item", // TODO: Get it from the body
 		})
 

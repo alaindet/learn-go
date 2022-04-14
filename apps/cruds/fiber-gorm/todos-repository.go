@@ -4,9 +4,12 @@ import (
 	"database/sql"
 )
 
-func createTodo(db *sql.DB, dto *CreateTodoDto) (*Todo, error) {
+type todosRepository struct {
+	db *sql.DB
+}
 
-	stmt, err := db.Prepare("INSERT INTO todos (name) VALUES (?)")
+func (r *todosRepository) create(dto *CreateTodoDto) (*Todo, error) {
+	stmt, err := r.db.Prepare("INSERT INTO todos (name) VALUES (?)")
 
 	if err != nil {
 		return nil, err
@@ -34,11 +37,11 @@ func createTodo(db *sql.DB, dto *CreateTodoDto) (*Todo, error) {
 }
 
 // TODO: Use prepared statements?
-func getTodoById(db *sql.DB, id int64) (*Todo, error) {
+func (r *todosRepository) getById(id int64) (*Todo, error) {
 
 	todo := &Todo{}
 
-	row := db.QueryRow("SELECT * FROM todos WHERE id = ?", id)
+	row := r.db.QueryRow("SELECT * FROM todos WHERE id = ?", id)
 
 	if row.Err() != nil {
 		return nil, row.Err()
@@ -58,9 +61,9 @@ func getTodoById(db *sql.DB, id int64) (*Todo, error) {
 }
 
 // TODO: Use prepared statements?
-func getTodos(db *sql.DB) ([]Todo, error) {
+func (r *todosRepository) getAll() ([]Todo, error) {
 
-	rows, err := db.Query("SELECT * FROM todos")
+	rows, err := r.db.Query("SELECT * FROM todos")
 
 	if err != nil {
 		return nil, err
@@ -82,15 +85,17 @@ func getTodos(db *sql.DB) ([]Todo, error) {
 	return todos, nil
 }
 
-func updateTodo(db *sql.DB, dto *UpdateTodoDto) (*Todo, error) {
+func (r *todosRepository) update(dto *UpdateTodoDto) (*Todo, error) {
 
-	todo, err := getTodoById(db, dto.Id)
+	todo, err := r.getById(dto.Id)
 
 	if err != nil {
 		return nil, err
 	}
 
-	stmt, err := db.Prepare("UPDATE todos SET name = ?, is_done = ? WHERE id = ?")
+	stmt, err := r.db.Prepare(
+		"UPDATE todos SET name = ?, is_done = ? WHERE id = ?",
+	)
 
 	if err != nil {
 		return todo, err
@@ -106,15 +111,15 @@ func updateTodo(db *sql.DB, dto *UpdateTodoDto) (*Todo, error) {
 	return todo, nil
 }
 
-func deleteTodo(db *sql.DB, dto *DeleteTodoDto) (*Todo, error) {
+func (r *todosRepository) delete(dto *DeleteTodoDto) (*Todo, error) {
 
-	todo, err := getTodoById(db, dto.Id)
+	todo, err := r.getById(dto.Id)
 
 	if err != nil {
 		return nil, err
 	}
 
-	stmt, err := db.Prepare("DELETE FROM todos WHERE id = ?")
+	stmt, err := r.db.Prepare("DELETE FROM todos WHERE id = ?")
 
 	if err != nil {
 		return todo, err

@@ -10,10 +10,16 @@ import (
 	"github.com/spf13/viper"
 )
 
+type appRepositories struct {
+	todos *todosRepository
+	// Add repositories here...
+}
+
 type AppContext struct {
-	config *config
-	db     *sql.DB
-	fiber  *fiber.App
+	config       *config
+	db           *sql.DB
+	fiber        *fiber.App
+	repositories *appRepositories
 }
 
 var app *AppContext
@@ -52,6 +58,18 @@ func (a *AppContext) initDatabaseConnection() error {
 	}
 
 	a.db = db
+
+	return nil
+}
+
+func (a *AppContext) initRepositories() error {
+
+	a.repositories = &appRepositories{
+		todos: &todosRepository{
+			db: a.db,
+		},
+		// Add repository instances here...
+	}
 
 	return nil
 }
@@ -105,6 +123,12 @@ func initApp() error {
 	err = app.initDatabaseConnection()
 	if err != nil {
 		log.Fatal("Cannot connect to database")
+		return err
+	}
+
+	err = app.initRepositories()
+	if err != nil {
+		log.Fatal("Cannot initialize repositories")
 		return err
 	}
 

@@ -13,7 +13,7 @@ func deleteTodoHandlerFn(a *AppContext) func(c *fiber.Ctx) error {
 		id, err := strconv.Atoi(c.Params("id"))
 		_ = err
 
-		todo, err := deleteTodo(a.db, &DeleteTodoDto{
+		todo, err := a.repositories.todos.delete(&DeleteTodoDto{
 			Id: int64(id),
 		})
 
