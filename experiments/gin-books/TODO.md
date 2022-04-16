@@ -1,0 +1,7 @@
+- [ ] Live reload
+- [ ] Routes grouping
+- [ ] Catch all route
+- [ ] Pagination
+- [ ] Divide folders by domain/feature
+- [ ] Add .env file
+- [ ] Add .env file for GIN for production mode?
