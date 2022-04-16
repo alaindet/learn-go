@@ -1,0 +1,21 @@
+{
+  "name": "nodemon-go",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon main.go"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      ".git",
+      "node_modules/**/node_modules"
+    ],
+    "verbose": true,
+    "execMap": {
+      "go": "go run"
+    },
+    "ext": "go"
+  }
+}
