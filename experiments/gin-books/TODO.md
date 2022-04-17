@@ -1,7 +1,8 @@
-- [ ] Live reload
+- [x] Live reload
 - [ ] Routes grouping
 - [ ] Catch all route
 - [ ] Pagination
 - [ ] Divide folders by domain/feature
 - [ ] Add .env file
+- [ ] Dockerize app with external env?
 - [ ] Add .env file for GIN for production mode?
