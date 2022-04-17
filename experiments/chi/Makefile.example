@@ -1,0 +1,17 @@
+# This is what is run when running "make" without a target
+.DEFAULT_GOAL := baz
+
+SOME_VAR := "Hello World"
+
+# @ <-- Executes command without showing the command to the user
+foo:
+	@echo "This is foo"
+
+bar:
+	@echo "This is bar"
+
+baz: foo bar
+	@echo "This is baz"
+
+somevar:
+	@echo ${SOME_VAR}

@@ -1,0 +1,22 @@
+{
+  "name": "chi_example",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon main.go"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      ".git",
+      "node_modules/**/node_modules"
+    ],
+    "verbose": true,
+    "signal": "SIGTERM",
+    "execMap": {
+      "go": "go run"
+    },
+    "ext": "go"
+  }
+}
