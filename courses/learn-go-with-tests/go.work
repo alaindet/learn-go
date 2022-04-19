@@ -1,6 +1,7 @@
 go 1.18
 
 use (
-	./hello_world
-	./integers
+	./01-hello_world
+	./02-integers
+	./03-iteration
 )
