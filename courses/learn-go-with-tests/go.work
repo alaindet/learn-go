@@ -4,4 +4,5 @@ use (
 	./01-hello_world
 	./02-integers
 	./03-iteration
+	./04-arrays-slices
 )
