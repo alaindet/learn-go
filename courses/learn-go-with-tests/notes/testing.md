@@ -1,5 +1,21 @@
 # Testing
 
+Testing is performed by running this inside the module
+
+```
+go test
+```
+
+You can also run this to run specific functions and subtests
+
+```
+# Run a test function
+go test -run TestArea
+
+# Run a subtest inside a test function
+go test -run TestArea/Rectangle
+```
+
 ## Conventions
 - Tests need to be in a file named like `*_test.go` (ex.: `hello_test.go`)
 - Test functions must start with `Test` (ex.: `TestHello`)
