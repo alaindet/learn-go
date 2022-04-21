@@ -13,10 +13,22 @@ func TestWallet(t *testing.T) {
 		}
 	}
 
-	assertError := func(t testing.TB, err error) {
+	assertError := func(t testing.TB, result, expected error) {
 		t.Helper()
-		if err == nil {
-			t.Error("withdraw should return an error")
+		if result == nil {
+			// New: stop test here if this gets called!
+			t.Fatal("should be an error")
+		}
+
+		if result != expected {
+			t.Errorf("Result: %q Expected: %q", result.Error(), expected)
+		}
+	}
+
+	assertNoError := func(t testing.TB, result error) {
+		t.Helper()
+		if result != nil {
+			t.Fatal("should not be an error")
 		}
 	}
 
@@ -29,8 +41,9 @@ func TestWallet(t *testing.T) {
 
 	t.Run("withdraw", func(t *testing.T) {
 		w := Wallet{balance: SomeDigitalCoin(20)}
-		w.Withdraw(SomeDigitalCoin(10))
+		err := w.Withdraw(SomeDigitalCoin(10))
 		expected := SomeDigitalCoin(10)
+		assertNoError(t, err)
 		assertBalance(t, w, expected)
 	})
 
@@ -38,7 +51,7 @@ func TestWallet(t *testing.T) {
 		startingBalance := SomeDigitalCoin(20)
 		w := Wallet{balance: startingBalance}
 		err := w.Withdraw(SomeDigitalCoin(100))
-		assertError(t, err)
+		assertError(t, err, ErrInsufficientFunds)
 		assertBalance(t, w, startingBalance)
 	})
 }

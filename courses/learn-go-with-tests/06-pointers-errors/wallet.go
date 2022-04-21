@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+// New: Errors are first class citizens in Go!
+var ErrInsufficientFunds = errors.New("cannot withdraw, insufficient funds")
+
 type SomeDigitalCoin int
 
 // This implements fmt.Stringer built-in interface
@@ -21,8 +24,9 @@ func (w *Wallet) Deposit(amount SomeDigitalCoin) {
 }
 
 func (w *Wallet) Withdraw(amount SomeDigitalCoin) error {
+
 	if w.balance < amount {
-		return errors.New("cannot withdraw from wallet")
+		return ErrInsufficientFunds
 	}
 
 	w.balance -= amount
