@@ -8,4 +8,5 @@ use (
 	./05-structs-methods-interfaces
 	./06-pointers-errors
 	./07-maps
+	./08-dependency-injection
 )
