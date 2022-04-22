@@ -10,4 +10,5 @@ use (
 	./07-maps
 	./08-dependency-injection
 	./09-mocking
+	./10-concurrency
 )
