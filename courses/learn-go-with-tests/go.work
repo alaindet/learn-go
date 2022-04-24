@@ -11,4 +11,5 @@ use (
 	./08-dependency-injection
 	./09-mocking
 	./10-concurrency
+	./11-select
 )
