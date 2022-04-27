@@ -7,22 +7,34 @@ import (
 func walk(x interface{}, fn func(input string)) {
 	val := getValue(x)
 
-	valuesCount := 0
-	var getField func(int) reflect.Value
+	walkValue := func(value reflect.Value) {
+		walk(value.Interface(), fn)
+	}
 
 	switch val.Kind() {
 	case reflect.String:
 		fn(val.String())
-	case reflect.Slice, reflect.Array:
-		valuesCount = val.Len()
-		getField = val.Index
 	case reflect.Struct:
-		valuesCount = val.NumField()
-		getField = val.Field
-	}
-
-	for i := 0; i < valuesCount; i++ {
-		walk(getField(i).Interface(), fn)
+		for i := 0; i < val.NumField(); i++ {
+			walkValue(val.Field(i))
+		}
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < val.Len(); i++ {
+			walkValue(val.Index(i))
+		}
+	case reflect.Map:
+		for _, key := range val.MapKeys() {
+			walkValue(val.MapIndex(key))
+		}
+	case reflect.Chan:
+		// Recv() receives data from a channel
+		// 1. Receive from channel
+		// 2. if ok == true the channel is not closed
+		// 3. walk() on received channel
+		// 4. Keep receiving while ok == true (channel is open)
+		for v, ok := val.Recv(); ok; v, ok = val.Recv() {
+			walkValue(v)
+		}
 	}
 }
 

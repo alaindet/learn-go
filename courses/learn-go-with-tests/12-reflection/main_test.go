@@ -20,6 +20,19 @@ type Profile struct {
 	City string
 }
 
+func assertContains(t testing.TB, haystack []string, needle string) {
+	t.Helper()
+	contains := false
+	for _, x := range haystack {
+		if x == needle {
+			contains = true
+		}
+	}
+	if !contains {
+		t.Errorf("expected %+v to contain %q but it didn't", haystack, needle)
+	}
+}
+
 func TestWalk(t *testing.T) {
 
 	testCases := []struct {
@@ -89,4 +102,42 @@ func TestWalk(t *testing.T) {
 			}
 		})
 	}
+
+	// Test for maps
+	t.Run("with maps", func(t *testing.T) {
+		input := map[string]string{
+			"Foo": "Bar",
+			"Baz": "Boz",
+		}
+
+		var got []string
+		walk(input, func(input string) {
+			got = append(got, input)
+		})
+
+		assertContains(t, got, "Bar")
+		assertContains(t, got, "Boz")
+	})
+
+	// Test for channels
+	t.Run("channels", func(t *testing.T) {
+		ch := make(chan Profile)
+
+		go func(outerCh chan Profile) {
+			outerCh <- Profile{42, "London"}
+			outerCh <- Profile{69, "Roma"}
+			close(outerCh)
+		}(ch)
+
+		var result []string
+		walk(ch, func(input string) {
+			result = append(result, input)
+		})
+
+		expected := []string{"London", "Roma"}
+
+		if !reflect.DeepEqual(result, expected) {
+			t.Errorf("Result: %v Expected: %v", result, expected)
+		}
+	})
 }
