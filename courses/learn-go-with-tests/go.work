@@ -13,4 +13,5 @@ use (
 	./10-concurrency
 	./11-select
 	./12-reflection
+	./13-sync
 )

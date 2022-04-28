@@ -1,1 +1,1 @@
-https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/reflection#write-the-test-first-10
+https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/sync#next-steps
