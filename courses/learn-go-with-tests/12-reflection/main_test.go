@@ -140,4 +140,22 @@ func TestWalk(t *testing.T) {
 			t.Errorf("Result: %v Expected: %v", result, expected)
 		}
 	})
+
+	// Test for functions
+	t.Run("function", func(t *testing.T) {
+
+		f := func() (Profile, Profile) {
+			return Profile{42, "London"}, Profile{69, "Roma"}
+		}
+
+		var result []string
+		walk(f, func(input string) {
+			result = append(result, input)
+		})
+
+		expected := []string{"London", "Roma"}
+		if !reflect.DeepEqual(result, expected) {
+			t.Errorf("Result: %v Expected: %v", result, expected)
+		}
+	})
 }
