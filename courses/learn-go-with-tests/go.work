@@ -15,4 +15,6 @@ use (
 	./12-reflection
 	./13-sync
 	./14-context
+	./15-property-tests
+	./16-maths
 )
