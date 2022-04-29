@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -49,6 +50,24 @@ func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
 	}
 }
 
+type SpyResponseWriter struct {
+	written bool
+}
+
+func (s *SpyResponseWriter) Header() http.Header {
+	s.written = true
+	return nil
+}
+
+func (s *SpyResponseWriter) Write([]byte) (int, error) {
+	s.written = true
+	return 0, errors.New("not implemented")
+}
+
+func (s *SpyResponseWriter) WriteHeader(statusCode int) {
+	s.written = true
+}
+
 func TestServer(t *testing.T) {
 
 	t.Run(
@@ -67,30 +86,32 @@ func TestServer(t *testing.T) {
 		},
 	)
 
-	// t.Run(
-	// 	"tells store to cancel work if request is cancelled",
-	// 	func(t *testing.T) {
-	// 		storeData := "hello, world"
-	// 		store := &SpyStore{response: storeData}
-	// 		server := Server(store)
+	t.Run(
+		"tells store to cancel work if request is cancelled",
+		func(t *testing.T) {
+			storeData := "hello, world"
+			store := &SpyStore{response: storeData}
+			server := Server(store)
 
-	// 		request := httptest.NewRequest(http.MethodGet, "/", nil)
+			request := httptest.NewRequest(http.MethodGet, "/", nil)
 
-	// 		// Create a derived context with cancelling signal
-	// 		// by extending the request context
-	// 		cancellingCtx, cancel := context.WithCancel(request.Context())
+			// Create a derived context with cancelling signal
+			// by extending the request context
+			cancellingCtx, cancel := context.WithCancel(request.Context())
 
-	// 		// Run the function signaling cancellation after 10 milliseconds
-	// 		time.AfterFunc(10*time.Millisecond, cancel)
+			// Run the function signaling cancellation after 10 milliseconds
+			time.AfterFunc(10*time.Millisecond, cancel)
 
-	// 		// Create a new request context by extending the canceling context
-	// 		request = request.WithContext(cancellingCtx)
+			// Create a new request context by extending the canceling context
+			request = request.WithContext(cancellingCtx)
 
-	// 		response := httptest.NewRecorder()
+			response := &SpyResponseWriter{}
 
-	// 		server.ServeHTTP(response, request)
+			server.ServeHTTP(response, request)
 
-	// 		store.assertWasCancelled()
-	// 	},
-	// )
+			if response.written {
+				t.Error("a response should not have been written")
+			}
+		},
+	)
 }
