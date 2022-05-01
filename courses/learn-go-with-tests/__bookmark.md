@@ -1,1 +1,1 @@
-https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#floats-are-horrible
+https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#refactor-4
