@@ -17,4 +17,5 @@ use (
 	./14-context
 	./15-property-tests
 	./16-maths
+	./17-reading-files
 )
