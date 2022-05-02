@@ -1,1 +1,1 @@
-https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#write-the-test-first-7
+https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/math#refactor-9

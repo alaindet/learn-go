@@ -19,14 +19,6 @@ type Point struct {
 	Y float64
 }
 
-func SecondHand(t time.Time) Point {
-	p := secondHandPoint(t)
-	p = Point{p.X * SecondHandLength, p.Y * SecondHandLength} // scale
-	p = Point{p.X, -p.Y}                                      // flip on Y axis
-	p = Point{p.X + Center, p.Y + Center}                     // translate
-	return p
-}
-
 func secondsInRadians(t time.Time) float64 {
 	// return float64(t.Second()) * math.Pi / 30
 	return math.Pi / (30 / float64(t.Second()))
@@ -55,12 +47,26 @@ func minuteHand(w io.Writer, t time.Time) {
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, p.X, p.Y)
 }
 
+func hoursInRadians(t time.Time) float64 {
+	return (minutesInRadians(t) / 12) + (math.Pi / (6 / float64(t.Hour()%12)))
+}
+
+func hourHandPoint(t time.Time) Point {
+	return angleToPoint(hoursInRadians(t))
+}
+
+func hourHand(w io.Writer, t time.Time) {
+	p := makeHand(hourHandPoint(t), HourHandLength)
+	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, p.X, p.Y)
+}
+
 // This writes the image of a clock in SVG showing time t in writer w
 func SVGWriter(w io.Writer, t time.Time) {
 	io.WriteString(w, svgStart)
 	io.WriteString(w, bezel)
 	secondHand(w, t)
 	minuteHand(w, t)
+	hourHand(w, t)
 	io.WriteString(w, svgEnd)
 }
 
