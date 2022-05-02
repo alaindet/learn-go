@@ -33,21 +33,26 @@ func secondsInRadians(t time.Time) float64 {
 	// ^^ Equivalent, but should preserve floating-point precision (?)
 }
 
-// This assumes a "unit" circle of radius 1 centered in (0,0)
-// Returns the coordinates of the second hand tip on the unit circle
 func secondHandPoint(t time.Time) Point {
-	rad := secondsInRadians(t)
-	x := math.Sin(rad)
-	y := math.Cos(rad)
-	return Point{x, y}
+	return angleToPoint(secondsInRadians(t))
 }
 
 func secondHand(w io.Writer, t time.Time) {
-	p := secondHandPoint(t)
-	p = Point{p.X * SecondHandLength, p.Y * SecondHandLength} // scale
-	p = Point{p.X, -p.Y}                                      // flip
-	p = Point{p.X + Center, p.Y + Center}                     // translate
+	p := makeHand(secondHandPoint(t), SecondHandLength)
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, p.X, p.Y)
+}
+
+func minutesInRadians(t time.Time) float64 {
+	return (secondsInRadians(t) / 60) + (math.Pi / (30 / float64(t.Minute())))
+}
+
+func minuteHandPoint(t time.Time) Point {
+	return angleToPoint(minutesInRadians(t))
+}
+
+func minuteHand(w io.Writer, t time.Time) {
+	p := makeHand(minuteHandPoint(t), MinuteHandLength)
+	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, p.X, p.Y)
 }
 
 // This writes the image of a clock in SVG showing time t in writer w
@@ -55,6 +60,7 @@ func SVGWriter(w io.Writer, t time.Time) {
 	io.WriteString(w, svgStart)
 	io.WriteString(w, bezel)
 	secondHand(w, t)
+	minuteHand(w, t)
 	io.WriteString(w, svgEnd)
 }
 
@@ -69,3 +75,13 @@ const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 const bezel = `<circle cx="150" cy="150" r="100" style="fill:#fff;stroke:#000;stroke-width:5px;"/>`
 
 const svgEnd = `</svg>`
+
+func angleToPoint(angle float64) Point {
+	return Point{math.Sin(angle), math.Cos(angle)}
+}
+
+func makeHand(p Point, length float64) Point {
+	p = Point{p.X * length, p.Y * length}
+	p = Point{p.X, -p.Y}
+	return Point{p.X + Center, p.Y + Center}
+}

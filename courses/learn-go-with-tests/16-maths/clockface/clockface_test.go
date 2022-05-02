@@ -26,8 +26,8 @@ func testName(t time.Time) string {
 func TestSecondsInRadians(t *testing.T) {
 
 	cases := []struct {
-		time  time.Time
-		angle float64
+		input    time.Time
+		expected float64
 	}{
 		{simpleTime(0, 0, 30), math.Pi},
 		{simpleTime(0, 0, 0), 0},
@@ -36,10 +36,10 @@ func TestSecondsInRadians(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		name := testName(c.time)
+		name := testName(c.input)
 		t.Run(name, func(t *testing.T) {
-			result := secondsInRadians(c.time)
-			expected := c.angle
+			result := secondsInRadians(c.input)
+			expected := c.expected
 
 			if !circaEqualFloats(result, expected, 1e-7) {
 				t.Fatalf("got %v but wanted %v radians", expected, result)
@@ -51,7 +51,7 @@ func TestSecondsInRadians(t *testing.T) {
 func TestSecondHandVector(t *testing.T) {
 
 	testCases := []struct {
-		time     time.Time
+		input    time.Time
 		expected Point
 	}{
 		{simpleTime(0, 0, 30), Point{0, -1}},
@@ -59,10 +59,48 @@ func TestSecondHandVector(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		t.Run(testName(testCase.time), func(t *testing.T) {
-			result := secondHandPoint(testCase.time)
+		t.Run(testName(testCase.input), func(t *testing.T) {
+			result := secondHandPoint(testCase.input)
 			if !circaEqualPoints(result, testCase.expected) {
 				t.Fatalf("Wanted %v Point, but got %v", testCase.expected, result)
+			}
+		})
+	}
+}
+
+func TestMinutesInRadians(t *testing.T) {
+	cases := []struct {
+		input    time.Time
+		expected float64
+	}{
+		{simpleTime(0, 30, 0), math.Pi},
+		{simpleTime(0, 0, 7), 7 * (math.Pi / (30 * 60))},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.input), func(t *testing.T) {
+			result := minutesInRadians(c.input)
+			if result != c.expected {
+				t.Fatalf("Wanted %v radians, but got %v", c.expected, result)
+			}
+		})
+	}
+}
+
+func TestMinuteHandPoint(t *testing.T) {
+	cases := []struct {
+		input    time.Time
+		expected Point
+	}{
+		{simpleTime(0, 30, 0), Point{0, -1}},
+		{simpleTime(0, 45, 0), Point{-1, 0}},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.input), func(t *testing.T) {
+			result := minuteHandPoint(c.input)
+			if !circaEqualPoints(result, c.expected) {
+				t.Fatalf("Wanted %v Point, but got %v", c.expected, result)
 			}
 		})
 	}

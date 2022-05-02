@@ -34,33 +34,64 @@ type Line struct {
 
 func TestSVGWriterSecondHand(t *testing.T) {
 	cases := []struct {
-		Input    time.Time
-		Expected Line
+		input    time.Time
+		expected Line
 	}{
 		// Test case 1
 		{
-			Input:    simpleTime(0, 0, 0),
-			Expected: Line{150, 150, 150, 60},
+			input:    simpleTime(0, 0, 0),
+			expected: Line{150, 150, 150, 60},
 		},
 		// Test case 2
 		{
-			Input:    simpleTime(0, 0, 30),
-			Expected: Line{150, 150, 150, 240},
+			input:    simpleTime(0, 0, 30),
+			expected: Line{150, 150, 150, 240},
 		},
 	}
 
 	for _, c := range cases {
-		t.Run(testName(c.Input), func(t *testing.T) {
+		t.Run(testName(c.input), func(t *testing.T) {
 
 			b := bytes.Buffer{}
-			SVGWriter(&b, c.Input)
+			SVGWriter(&b, c.input)
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
 
-			if !containsLine(c.Expected, svg.Line) {
+			if !containsLine(c.expected, svg.Line) {
 				t.Errorf(
 					"Expected to find the second hand line %+v, in the SVG lines %+v",
-					c.Expected,
+					c.expected,
+					svg.Line,
+				)
+			}
+		})
+	}
+}
+
+func TestSVGWriterMinuteHand(t *testing.T) {
+	cases := []struct {
+		input    time.Time
+		expected Line
+	}{
+		// Test case 1
+		{
+			input:    simpleTime(0, 0, 0),
+			expected: Line{150, 150, 150, 70},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.input), func(t *testing.T) {
+
+			b := bytes.Buffer{}
+			SVGWriter(&b, c.input)
+			svg := SVG{}
+			xml.Unmarshal(b.Bytes(), &svg)
+
+			if !containsLine(c.expected, svg.Line) {
+				t.Errorf(
+					"Expected to find the minute hand line %+v, in the SVG lines %+v",
+					c.expected,
 					svg.Line,
 				)
 			}
