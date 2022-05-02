@@ -22,6 +22,7 @@ func testName(t time.Time) string {
 	return t.Format("15:04:05")
 }
 
+// This is a unit test
 func TestSecondsInRadians(t *testing.T) {
 
 	cases := []struct {
