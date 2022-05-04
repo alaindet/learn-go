@@ -25,6 +25,8 @@ func TestRender(t *testing.T) {
 		}
 
 		result := buf.String()
+
+		// TODO: Move to approval tests
 		expected := joinStrings(
 			"<h1>hello world</h1>",
 			"<p>This is a description</p>",
