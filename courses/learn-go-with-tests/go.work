@@ -19,5 +19,6 @@ use (
 	./16-maths
 	./17-reading-files
 	./18-templates
-	./19-generics	
+	./19-generics
+	./20-app
 )
