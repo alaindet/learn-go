@@ -103,4 +103,28 @@ func TestGameOfLife(t *testing.T) {
 			t.Errorf("Result: %v Expected: %v", result, expected)
 		}
 	})
+
+	t.Run("wraps on horizontal edges", func(t *testing.T) {
+		g := NewGameOfLife(4, 4)
+		g.SetSymbols('x', 'o')
+		g.SetState(utils.IntsToBools([]int{
+			0, 0, 0, 1,
+			0, 0, 0, 1,
+			0, 0, 0, 1,
+			0, 0, 0, 0,
+		}))
+		g.Step()
+
+		result := g.String()
+		expected := utils.JoinLines(
+			"oooo",
+			"xoxx",
+			"oooo",
+			"oooo",
+		)
+
+		if result != expected {
+			t.Errorf("Result: %v Expected: %v", result, expected)
+		}
+	})
 }
