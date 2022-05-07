@@ -1,6 +1,10 @@
 package core
 
-import "strings"
+import (
+	"math/rand"
+	"strings"
+	"time"
+)
 
 type State []bool
 
@@ -33,12 +37,23 @@ func NewGameOfLife(w, h int) *Game {
 	}
 }
 
-func (g *Game) SetRandomState(percentageAlive float64) {
-	aliveCount := int(percentageAlive * float64(g.Size))
-	newState := make([]bool, g.Size)
+func getRandomizer(args ...int64) *rand.Rand {
+	seed := time.Now().UTC().UnixMilli()
+	if len(args) > 0 {
+		seed = args[0]
+	}
+	randomSource := rand.NewSource(seed)
+	return rand.New(randomSource)
+}
 
-	// TODO ...
-	_ = aliveCount
+func (g *Game) SetRandomState(percentageAlive float64) {
+	newState := make([]bool, g.Size)
+	randomizer := getRandomizer()
+	threshold := percentageAlive * 100.0
+
+	for i := 0; i < g.Size; i++ {
+		newState[i] = float64(randomizer.Intn(100)) < threshold
+	}
 
 	g.State = newState
 }
