@@ -1,4 +1,4 @@
-.DEFAULT_GOAL=wasm-build
+.DEFAULT_GOAL=run
 
 wasm-build:
 	GOOS=js GOARCH=wasm go build -o ./assets/wasm/main.wasm ./cmd/wasm
@@ -9,3 +9,5 @@ wasm-init:
 
 server-run:
 	node server.js
+
+run: wasm-build server-run

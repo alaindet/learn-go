@@ -1,13 +1,21 @@
-/**
-From wasm_exec.js
-=================
-Go class
-WebAssembly class
-*/
+const goWasm = new Go(); // Comes from wasm_exec.js
 
-const goWasm = new Go();
+const run = (mainWasm) => {
+  // Run the module
+  goWasm.run(mainWasm.instance);
 
-WebAssembly.instantiateStreaming(fetch("wasm/main.wasm"), goWasm.importObject)
-  .then(result => {
-    goWasm.run(result.instance);
+  // Use a global function
+  const btn = document.getElementById("clickme");
+  const out = document.getElementById("output");
+
+  btn.addEventListener("click", () => {
+    const fromWasm = sayHello();
+    console.log('From WASM', typeof fromWasm, fromWasm);
+    out.innerHTML = fromWasm;
   });
+};
+
+(async () => {
+  const w = WebAssembly.instantiateStreaming;
+  run(await w(fetch("wasm/main.wasm"), goWasm.importObject));
+})();
