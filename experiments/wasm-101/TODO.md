@@ -1,0 +1,2 @@
+- [ ] Minify wasm_exec.js?
+- [ ] Try TinyGo for smaller builds?
