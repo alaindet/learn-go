@@ -32,12 +32,21 @@ function onFibonacci() {
 }
 
 function onFibonacciBenchmark() {
-  measureTime("JavaScript", () => jsFibonacci(78));
-  measureTime("WASM", () => fibonacci(78));
+  console.log('');
+  measureTime("JavaScript", () => {
+    for (let i = 0; i < 1000000; i++) {
+      jsFibonacci(75);
+    }
+  });
+  measureTime("WASM", () => {
+    for (let i = 0; i < 1000000; i++) {
+      fibonacci(75);
+    }
+  });
 }
 
 function measureTime(name, fn) {
-  const start = performance.now()
+  const start = performance.now();
   fn();
   const took = performance.now() - start;
   console.log(`Measure time: "${name}" took ${took} ms`);
@@ -57,8 +66,6 @@ function jsFibonacci(n) {
 		secondLast = last
 		last = result
 	}
-
-  console.log('result', result);
 
 	return result;
 }

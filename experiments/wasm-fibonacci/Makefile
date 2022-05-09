@@ -1,4 +1,6 @@
 .DEFAULT_GOAL=run
+ITERATIONS=100000000
+N=75
 
 wasm-build:
 	GOOS=js GOARCH=wasm go build -o ./assets/wasm/fibonacci.wasm ./cmd/wasm-fibonacci
@@ -14,3 +16,9 @@ test:
 	go test ./cmd/fibonacci
 
 run: wasm-build server-run
+
+benchmarks:
+	@echo "Started benchmarking Node N=${N}, ITERATIONS=${ITERATIONS}..."
+	@N=${N} ITERATIONS=${ITERATIONS} node ./benchmark/node/index.js
+	@echo "Started benchmarking Go N=${N}, ITERATIONS=${ITERATIONS}..."
+	@N=${N} ITERATIONS=${ITERATIONS} go run ./benchmark/go/main.go
