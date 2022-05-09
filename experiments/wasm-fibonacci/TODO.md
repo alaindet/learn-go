@@ -1,0 +1,2 @@
+- [ ] Live reload with Nodemon?
+- [ ] Check max N fibonacci
