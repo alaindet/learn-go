@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go WASM Fibonacci</title>
+</head>
+<body>
+
+  <h1>Fibonacci WASM calculator</h1>
+
+  <p>Max N: 78</p>
+
+  <!-- Input -->
+  <div class="form-control">
+    <label for="input">Input:</label>
+    <input type="number" id="input">
+  </div>
+
+  <!-- Result -->
+  <div class="form-control">
+    <label for="output">Output:</label>
+    <input type="number" id="output">
+  </div>
+
+  <button onClick="onFibonacci();">Calculate</button>
+  <button onClick="onFibonacciBenchmark();">Benchmark (JS vs WASM)</button>
+
+  <script src="wasm/wasm_exec.js"></script>
+  <script src="polyfills.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
