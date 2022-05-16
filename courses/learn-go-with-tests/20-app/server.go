@@ -19,7 +19,7 @@ type Player struct {
 	Score int
 }
 
-func NewServer(store *InMemoryPlayerStore) *PlayerServer {
+func NewServer(store *IPlayerStore) *PlayerServer {
 	p := new(PlayerServer)
 	p.store = store
 
