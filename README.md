@@ -19,6 +19,7 @@ This repository contains the learning material, demo, tests and everything I use
 ### Books
 - [Pro Go - The Complete Guide to Programming Reliable and Efficient Software Using Golang](https://link.springer.com/book/10.1007/978-1-4842-7355-5)
 - [Learning Go: An Idiomatic Approach to Real-World Go Programming](https://www.oreilly.com/library/view/learning-go/9781492077206/)
+- [Learn Data Structures and Algorithms with Golang](https://www.packtpub.com/product/learn-data-structures-and-algorithms-with-golang/9781789618501)
 
 ### Other
 - [https://gophercises.com/](https://gophercises.com/)
