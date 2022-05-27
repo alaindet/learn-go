@@ -19,17 +19,6 @@ var words = []string{
 }
 
 func main() {
-	example2()
-}
-
-// Very very bad
-// func example1() {
-// 	go printIt("This is the first")
-// 	time.Sleep(time.Millisecond * 200)
-// 	printIt("This is the second")
-// }
-
-func example2() {
 	var wg sync.WaitGroup
 	wg.Add(len(words))
 
@@ -48,5 +37,5 @@ func printIt(s string) {
 
 func wgPrintIt(wg *sync.WaitGroup, s string) {
 	defer wg.Done()
-	print(s)
+	printIt(s)
 }

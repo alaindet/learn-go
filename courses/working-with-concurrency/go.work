@@ -1,5 +1,5 @@
 go 1.18
 
 use (
-    ./first-example
+    ./wait-group
 )
