@@ -10,6 +10,7 @@ import (
 const (
 	numberOfPizzas = 10
 	successRate    = 7
+	maxDelay       = 4
 )
 
 var pizzasMade, pizzasFailed, total int
@@ -26,4 +27,22 @@ func main() {
 
 	go pizzeria(pizzaJob)
 
+	for order := range pizzaJob.data {
+		if order.pizzaNumber > numberOfPizzas {
+			color.Cyan("\nDone making pizzas")
+			err := pizzaJob.Close()
+			if err != nil {
+				color.Red("ERROR Could not close the channel")
+			}
+			continue
+		}
+
+		if order.success {
+			color.Green(order.message)
+			color.Green("Order #%d is out for delivery", order.pizzaNumber)
+		} else {
+			color.Red(order.message)
+			color.Red("The customer is not happy")
+		}
+	}
 }

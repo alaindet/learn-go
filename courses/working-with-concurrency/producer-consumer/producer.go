@@ -29,6 +29,27 @@ var errorMessages = map[int]string{
 	10: "Pizzaiolo quit",
 }
 
+func pizzeria(pizzaMaker *Producer) {
+	i := 0
+	for {
+		pizza := makePizza(i)
+
+		// This should be impossibile, but better check it
+		if pizza == nil {
+			continue
+		}
+
+		i = pizza.pizzaNumber
+		select {
+		case pizzaMaker.data <- *pizza:
+		case quitChan := <-pizzaMaker.quit:
+			close(pizzaMaker.data)
+			close(quitChan)
+			return
+		}
+	}
+}
+
 func makePizza(pizzaNumber int) *PizzaOrder {
 	pizzaNumber++
 
@@ -42,9 +63,10 @@ func makePizza(pizzaNumber int) *PizzaOrder {
 	var msg string
 	var success bool
 
+	fmt.Println("\n---")
 	fmt.Printf("Received order #%d\n", pizzaNumber)
 	outcome := rand.Intn(9) + 1
-	delay := rand.Intn(5) + 1 // Simulate a delay in making the pizza
+	delay := rand.Intn(maxDelay) + 1 // Simulate a delay in making the pizza
 
 	// Update counters
 	total++
@@ -59,30 +81,14 @@ func makePizza(pizzaNumber int) *PizzaOrder {
 		msg = fmt.Sprintf(f, pizzaNumber, errorMessages[outcome])
 	}
 
-	f := "Making pizza #%d. It will take %d seconds..."
-	fmt.Printf(f, pizzaNumber, delay)
-	time.Sleep(time.Duration(delay) * time.Second)
+	d := float64(delay) / 2
+	f := "Making pizza #%d. It will take %.1f seconds...\n"
+	fmt.Printf(f, pizzaNumber, d)
+	time.Sleep(time.Duration(delay) * 500 * time.Millisecond)
 
 	return &PizzaOrder{
 		pizzaNumber: pizzaNumber,
 		message:     msg,
 		success:     success,
-	}
-}
-
-func pizzeria(pizzaMaker *Producer) {
-	i := 0
-	for {
-		pizza := makePizza(i)
-		if pizza != nil {
-			i = pizza.pizzaNumber
-			select {
-			case pizzaMaker.data <- *pizza:
-			case quitChan := <-pizzaMaker.quit:
-				close(pizzaMaker.data)
-				close(quitChan)
-				return
-			}
-		}
 	}
 }
