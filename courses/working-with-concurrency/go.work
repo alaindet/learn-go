@@ -1,6 +1,7 @@
 go 1.18
 
 use (
+	./dining-philosophers
 	./producer-consumer
 	./race-conditions
 	./wait-group
