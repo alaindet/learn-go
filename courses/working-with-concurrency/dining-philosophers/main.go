@@ -25,8 +25,9 @@ type Philosopher struct {
 const hunger = 3
 
 var wg sync.WaitGroup
-var waitingTime = 1 * time.Second
-var eatingTime = 3 * time.Second
+var waitingTime = 300 * time.Millisecond
+var eatingTime = 600 * time.Millisecond
+var thinkTime = 300 * time.Millisecond
 var philosophers = []Philosopher{
 	{"Plato", color.Green},
 	{"Socrates", color.Blue},
@@ -42,6 +43,8 @@ func main() {
 
 	wg.Add(len(philosophers))
 	leftFork := &sync.Mutex{}
+
+	// Last right fork should be the first left fork, right?
 	for i := 0; i < len(philosophers); i++ {
 		rightFork := &sync.Mutex{}
 		go diningProblem(philosophers[i], leftFork, rightFork)
@@ -67,8 +70,11 @@ func diningProblem(p Philosopher, leftFork, rightFork *sync.Mutex) {
 		rightFork.Lock()
 		p.log("%s picked up the right fork\n", p.name)
 
-		p.log("%s has both forks and is eating\n", p.name)
+		p.log("%s has both forks and is about to eat\n", p.name)
 		time.Sleep(eatingTime)
+
+		p.log("%s is taking some time to think about the universe before eating\n", p.name)
+		time.Sleep(thinkTime)
 
 		leftFork.Unlock()
 		p.log("%s put down the left fork\n", p.name)
