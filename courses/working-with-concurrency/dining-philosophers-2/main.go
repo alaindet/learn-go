@@ -20,6 +20,7 @@ on a line by itself, where <number> is the number of the philosopher.
 package main
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -60,12 +61,17 @@ func (p philosopher) eat(wg *sync.WaitGroup) {
 		p.log("has finished eating and waits")
 		time.Sleep(waitingTime)
 	}
+	orderMutex.Lock()
+	orderFinished = append(orderFinished, p.name)
+	orderMutex.Unlock()
 }
 
 const hunger = 3
-const eatingTime = 300 * time.Millisecond
-const waitingTime = 500 * time.Millisecond
 
+var eatingTime = 300 * time.Millisecond
+var waitingTime = 500 * time.Millisecond
+var orderMutex sync.Mutex
+var orderFinished []string
 var philosophers = []philosopher{
 	{name: "Plato", logger: color.Green},
 	{name: "Socrates", logger: color.Blue},
@@ -77,6 +83,7 @@ var philosophers = []philosopher{
 func main() {
 	var wg sync.WaitGroup
 	count := len(philosophers)
+	orderFinished = make([]string, 0, count)
 
 	// Create chopsticks
 	chopsticks := make([]*chopstick, count)
@@ -92,4 +99,6 @@ func main() {
 		go philosophers[i].eat(&wg)
 	}
 	wg.Wait()
+	fmt.Printf("\n---\nOrder: %v\n", orderFinished)
+	fmt.Println("Table is empty")
 }
