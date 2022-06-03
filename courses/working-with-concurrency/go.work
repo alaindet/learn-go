@@ -1,6 +1,7 @@
 go 1.18
 
 use (
+	./channels-101
 	./dining-philosophers
 	./dining-philosophers-2
 	./producer-consumer
