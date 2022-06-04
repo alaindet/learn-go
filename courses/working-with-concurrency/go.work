@@ -2,6 +2,8 @@ go 1.18
 
 use (
 	./channels-101
+	./channels-buffered
+	./channels-select
 	./dining-philosophers
 	./dining-philosophers-2
 	./producer-consumer
