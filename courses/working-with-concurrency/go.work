@@ -8,6 +8,7 @@ use (
 	./dining-philosophers-2
 	./producer-consumer
 	./race-conditions
+	./sleeping-barber
 	./wait-group
 	./weekly-income
 )
