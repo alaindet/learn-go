@@ -11,6 +11,7 @@ The Sleepgin Barber Problem
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -20,17 +21,56 @@ import (
 var seatsCapacity = 10
 var arrivalRate = 100
 var cutDuration = 200 * time.Millisecond
-var timeOpen = 10 * time.Second
+var timeOpen = 5 * time.Second
+var barbers = []string{
+	"Frank",
+	"Gerard",
+	"Milton",
+	"Susan",
+	"Kelly",
+	"Pat",
+}
 
 func main() {
 	color.Yellow("The Sleeping Barber Problem")
 	color.Yellow("---------------------------")
 
+	// Create barber shop
 	rand.Seed(time.Now().UnixNano())
 	shop := NewBarberShop(seatsCapacity, cutDuration)
-
 	color.Green("The shop is open")
 
-	// TODO...
-	_ = shop
+	// Add barbers
+	for _, barber := range barbers {
+		shop.AddBarber(barber)
+	}
+
+	// Close shop after some time
+	shopClosing := make(chan bool)
+	closed := make(chan bool)
+	go func() {
+		<-time.After(timeOpen)
+		shopClosing <- true
+		shop.closeShopForDay()
+		closed <- true
+	}()
+
+	// Send clients
+	i := 1
+	go func() {
+		for {
+			randomMs := rand.Int() % (2 * arrivalRate)
+			select {
+			case <-shopClosing:
+				return
+			case <-time.After(time.Millisecond * time.Duration(randomMs)):
+				shop.AddClient(fmt.Sprintf("Client #%d", i))
+				i++
+			}
+		}
+	}()
+
+	// Wait for the barber shop to close
+	<-closed
+	fmt.Println("Done")
 }
