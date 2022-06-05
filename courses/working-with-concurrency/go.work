@@ -6,6 +6,7 @@ use (
 	./channels-select
 	./dining-philosophers
 	./dining-philosophers-2
+	./final-project
 	./producer-consumer
 	./race-conditions
 	./sleeping-barber
