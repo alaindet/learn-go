@@ -5,6 +5,10 @@ go 1.18
 require (
 	github.com/jackc/pgconn v1.12.1
 	github.com/jackc/pgx/v4 v4.16.1
+	github.com/alexedwards/scs/redisstore v0.0.0-20220216073957-c252878bcf5a
+	github.com/alexedwards/scs/v2 v2.5.0
+	github.com/go-chi/chi/v5 v5.0.7
+	github.com/gomodule/redigo v1.8.0
 )
 
 require (
