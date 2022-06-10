@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -17,6 +18,8 @@ import (
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v4"
 	_ "github.com/jackc/pgx/v4/stdlib"
+
+	"final_project/data"
 )
 
 const (
@@ -28,12 +31,15 @@ const (
 var db *sql.DB
 
 func main() {
+	db := initDB()
+
 	app := Config{
 		Session:  initSession(),
-		DB:       initDB(),
+		DB:       db,
 		InfoLog:  log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
 		ErrorLog: log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
 		Wait:     &sync.WaitGroup{},
+		Models:   data.New(db),
 	}
 
 	go app.listenForShutdown()
@@ -111,6 +117,7 @@ func openDB(dsn string) (*sql.DB, error) {
 }
 
 func initSession() *scs.SessionManager {
+	gob.Register(data.User{})
 	session := scs.New()
 	session.Store = redisstore.New(initRedis())
 	session.Lifetime = 24 * time.Hour
