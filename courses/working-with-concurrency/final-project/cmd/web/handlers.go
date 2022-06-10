@@ -38,11 +38,16 @@ func (app *Config) PostLoginPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.Session.Put(r.Context(), "userID", user.ID)
-	app.Session.Put(r.Context(), "userID", user.ID)
+	app.Session.Put(r.Context(), "user", user)
+	app.Session.Put(r.Context(), "flash", "You logged in successfully")
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (app *Config) Logout(w http.ResponseWriter, r *http.Request) {
-	// TODO
+	_ = app.Session.Destroy(r.Context())
+	_ = app.Session.RenewToken(r.Context())
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
 func (app *Config) RegisterPage(w http.ResponseWriter, r *http.Request) {
@@ -50,9 +55,14 @@ func (app *Config) RegisterPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Config) PostRegisterPage(w http.ResponseWriter, r *http.Request) {
-	// TODO
+	// create user
+	// send activation email
+	// subscribe user to account
 }
 
 func (app *Config) ActivateAccount(w http.ResponseWriter, r *http.Request) {
-	// TODO
+	// validate url
+	// generate invoice
+	// send email with attachments
+	// send email with invoice attached
 }

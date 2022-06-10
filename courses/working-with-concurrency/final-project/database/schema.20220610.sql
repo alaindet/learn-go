@@ -61,7 +61,7 @@ CREATE TABLE public.users (
   updated_at timestamp without time zone
 );
 
--- Password for root admin is "verysecret"
+-- Password for root admin is "admin@example.com"
 INSERT INTO
   "public"."users"(
     "email",
@@ -75,14 +75,14 @@ INSERT INTO
   )
 VALUES
   (
-    E 'admin@example.com',
-    E 'Admin',
-    E 'User',
-    E '$2a$12$1zGLuYDDNvATh4RA4avbKuheAMpb1svexSzrQm7up.bnpwQHs0jNe',
+    'admin@example.com',
+    'Admin',
+    'User',
+    '$2a$12$ZyUkSayVDTXby/6gw5qi1.UkLicyv4Ib9XZstMUtADmOOMk/WjnVe',
     1,
     1,
-    E '2022-03-14 00:00:00',
-    E '2022-03-14 00:00:00'
+    '2022-03-14 00:00:00',
+    '2022-03-14 00:00:00'
   );
 
 SELECT
@@ -103,22 +103,22 @@ INSERT INTO
   )
 VALUES
   (
-    E 'Bronze Plan',
+    'Bronze Plan',
     1000,
-    E '2022-05-12 00:00:00',
-    E '2022-05-12 00:00:00'
+    '2022-05-12 00:00:00',
+    '2022-05-12 00:00:00'
   ),
   (
-    E 'Silver Plan',
+    'Silver Plan',
     2000,
-    E '2022-05-12 00:00:00',
-    E '2022-05-12 00:00:00'
+    '2022-05-12 00:00:00',
+    '2022-05-12 00:00:00'
   ),
   (
-    E 'Gold Plan',
+    'Gold Plan',
     3000,
-    E '2022-05-12 00:00:00',
-    E '2022-05-12 00:00:00'
+    '2022-05-12 00:00:00',
+    '2022-05-12 00:00:00'
   );
 
 ALTER TABLE
