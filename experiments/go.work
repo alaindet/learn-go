@@ -2,4 +2,5 @@ go 1.18
 
 use (
     ./chained-channels
+    ./chained-channels-2
 )
