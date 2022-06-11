@@ -170,7 +170,14 @@ func (app *Config) ChooseSubscription(w http.ResponseWriter, r *http.Request) {
 
 func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
-	planID, _ := strconv.Atoi(id)
+	planID, err := strconv.Atoi(id)
+
+	if err != nil {
+		app.Session.Put(r.Context(), "error", "Invalid plan ID")
+		http.Redirect(w, r, "/members/plans", http.StatusSeeOther)
+		return
+	}
+
 	plan, err := app.Models.Plan.GetOne(planID)
 
 	if err != nil {
@@ -187,9 +194,8 @@ func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.Wait.Add(1)
-
 	// Generate invoice and send email with attached invoice
+	app.Wait.Add(1)
 	go func() {
 		defer app.Wait.Done()
 		invoice, err := app.getInvoice(user, plan)
@@ -198,16 +204,56 @@ func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 			app.ErrorChan <- err
 		}
 
-		msg := Message{
+		app.sendEmail(Message{
 			To:       user.Email,
 			Subject:  "Your invoice",
 			Data:     invoice,
 			Template: "invoice",
-		}
-
-		app.sendEmail(msg)
+		})
 	}()
 
-	// Subscribe to plan
-	// Redirect
+	// Generate the manual
+	app.Wait.Add(1)
+	go func() {
+		defer app.Wait.Done()
+		pdf := app.generateManual(user, plan)
+		pdfPath := fmt.Sprintf("./tmp/%d_manual.pdf", user.ID)
+		err := pdf.OutputFileAndClose(pdfPath)
+
+		if err != nil {
+			app.ErrorChan <- err
+			return
+		}
+
+		app.sendEmail(Message{
+			To:      user.Email,
+			Subject: "Your manual",
+			Data:    "Your user manual is attached",
+			AttachmentMap: map[string]string{
+				"manual.pdf": pdfPath,
+			},
+		})
+	}()
+
+	err = app.Models.Plan.SubscribeUserToPlan(user, *plan)
+
+	if err != nil {
+		app.Session.Put(r.Context(), "error", "Error subscribing to plan")
+		http.Redirect(w, r, "/members/plans", http.StatusSeeOther)
+		return
+	}
+
+	// Refresh user into session
+	u, err := app.Models.User.GetOne(user.ID)
+
+	if err != nil {
+		app.Session.Put(r.Context(), "error", "Error getting user from database")
+		http.Redirect(w, r, "/members/plans", http.StatusSeeOther)
+		return
+	}
+
+	app.Session.Put(r.Context(), "user", u)
+
+	app.Session.Put(r.Context(), "flash", "Subscribed")
+	http.Redirect(w, r, "/members/plans", http.StatusSeeOther)
 }
