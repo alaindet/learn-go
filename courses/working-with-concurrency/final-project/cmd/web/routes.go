@@ -22,7 +22,9 @@ func (app *Config) routes() http.Handler {
 	mux.Get("/logout", app.Logout)
 	mux.Get("/register", app.RegisterPage)
 	mux.Post("/register", app.PostRegisterPage)
-	mux.Post("/activate", app.ActivateAccount)
+	mux.Get("/activate", app.ActivateAccount)
+	mux.Get("/plans", app.ChooseSubscription)
+	mux.Get("/subscribe", app.SubscribeToPlan)
 	// Add global routes here...
 
 	return mux

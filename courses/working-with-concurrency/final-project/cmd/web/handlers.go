@@ -117,8 +117,70 @@ func (app *Config) PostRegisterPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Config) ActivateAccount(w http.ResponseWriter, r *http.Request) {
-	// validate url
-	// generate invoice
-	// send email with attachments
-	// send email with invoice attached
+
+	url := r.RequestURI
+	// TODO: Use environment variables
+	testURL := fmt.Sprintf("http://localhost:8080%s", url)
+	verifiedURL := VerifyToken(testURL)
+
+	if !verifiedURL {
+		app.Session.Put(r.Context(), "error", "Invalid token")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	email := r.URL.Query().Get("email")
+	u, err := app.Models.User.GetByEmail(email)
+
+	if err != nil {
+		app.Session.Put(r.Context(), "error", "No user found")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	u.Active = 1
+	err = u.Update()
+
+	if err != nil {
+		app.Session.Put(r.Context(), "error", "Unable to update user")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	app.Session.Put(r.Context(), "flash", "Account activated. You can login now")
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}
+
+func (app *Config) ChooseSubscription(w http.ResponseWriter, r *http.Request) {
+
+	// TODO: Put in authetication middleware
+	if !app.Session.Exists(r.Context(), "userID") {
+		app.Session.Put(r.Context(), "warning", "You must be logged in to see this page")
+		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+		return
+	}
+
+	plans, err := app.Models.Plan.GetAll()
+
+	if err != nil {
+		app.ErrorLog.Println(err)
+		return
+	}
+
+	dataMap := make(map[string]any)
+	dataMap["plans"] = plans
+
+	app.render(w, r, "plans.page.gohtml", &TemplateData{
+		Data: dataMap,
+	})
+}
+
+func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
+	// Get ID of plan
+	// Get plan from db
+	// Get user from session
+	// Generate invoice
+	// Send email with attached invoice
+	// Subscribe to plan
+	// Redirect
 }

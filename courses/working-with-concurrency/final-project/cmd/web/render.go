@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"net/http"
 	"time"
+
+	"final_project/data"
 )
 
 const (
@@ -21,7 +23,7 @@ type TemplateData struct {
 	Error         string
 	Authenticated bool
 	Now           time.Time
-	// User          *data.User
+	User          *data.User
 }
 
 func (app *Config) render(
@@ -64,8 +66,15 @@ func (app *Config) AddDefaultData(td *TemplateData, r *http.Request) *TemplateDa
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.Authenticated = app.IsAuthenticated(r)
 
+	// Extract and deserialize from GOB format the user from Redis
 	if td.Authenticated {
-		// TODO: Get more user info
+		user, ok := app.Session.Get(r.Context(), "user").(data.User)
+
+		if !ok {
+			app.ErrorLog.Println("cannot get user from session")
+		} else {
+			td.User = &user
+		}
 	}
 
 	td.Now = time.Now()
