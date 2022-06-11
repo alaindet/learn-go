@@ -42,6 +42,9 @@ func main() {
 		Models:   data.New(db),
 	}
 
+	app.Mailer = app.createMail()
+	go app.listenForMail()
+
 	go app.listenForShutdown()
 
 	app.serve()
@@ -153,5 +156,29 @@ func (app *Config) shutdown() {
 	// TODO: Cleanup
 	app.InfoLog.Println("TODO: run cleanup tasks here")
 	app.Wait.Wait()
+	app.Mailer.DoneChan <- true
 	app.InfoLog.Println("shutting down the application")
+	close(app.Mailer.MailerChan)
+	close(app.Mailer.ErrorChan)
+	close(app.Mailer.DoneChan)
+}
+
+func (app *Config) createMail() Mail {
+	errorChan := make(chan error)
+	mailerChan := make(chan Message, 100)
+	mailerDoneChan := make(chan bool)
+
+	// TODO: Use environment variables
+	return Mail{
+		Domain:      "localhost",
+		Host:        "localhost",
+		Port:        1025,
+		Encryption:  "none",
+		FromAddress: "info@example.com",
+		FromName:    "Info",
+		Wait:        app.Wait,
+		ErrorChan:   errorChan,
+		MailerChan:  mailerChan,
+		DoneChan:    mailerDoneChan,
+	}
 }
