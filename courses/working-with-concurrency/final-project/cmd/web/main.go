@@ -117,7 +117,11 @@ func openDB(dsn string) (*sql.DB, error) {
 }
 
 func initSession() *scs.SessionManager {
+
+	// https://tech.shaadi.com/2021/10/05/serialize-using-gob-in-golang
+	// Gob is a serialization form specific to Go data types
 	gob.Register(data.User{})
+
 	session := scs.New()
 	session.Store = redisstore.New(initRedis())
 	session.Lifetime = 24 * time.Hour
