@@ -34,18 +34,22 @@ func main() {
 	db := initDB()
 
 	app := Config{
-		Session:  initSession(),
-		DB:       db,
-		InfoLog:  log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
-		ErrorLog: log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
-		Wait:     &sync.WaitGroup{},
-		Models:   data.New(db),
+		Session:       initSession(),
+		DB:            db,
+		InfoLog:       log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
+		ErrorLog:      log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+		Wait:          &sync.WaitGroup{},
+		Models:        data.New(db),
+		ErrorChan:     make(chan error),
+		ErrorChanDone: make(chan bool),
 	}
 
 	app.Mailer = app.createMail()
 	go app.listenForMail()
 
 	go app.listenForShutdown()
+
+	go app.listenForErrors()
 
 	app.serve()
 }
@@ -144,6 +148,17 @@ func initRedis() *redis.Pool {
 	}
 }
 
+func (app *Config) listenForErrors() {
+	for {
+		select {
+		case err := <-app.ErrorChan:
+			app.ErrorLog.Println(err)
+		case <-app.ErrorChanDone:
+			return
+		}
+	}
+}
+
 func (app *Config) listenForShutdown() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
@@ -153,14 +168,15 @@ func (app *Config) listenForShutdown() {
 }
 
 func (app *Config) shutdown() {
-	// TODO: Cleanup
-	app.InfoLog.Println("TODO: run cleanup tasks here")
 	app.Wait.Wait()
 	app.Mailer.DoneChan <- true
+	app.ErrorChanDone <- true
 	app.InfoLog.Println("shutting down the application")
 	close(app.Mailer.MailerChan)
 	close(app.Mailer.ErrorChan)
 	close(app.Mailer.DoneChan)
+	close(app.ErrorChan)
+	close(app.ErrorChanDone)
 }
 
 func (app *Config) createMail() Mail {

@@ -10,12 +10,11 @@ import (
 func (app *Config) routes() http.Handler {
 	mux := chi.NewRouter()
 
-	// Middleware
+	// Global middleware
 	mux.Use(middleware.Recoverer)
 	mux.Use(app.SessionLoad)
-	// Add global middleware here...
 
-	// Routes
+	// Global routes
 	mux.Get("/", app.HomePage)
 	mux.Get("/login", app.LoginPage)
 	mux.Post("/login", app.PostLoginPage)
@@ -23,9 +22,20 @@ func (app *Config) routes() http.Handler {
 	mux.Get("/register", app.RegisterPage)
 	mux.Post("/register", app.PostRegisterPage)
 	mux.Get("/activate", app.ActivateAccount)
+
+	// Routes group
+	mux.Mount("/members", app.membersRoutes())
+
+	return mux
+}
+
+func (app *Config) membersRoutes() http.Handler {
+	mux := chi.NewRouter()
+
+	mux.Use(app.Auth)
+
 	mux.Get("/plans", app.ChooseSubscription)
 	mux.Get("/subscribe", app.SubscribeToPlan)
-	// Add global routes here...
 
 	return mux
 }

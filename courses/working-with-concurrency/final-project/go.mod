@@ -26,6 +26,9 @@ require (
 	github.com/jackc/pgproto3/v2 v2.3.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgtype v1.11.0 // indirect
+	github.com/phpdave11/gofpdf v1.4.2 // indirect
+	github.com/phpdave11/gofpdi v1.0.12 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/toorop/go-dkim v0.0.0-20201103131630-e1cd1a0a5208 // indirect
 	github.com/vanng822/css v1.0.1 // indirect
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect

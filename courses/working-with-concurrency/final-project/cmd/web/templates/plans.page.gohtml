@@ -53,7 +53,7 @@
         confirmButtonText: 'Subscribe',
       }).then(result => {
         if (!result.isConfirmed) return
-        window.location.href = `/subscribe?id=${planId}`;
+        window.location.href = `/members/subscribe?id=${planId}`;
       });
     }
   </script>
