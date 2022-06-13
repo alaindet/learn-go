@@ -22,14 +22,6 @@ import (
 	"final_project/data"
 )
 
-const (
-	dbMaxTries = 10
-	dbRetryIn  = 1000 // milliseconds
-	webPort    = "8080"
-)
-
-var db *sql.DB
-
 func main() {
 	db := initDB()
 

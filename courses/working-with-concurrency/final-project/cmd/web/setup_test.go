@@ -24,10 +24,16 @@ var testApp Config
 // - Use testing.M.Run() to run tests and get exit code
 // - Remember to call os.Exit(exitCode) with exitCode != 0
 func TestMain(m *testing.M) {
+	overrideGlobalVariables()
 	initTestApp()
 	go listenToTestMailer()
 	go listenToTestLoggers()
 	os.Exit(m.Run())
+}
+
+func overrideGlobalVariables() {
+	tempPath = "./../../tmp"
+	pdfTemplatesPath = "./../../pdf"
 }
 
 func initTestApp() {
@@ -77,6 +83,7 @@ func listenToTestMailer() {
 	for {
 		select {
 		case <-testApp.Mailer.MailerChan:
+			testApp.Wait.Done()
 		case <-testApp.Mailer.ErrorChan:
 		case <-testApp.Mailer.DoneChan:
 			return

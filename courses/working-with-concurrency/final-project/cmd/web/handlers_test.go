@@ -108,3 +108,27 @@ func TestPostLoginPage(t *testing.T) {
 		t.Errorf("Did not find userID in the session")
 	}
 }
+
+func TestSubscribeToPlan(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/members/subscribe?id=1", nil)
+	ctx := getContext(req)
+	req = req.WithContext(ctx)
+
+	testApp.Session.Put(ctx, "user", data.User{
+		ID:        1,
+		Email:     "admin@example.com",
+		FirstName: "John",
+		LastName:  "Doe",
+		Active:    1,
+	})
+
+	handler := http.HandlerFunc(testApp.SubscribeToPlan)
+	handler.ServeHTTP(res, req)
+
+	testApp.Wait.Wait()
+
+	if res.Code != http.StatusSeeOther {
+		t.Errorf("Expected HTTP Code 303 See Other, but got %d", res.Code)
+	}
+}

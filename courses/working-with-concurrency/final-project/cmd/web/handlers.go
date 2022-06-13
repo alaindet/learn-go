@@ -217,7 +217,7 @@ func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		defer app.Wait.Done()
 		pdf := app.generateManual(user, plan)
-		pdfPath := fmt.Sprintf("./tmp/%d_manual.pdf", user.ID)
+		pdfPath := fmt.Sprintf("%s/%d_manual.pdf", tempPath, user.ID)
 		err := pdf.OutputFileAndClose(pdfPath)
 
 		if err != nil {

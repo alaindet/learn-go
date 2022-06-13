@@ -9,8 +9,6 @@ import (
 	"final_project/data"
 )
 
-var templatesPath = "./cmd/web/templates"
-
 type TemplateData struct {
 	StringMap     map[string]string
 	IntMap        map[string]int

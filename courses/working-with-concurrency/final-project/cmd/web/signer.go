@@ -8,14 +8,10 @@ import (
 	goalone "github.com/bwmarrin/go-alone"
 )
 
-const (
-	secret = "abc123abc123abc123"
-)
-
 var secretKey []byte
 
 func NewURLSigner() {
-	secretKey = []byte(secret)
+	secretKey = []byte(mailerSecret)
 }
 
 func GenerateTokenFromString(data string) string {
