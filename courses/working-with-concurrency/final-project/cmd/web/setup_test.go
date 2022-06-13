@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/gob"
-	"final_project/data"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +11,8 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
+
+	"final_project/data"
 )
 
 var testApp Config
@@ -40,6 +41,7 @@ func initTestApp() {
 		InfoLog:       infoLog,
 		ErrorLog:      errorLog,
 		Wait:          &sync.WaitGroup{},
+		Models:        data.TestNew(nil),
 		ErrorChan:     make(chan error),
 		ErrorChanDone: make(chan bool),
 		Mailer:        *mailer,
