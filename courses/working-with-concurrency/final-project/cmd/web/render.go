@@ -9,9 +9,7 @@ import (
 	"final_project/data"
 )
 
-const (
-	templatesPath = "./cmd/web/templates"
-)
+var templatesPath = "./cmd/web/templates"
 
 type TemplateData struct {
 	StringMap     map[string]string
