@@ -44,7 +44,7 @@ func (u *TestUser) GetOne(id int) (*User, error) {
 	return testGetDummyUser(), nil
 }
 
-func (u *TestUser) Update() error {
+func (u *TestUser) Update(user User) error {
 	return nil
 }
 
