@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/gob"
 	"final_project/data"
 	"log"
@@ -97,4 +98,14 @@ func listenToTestLoggers() {
 			return
 		}
 	}
+}
+
+func getContext(r *http.Request) context.Context {
+	ctx, err := testApp.Session.Load(r.Context(), r.Header.Get("X-Session"))
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	return ctx
 }
