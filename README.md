@@ -13,14 +13,14 @@ This repository contains the learning material, demo, tests and everything I use
 - [Effective Go](https://go.dev/doc/effective_go)
 
 ### Courses
-- [Master Go (Golang) Programming:The Complete Go Bootcamp 2022](https://www.udemy.com/course/master-go-programming-complete-golang-bootcamp)
+- [Master Go (Golang) Programming: The Complete Go Bootcamp 2022](https://www.udemy.com/course/master-go-programming-complete-golang-bootcamp)
 - [Let's Build a Go version of Laravel](https://www.udemy.com/course/lets-build-a-go-version-of-laravel)
 - [Working with Concurrency in Go (Golang)](https://www.udemy.com/course/working-with-concurrency-in-go-golang)
 
 ### Books
 - [Pro Go - The Complete Guide to Programming Reliable and Efficient Software Using Golang](https://link.springer.com/book/10.1007/978-1-4842-7355-5)
-- [Learning Go: An Idiomatic Approach to Real-World Go Programming](https://www.oreilly.com/library/view/learning-go/9781492077206/)
 - [Learn Data Structures and Algorithms with Golang](https://www.packtpub.com/product/learn-data-structures-and-algorithms-with-golang/9781789618501)
+- [Let's Go - Alex Edwards](https://lets-go.alexedwards.net/)
 
 ### Other
 - [https://gophercises.com/](https://gophercises.com/)
