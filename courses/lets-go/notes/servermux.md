@@ -1,6 +1,4 @@
-# Notes
-
-## Servermux
+# Servermux
 
 - A servermux for Go is just a regular HTTP router
 - **WARNING**: Servermux cannot route based on HTTP method
@@ -17,19 +15,19 @@
   ```
 - **URL patterns** are divided into two categories, fixed paths and subtree paths
 
-### Fixed paths
+## Fixed paths
 
 Ex.: `/snippet/view`
 
 Or simply "paths", those are paths with **no trailing slash**, they match only when the request URL matches **exactly** with them
 
-### Subtree paths
+## Subtree paths
 
 Ex.: `/` or `/assets/`
 
 Or simply "path prefixes", those are paths with **a trailing slash** and they match anything that is **prefixed by** them, ex.: `/assets/` matches `/assets`, `/assets/logo.jpg` and `/assets/icons/64x64/admin.svg`, while `/` catches all routes
 
-### HTTP Headers
+## HTTP Headers
 
 - Go automatically populates these headers in the response
   - `Date`
