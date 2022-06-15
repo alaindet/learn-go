@@ -1,2 +1,2 @@
-36
-Project structure and organization
+46
+Embedding partials
