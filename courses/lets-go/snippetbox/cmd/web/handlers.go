@@ -20,6 +20,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 	templates := []string{
 		"./ui/html/base.gohtml",
+		"./ui/html/partials/nav.gohtml",
 		"./ui/html/pages/home.gohtml",
 	}
 
@@ -31,8 +32,9 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var data any = nil // TODO
-	err = t.Execute(w, data)
+	var templateData any = nil // TODO
+	err = t.ExecuteTemplate(w, "base", templateData)
+
 	if err != nil {
 		log.Println(err.Error())
 		errorInternalServerError(w, r)

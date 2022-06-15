@@ -5,16 +5,21 @@
 <head>
   <meta charset="utf-8">
   <title>{{template "title" .}} - Snippetbox</title>
+  <link rel='stylesheet' href='/assets/css/main.css'>
+  <link rel='shortcut icon' href='/assets/img/favicon.ico' type='image/x-icon'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700'>
 </head>
 
 <body>
   <header>
     <h1><a href="/">Snippetbox</a></h1>
   </header>
+  {{template "nav" .}}
   <main>
     {{template "main" .}}
   </main>
-  <footer>Powered by <a href="https://golang.org/">Go</a></footer>
+  <footer>Powered by <a href="https://go.dev/">Go</a></footer>
+  <script src="/assets/js.main.js"></script>
 </body>
 
 </html>
