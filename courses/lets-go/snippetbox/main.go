@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -39,7 +41,14 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func snippetView(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Display a specific snippet..."))
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+
+	if err != nil {
+		notFound(w, r)
+		return
+	}
+
+	fmt.Fprintf(w, "Display a specific snippet with ID %d...", id)
 }
 
 func snippetCreate(w http.ResponseWriter, r *http.Request) {
@@ -57,8 +66,8 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 func notAllowed(w http.ResponseWriter, r *http.Request, methods []string) {
 
 	// Set any header before writing!
-	w.Header().Set("Allow", strings.Join(methods, ","))
+	w.Header().Set("Allow", strings.Join(methods, ", "))
 
-	w.WriteHeader(405) // TODO: Status code is a header?
-	w.Write([]byte("405 Method Not Allowed"))
+	msg := fmt.Sprintf("%d Method Not Allowed", http.StatusMethodNotAllowed)
+	http.Error(w, msg, http.StatusMethodNotAllowed)
 }

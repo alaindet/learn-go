@@ -28,3 +28,16 @@ Or simply "paths", those are paths with **no trailing slash**, they match only w
 Ex.: `/` or `/assets/`
 
 Or simply "path prefixes", those are paths with **a trailing slash** and they match anything that is **prefixed by** them, ex.: `/assets/` matches `/assets`, `/assets/logo.jpg` and `/assets/icons/64x64/admin.svg`, while `/` catches all routes
+
+### HTTP Headers
+
+- Go automatically populates these headers in the response
+  - `Date`
+  - `Content-Length`
+  - `Content-Type` This is performed via `http.DetectContentType()` and if no valid content type is detected, `Content-Type: application/octet-stream` is used as default
+
+- **WARNING:** `http.DetectContentType()` does not distinguish JSON from plain text, so manual header setting is requested
+  ```go
+  w.Header().Set("Content-Type", "application/json")
+  w.Write([]byte(`{"name":"Alain"}`))
+  ```
