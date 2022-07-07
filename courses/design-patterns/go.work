@@ -1,3 +1,6 @@
 go 1.18
 
-use ./solid
+use (
+	./solid
+	./solid-open-closed
+)

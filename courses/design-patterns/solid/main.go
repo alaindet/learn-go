@@ -1,31 +1,18 @@
 package main
 
-import "fmt"
-
-var entryCount = 0
-
-type Journal struct {
-	entries []string
-}
-
-func (j *Journal) AddEntry(text string) int {
-	entryCount++
-	entry := fmt.Sprintf("%d: %s", entryCount, text)
-	j.entries = append(j.entries, entry)
-	return entryCount
-}
-
-func (j *Journal) RemoveEntry(index int) int {
-	entryCount--
-	if entryCount < 0 {
-		entryCount = 0
-	}
-
-	// TODO...
-
-	return entryCount
-}
+import (
+	"fmt"
+)
 
 func main() {
+	j := NewJournal()
+	j.AddEntry("Hello there, how are you?")
+	j.AddEntry("Fine thanks. And you?")
+	j.AddEntry("Fine too! Have a nice day")
+	j.RemoveEntry(1)
 
+	p := NewPersistence("\n")
+	p.SaveToFile(j, "journal.txt")
+
+	fmt.Printf("entries (%T): %v\n", j.entries, j.entries)
 }
