@@ -2,5 +2,7 @@ go 1.18
 
 use (
 	./solid
+	./solid-interface-segregation
+	./solid-liskov-substitution
 	./solid-open-closed
 )
