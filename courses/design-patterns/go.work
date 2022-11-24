@@ -1,0 +1,34 @@
+go 1.18
+
+use (
+	./behavioral-patterns/chain-of-responsibility
+	./behavioral-patterns/command
+	./behavioral-patterns/interpreter
+	./behavioral-patterns/iterator
+	./behavioral-patterns/mediator
+	./behavioral-patterns/memento
+	./behavioral-patterns/observer
+	./behavioral-patterns/state
+	./behavioral-patterns/strategy
+	./behavioral-patterns/template-method
+	./behavioral-patterns/visitor
+
+	./creational-patterns/builder
+	./creational-patterns/factory
+	./creational-patterns/prototype
+	./creational-patterns/singleton
+
+	./solid-principles/dependency-injection
+	./solid-principles/interface-segregation
+	./solid-principles/liskov-substitution
+	./solid-principles/open-closed
+	./solid-principles/single-responsibility
+
+	./structural-patterns/adapter
+	./structural-patterns/bridge
+	./structural-patterns/composite
+	./structural-patterns/decorator
+	./structural-patterns/facade
+	./structural-patterns/flyweight
+	./structural-patterns/proxy
+)
