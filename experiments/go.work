@@ -3,9 +3,6 @@ go 1.18
 use (
     ./chained-channels
     ./chained-channels-2
-<<<<<<< HEAD
     ./distributed-sums
-=======
     ./slice-functions
->>>>>>> 5171b97400d12f8e982abae21114451c3795ebb2
 )
