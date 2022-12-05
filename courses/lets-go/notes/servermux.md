@@ -6,7 +6,12 @@
 - **WARNING**: Servermux cannot route based on HTTP method
 - **WARNING**: Servermux cannot match URL variables
 - **WARNING**: Servermux cannot match URL patterns expressed as regexp
-- URL patterns provided to the servermux only match when the request URL **exactly matches** a fixed path
+- **URL patterns** are divided into two categories, fixed paths and subtree paths
+- **Fixed paths** are only matched *exactly* and have *NO trailing `/`*
+  - Ex.: `this/is/a/fixed/path`
+- **Subtree paths** work like a prefix, have *a trailing `/`* and match everything starting with them
+  - Ex.: The `foo/` subtree path matches `foo`, `foo/bar`, `foo/baz` etc
+  - Ex.: The `/` path is the most generic subtree path and matches **EVERY** possibile path, acting as a catch all (useful for 404s)
 - Order of registration of routes does not matter since **longer paths take precedence**
 - URLs are always sanitized before matching, ex.: `/foo/bar/..//baz` => `/foo/baz`
 - If you provide host-specific patterns, those are matched first if possible
@@ -15,7 +20,6 @@
   mux.HandleFunc("/", snippetView) // Second
   mux.HandleFunc("example.org/", snippetView) // First
   ```
-- **URL patterns** are divided into two categories, fixed paths and subtree paths
 
 ## Fixed paths
 

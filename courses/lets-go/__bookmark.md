@@ -1,2 +1,2 @@
-63
-Managing configuration settings
+20
+Restricting the root url pattern
