@@ -2,6 +2,7 @@
 
 - A servermux for Go is just a regular HTTP router
 - All incoming HTTP requests are served in their own goroutine
+- *mux* stands for **multiplexer** as incoming requests are *multiplexed* to goroutines
 - **WARNING**: Servermux cannot route based on HTTP method
 - **WARNING**: Servermux cannot match URL variables
 - **WARNING**: Servermux cannot match URL patterns expressed as regexp
