@@ -9,7 +9,7 @@ import (
 func main() {
 
 	// Create and configure a router
-	mux := http.NewServeMux()
+	mux := http.NewServeMux() // Create a DefaultServerMux
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/snippet/view", snippetView)     // TODO: Should be GET /snippets/:id
 	mux.HandleFunc("/snippet/create", snippetCreate) // TODO: Should be POST /snippets
@@ -24,6 +24,10 @@ func main() {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
 	w.Write([]byte("Hello from Snippetbox"))
 }
 
@@ -32,5 +36,11 @@ func snippetView(w http.ResponseWriter, r *http.Request) {
 }
 
 func snippetCreate(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.Header().Set("Allow", "POST")
+		w.WriteHeader(405) // Can only be called once per request
+		w.Write([]byte("Method Not Allowed"))
+		return
+	}
 	w.Write([]byte("Create a new snippet"))
 }

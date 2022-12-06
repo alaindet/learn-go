@@ -1,1 +1,2 @@
 - [ ] Minify CSS and JS assets
+- [ ] Add live reloading via Go Air

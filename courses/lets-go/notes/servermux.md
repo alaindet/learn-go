@@ -45,3 +45,16 @@ Or simply "path prefixes", those are paths with **a trailing slash** and they ma
   w.Header().Set("Content-Type", "application/json")
   w.Write([]byte(`{"name":"Alain"}`))
   ```
+
+## `DefaultServeMux`
+- It's a global variable declared in the `net/http` package like this 
+  ```go
+  var DefaultServeMux = NewServeMux()
+  ```
+- Being a global variable, **any** piece of code, including 3d-party code, can register routes into it
+- It's a good practice to declare a **local server mux** instead of using the global one
+- This code uses the `DefaultServeMux` (BAD)
+  ```go
+  // No ServerMux declared, using the global DefaultServeMux
+  http.HandleFunc("/", home)
+  ```
