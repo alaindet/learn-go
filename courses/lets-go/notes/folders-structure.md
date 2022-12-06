@@ -5,4 +5,5 @@
 
 ## `internal`
 
-This is a special folder for any Go project, since any package living inside `internal` can **only be imported by the parent of `internal`**, which ensures that the `internal` folder holds all the project-specific logic and no other project can access it (including third-party)
+- Contains non-application specific code that should not be used by other applications
+- By convention, only code living into `internal` folder's parent can import code from `internal`

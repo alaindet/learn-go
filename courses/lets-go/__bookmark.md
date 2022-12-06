@@ -1,2 +1,2 @@
-39
-Additional information
+51
+Serving static files
