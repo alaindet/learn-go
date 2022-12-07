@@ -1,17 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 )
 
 func main() {
+	cfg := loadConfig()
+
 	// Router
 	mux := http.NewServeMux()
 
 	// Static files
-	fileServer := http.FileServer(http.Dir("./ui/static/"))
+	fileServer := http.FileServer(http.Dir(cfg.staticPath))
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
 	// Routes
@@ -20,9 +21,7 @@ func main() {
 	mux.HandleFunc("/snippet/create", snippetCreate)
 
 	// Bootstrap
-	port := 4000
-	addr := fmt.Sprintf(":%d", port)
-	log.Printf("Starting Snippetbox on %s\n", addr)
-	err := http.ListenAndServe(addr, mux)
+	log.Printf("Starting Snippetbox on %s\n", cfg.addr)
+	err := http.ListenAndServe(cfg.addr, mux)
 	log.Fatal(err)
 }
