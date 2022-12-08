@@ -41,7 +41,7 @@ body {
   line-height: 1.5;
   background-color: var(--color-grey-50);
   color: var(--color-grey-500);
-  overflow-y: scroll;
+  overflow-y: auto;
   font-size: inherit;
   font-family: inherit;
   min-height: 100vh;

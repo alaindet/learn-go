@@ -1,2 +1,2 @@
-68
-Leveled logging
+73
+Dependency injection

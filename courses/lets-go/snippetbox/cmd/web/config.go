@@ -8,14 +8,17 @@ import (
 )
 
 type config struct {
+	name       string
 	addr       string
 	staticPath string
 }
 
-// Load from .env, override with optional CLI flags
+// Load from .env, override some vars with optional CLI flags
 func loadConfig() *config {
 	var cfg config
 	loadEnvironmentFile()
+
+	cfg.name = viper.GetString("SNIPPETBOX_NAME")
 
 	// Address
 	flag.StringVar(
