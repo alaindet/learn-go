@@ -1,2 +1,5 @@
 - [ ] Minify CSS and JS assets
 - [ ] Add live reloading via Go Air
+- [ ] Add database connection
+- [ ] Add database credentials on .env and app.configuration
+- [ ] https://github.com/jackc/pgx
