@@ -3,11 +3,13 @@
 ## Usage
 
 ```
-cd ./snippetbox &&
-go run ./cmd/web # Use default in .env
+cd ./snippetbox
+cp .env.example .env
+# Fill the file
+go mod download # Equivalent to `npm install`
+go mod verify
+go run ./cmd/web
 
-go run ./cmd/web -addr=":9999"
-go run ./cmd/web -addr ":9999" # Equivalent
-export $(cat .env | xargs) && go run ./cmd/web -addr=$APP_ADDRESS
-go run ./cmd/web -help
+## One liner
+cd ./snippetbox && go run ./cmd/web
 ```

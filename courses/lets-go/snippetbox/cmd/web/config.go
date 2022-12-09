@@ -8,43 +8,80 @@ import (
 )
 
 type config struct {
-	name       string
-	addr       string
+
+	// General
+	name string
+	addr string
+
+	// Paths
 	staticPath string
+
+	// Database
+	dbUsername string
+	dbPassword string
+	dbHost     string
+	dbPort     string
+	dbName     string
+	dsn        string
 }
 
-// Load from .env, override some vars with optional CLI flags
-func loadConfig() *config {
+// TODO: Is it idiomatic?
+func ConfigNew() *config {
 	var cfg config
-	loadEnvironmentFile()
-
-	cfg.name = viper.GetString("SNIPPETBOX_NAME")
-
-	// Address
-	flag.StringVar(
-		&cfg.addr,
-		"addr",
-		viper.GetString("SNIPPETBOX_ADDRESS"),
-		"HTTP network address",
-	)
-
-	// Static path
-	flag.StringVar(
-		&cfg.staticPath,
-		"static-path",
-		viper.GetString("SNIPPETBOX_STATIC_PATH"),
-		"Path to static assets",
-	)
-
-	flag.Parse()
+	cfg.loadEnvFile()
+	cfg.loadDefaultsFromEnv()
+	cfg.overrideWithFlags()
 	return &cfg
 }
 
-func loadEnvironmentFile() {
+func (c *config) loadEnvFile() {
 	viper.SetConfigFile(".env")
 	viper.AllowEmptyEnv(true)
 	err := viper.ReadInConfig()
+
 	if err != nil {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
+}
+
+func (c *config) loadDefaultsFromEnv() {
+	c.name = viper.GetString("SNIPPETBOX_NAME")
+	c.addr = viper.GetString("SNIPPETBOX_ADDRESS")
+	c.dbUsername = viper.GetString("SNIPPETBOX_DB_USERNAME")
+	c.dbPassword = viper.GetString("SNIPPETBOX_DB_PASSWORD")
+	c.dbHost = viper.GetString("SNIPPETBOX_DB_HOST")
+	c.dbPort = viper.GetString("SNIPPETBOX_DB_PORT")
+	c.dbName = viper.GetString("SNIPPETBOX_DB_NAME")
+	c.dsn = c.getDsn()
+}
+
+func (c *config) getDsn() string {
+	return fmt.Sprintf(
+		"postgres://%s:%s@%s:%s/%s",
+		c.dbUsername,
+		c.dbPassword,
+		c.dbHost,
+		c.dbPort,
+		c.dbName,
+	)
+}
+
+func (c *config) overrideWithFlags() {
+
+	// Override address?
+	flag.StringVar(&c.addr, "addr", c.addr,
+		"HTTP network address",
+	)
+
+	// Override static path?
+	flag.StringVar(&c.staticPath, "static-path", c.staticPath,
+		"Path to static assets",
+	)
+
+	// Override database DSN?
+	flag.StringVar(&c.dsn, "dsn", c.dsn,
+		"PostgreSQL database source name",
+	)
+
+	flag.Parse()
 }
