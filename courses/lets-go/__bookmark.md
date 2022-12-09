@@ -1,2 +1,2 @@
-73
-Dependency injection
+79
+Centralized error handling
