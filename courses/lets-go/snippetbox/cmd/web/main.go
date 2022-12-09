@@ -7,42 +7,27 @@ import (
 )
 
 type application struct {
+	config
 	errorLog *log.Logger
 	infoLog  *log.Logger
 }
 
 func main() {
-	cfg := loadConfig()
-
-	// Loggers
-	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
-	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	// Application
 	app := &application{
-		errorLog: errorLog,
-		infoLog:  infoLog,
+		errorLog: log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+		infoLog:  log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
+		config:   *loadConfig(),
 	}
-
-	// Router
-	mux := http.NewServeMux()
-
-	// Static files
-	fileServer := http.FileServer(http.Dir(cfg.staticPath))
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-
-	// Routes
-	mux.HandleFunc("/", app.home)
-	mux.HandleFunc("/snippet/view", app.snippetView)
-	mux.HandleFunc("/snippet/create", app.snippetCreate)
 
 	// Bootstrap
 	webServer := &http.Server{
-		Addr:     cfg.addr,
-		ErrorLog: errorLog,
-		Handler:  mux,
+		Addr:     app.config.addr,
+		ErrorLog: app.errorLog,
+		Handler:  app.routes(),
 	}
-	infoLog.Printf("starting %s on %s\n", cfg.name, cfg.addr)
+	app.infoLog.Printf("starting %s on %s\n", app.config.name, app.config.addr)
 	err := webServer.ListenAndServe()
-	errorLog.Fatal(err)
+	app.errorLog.Fatal(err)
 }
