@@ -25,8 +25,7 @@ type config struct {
 	dsn        string
 }
 
-// TODO: Is it idiomatic?
-func ConfigNew() *config {
+func NewConfig() *config {
 	var cfg config
 	cfg.loadEnvFile()
 	cfg.loadDefaultsFromEnv()

@@ -1,2 +1,2 @@
-79
-Centralized error handling
+104
+Executing SQL statements
