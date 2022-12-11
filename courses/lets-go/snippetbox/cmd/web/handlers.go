@@ -57,5 +57,17 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "New snippet created")
+	// TODO: Take from input
+	title := "O snail"
+	content := "O snail\nClimb Mount Fuji,\nBut slowly, slowly!\n\n– Kobayashi Issa"
+	expires := 7
+
+	snippetId, err := app.snippets.Insert(title, content, expires)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	// https://en.wikipedia.org/wiki/Post/Redirect/Get
+	http.Redirect(w, r, fmt.Sprintf("/snippet/view?id=%d", snippetId), http.StatusSeeOther)
 }
