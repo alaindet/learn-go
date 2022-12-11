@@ -12,7 +12,7 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
       # Initialization script
-      - ./database/init-db.sql:/docker-entrypoint-initdb.d/pg-init.sql
+      - ./database/pg-init.sql:/docker-entrypoint-initdb.d/pg-init.sql
   adminer:
     image: adminer:4.8.1
     ports:

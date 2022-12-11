@@ -31,7 +31,6 @@ func initApp() *application {
 	if err != nil {
 		errorLog.Fatal(err)
 	}
-	defer db.Close()
 
 	// Application
 	return &application{
@@ -49,4 +48,8 @@ func (app *application) initWebServer() *http.Server {
 		ErrorLog: app.errorLog,
 		Handler:  app.routes(),
 	}
+}
+
+func (app *application) shutdown() {
+	app.db.Close()
 }

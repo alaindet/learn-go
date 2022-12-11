@@ -69,5 +69,5 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// https://en.wikipedia.org/wiki/Post/Redirect/Get
-	http.Redirect(w, r, fmt.Sprintf("/snippet/view?id=%d", snippetId), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/snippets/view?id=%d", snippetId), http.StatusSeeOther)
 }

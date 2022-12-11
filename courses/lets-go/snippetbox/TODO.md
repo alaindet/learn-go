@@ -1,4 +1,4 @@
 - [ ] Minify CSS and JS assets
-- [ ] Add live reloading via Go Air
+- [ ] https://github.com/cosmtrek/air
 - [x] Add database connection
 - [x] Add database credentials on .env and app.configuration
