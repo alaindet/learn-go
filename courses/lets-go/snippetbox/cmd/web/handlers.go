@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"html/template"
 	"net/http"
 	"strconv"
 
@@ -55,12 +56,14 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+
 	if err != nil || id < 1 {
 		app.notFound(w)
 		return
 	}
 
 	snippet, err := app.snippets.Get(id)
+
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
@@ -70,8 +73,24 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: Change
-	fmt.Fprintf(w, "%+v", snippet)
+	files := []string{
+		"./ui/html/base.html",
+		"./ui/html/partials/nav.html",
+		"./ui/html/pages/snippet-view.html",
+	}
+
+	ts, err := template.ParseFiles(files...)
+
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	err = ts.ExecuteTemplate(w, "base", snippet)
+
+	if err != nil {
+		app.serverError(w, err)
+	}
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
