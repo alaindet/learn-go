@@ -79,7 +79,7 @@ h1 a:hover {
 
 h2 {
   font-size: var(--font-size-h2);
-  margin-bottom: calc(1.64 * var(--font-size-h2));
+  /* margin-bottom: calc(1.64 * var(--font-size-h2)); */
   position: relative;
   top: calc(-0.41 * var(--font-size-h2));
 }
@@ -279,24 +279,17 @@ button:hover {
   overflow: auto;
 }
 
-.snippet .metadata span {
-  float: right;
+.snippet .metadata ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
 }
 
 .snippet .metadata strong {
   color: var(--color-grey-500);
-}
-
-.snippet .metadata time {
-  display: inline-block;
-}
-
-.snippet .metadata time:first-child {
-  float: left;
-}
-
-.snippet .metadata time:last-child {
-  float: right;
 }
 
 div.flash {

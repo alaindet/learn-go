@@ -1,4 +1,5 @@
 - [ ] Minify CSS and JS assets
 - [ ] https://github.com/cosmtrek/air
+- [ ] https://h1z3y3.me/posts/go-html-template-script-unescape/
 - [x] Add database connection
 - [x] Add database credentials on .env and app.configuration

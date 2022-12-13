@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -48,7 +49,6 @@ func (m *SnippetModel) Insert(title string, content string, expiresInDays int) (
 	return int(lastInsertId), nil
 }
 
-// TODO: Get a specific snippet by ID
 func (m *SnippetModel) Get(id int) (*Snippet, error) {
 
 	stmt := `
@@ -73,6 +73,8 @@ func (m *SnippetModel) Get(id int) (*Snippet, error) {
 			return nil, err
 		}
 	}
+
+	s.Content = strings.ReplaceAll(s.Content, "\\n", "<br>")
 
 	return s, nil
 }
