@@ -4,23 +4,26 @@
 - You can compose multiple partial templates together
 - Templates can have any file extension
 - Double curly braces contain Go-specific code that controls the templates, called **actions**
-- The most important actions are `define`, `template` and `block`
+- The most important actions are
+  - `define` declares some HTML between `define` and `end` that will later be parsed
+  - `template` acts as placeholder for something `define`d later elsewhere
+  - `block` like `template`, but declares a default HTML as well
+  - `if` Allows conditional rendering of HTML
+  - `with` Binds template data to nested fields of the template struct
+  - `range` Loops over an iterable field (array, slice, map, channel).
 
-## `define`
-- `define` declares a portion of HTML that will later be parsed and used from Go code
-- The HTML portion must live between `define` and `end`
+- The actions `if`, `with` and `range` all accepts an optional `else` clause
+- `with` and `range` change the value of the **dot** for HTML inside them
+  - `with` binds the dot explicitly to what you declare
+  - `range` binds the dot to the current element of the loop
 
-## `template`
-- `template` is like `require` in PHP and imports something previously defined with `define`
-- Nothing is printed if the template is not defined
-
-
-## `block`
-- `block` imports a HTML portion like `template`, but accepts a HTML portion to be used as default when importing a template which is not yet `define`d
-- The HTML portion must live between `block` and `end`
-- You can use it as `template` without a default HTML portion so that it acts like an optional template
-  - Example
-  ```
-  {{block "sidebar" .}}{{end}}
-  ```
-- It's usually preferred instead of `template` so that you can later provide a default HTML portion
+- There are also built-in **functions** in the `html/template` package, the most used are
+  - `eq` Equals
+  - `ne` Not equals
+  - `not` Negation
+  - `or` Or
+  - `index` Extracts a value from an array/slice with an index
+  - `printf` Works like `fmt.Sprintf`
+  - `len` Length of iterable
+  - `:=` Assigns a value to a temporary (template-only) variable
+    - Ex.: `{{$foo := len .Something}}`

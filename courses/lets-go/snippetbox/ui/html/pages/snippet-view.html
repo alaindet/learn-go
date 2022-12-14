@@ -1,33 +1,37 @@
-{{define "title"}}Snippet #{{.ID}}{{end}}
+{{define "title"}}Snippet #{{.Snippet.ID}}{{end}}
 
 {{define "main"}}
-  <div class='snippet'>
+  <div class="snippet">
 
-    <div class='metadata'>
-      <h1>{{.Title}}</h1>
-      <h2>#{{.ID}}</h2>
+    <div class="metadata">
+      <h1>{{.Snippet.Title}}</h1>
+      <h2>#{{.Snippet.ID}}</h2>
     </div>
 
-    <pre><code>{{.Content}}</code></pre>
+    <pre class="snippet__content"><code>{{.Snippet.Content}}</code></pre>
 
-    <div class='metadata'>
+    <div class="metadata">
       <ul>
         <li>
           <time>
             <strong>Created:</strong>
             <br>
-            {{.CreatedAt}}
+            {{.Snippet.CreatedAt}}
           </time>
         </li>
         <li>
           <time>
             <strong>Expires:</strong>
             <br>
-            {{.ExpiresAt}}
+            {{.Snippet.ExpiresAt}}
           </time>
         </li>
       </ul>
     </div>
 
   </div>
+{{end}}
+
+{{define "scripts"}}
+  <script src="/static/js/snippet-view.js" type="text/javascript"></script>
 {{end}}

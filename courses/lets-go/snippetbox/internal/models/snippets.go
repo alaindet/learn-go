@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"strings"
 	"time"
 )
 
@@ -73,8 +72,6 @@ func (m *SnippetModel) Get(id int) (*Snippet, error) {
 			return nil, err
 		}
 	}
-
-	s.Content = strings.ReplaceAll(s.Content, "\\n", "<br>")
 
 	return s, nil
 }
