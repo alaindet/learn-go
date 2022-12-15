@@ -1,35 +1,37 @@
 {{define "title"}}Snippet #{{.Snippet.ID}}{{end}}
 
 {{define "main"}}
-  <div class="snippet">
+  {{with .Snippet}}
+    <div class="snippet">
 
-    <div class="metadata">
-      <h1>{{.Snippet.Title}}</h1>
-      <h2>#{{.Snippet.ID}}</h2>
+      <div class="metadata">
+        <h1>{{.Title}}</h1>
+        <h2>#{{.ID}}</h2>
+      </div>
+
+      <pre class="snippet__content"><code>{{.Content}}</code></pre>
+
+      <div class="metadata">
+        <ul>
+          <li>
+            <time>
+              <strong>Created:</strong>
+              <br>
+              {{.CreatedAt}}
+            </time>
+          </li>
+          <li>
+            <time>
+              <strong>Expires:</strong>
+              <br>
+              {{.ExpiresAt}}
+            </time>
+          </li>
+        </ul>
+      </div>
+
     </div>
-
-    <pre class="snippet__content"><code>{{.Snippet.Content}}</code></pre>
-
-    <div class="metadata">
-      <ul>
-        <li>
-          <time>
-            <strong>Created:</strong>
-            <br>
-            {{.Snippet.CreatedAt}}
-          </time>
-        </li>
-        <li>
-          <time>
-            <strong>Expires:</strong>
-            <br>
-            {{.Snippet.ExpiresAt}}
-          </time>
-        </li>
-      </ul>
-    </div>
-
-  </div>
+  {{end}}
 {{end}}
 
 {{define "scripts"}}

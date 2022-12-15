@@ -23,29 +23,29 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, snippet := range snippets {
-		fmt.Fprintf(w, "%+v\n", snippet)
+	templates := []string{
+		"./ui/html/base.html",
+		"./ui/html/partials/nav.html",
+		"./ui/html/pages/home.html",
 	}
 
-	// templates := []string{
-	// 	"./ui/html/base.html",
-	// 	"./ui/html/partials/nav.html",
-	// 	"./ui/html/pages/home.html",
-	// }
+	ts, err := template.ParseFiles(templates...)
 
-	// ts, err := template.ParseFiles(templates...)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
 
-	// if err != nil {
-	// 	app.serverError(w, err)
-	// 	return
-	// }
+	data := &templateData{
+		Snippets: snippets,
+	}
 
-	// err = ts.ExecuteTemplate(w, "base", nil)
+	err = ts.ExecuteTemplate(w, "base", data)
 
-	// if err != nil {
-	// 	app.serverError(w, err)
-	// 	return
-	// }
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
