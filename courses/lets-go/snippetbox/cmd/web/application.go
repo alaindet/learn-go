@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -11,10 +12,11 @@ import (
 
 type application struct {
 	config
-	errorLog *log.Logger
-	infoLog  *log.Logger
-	db       *sql.DB // TODO: Remove?
-	snippets *models.SnippetModel
+	errorLog      *log.Logger
+	infoLog       *log.Logger
+	db            *sql.DB // TODO: Remove?
+	snippets      *models.SnippetModel
+	templateCache map[string]*template.Template
 }
 
 func initApp() *application {
@@ -32,13 +34,20 @@ func initApp() *application {
 		errorLog.Fatal(err)
 	}
 
+	// Init templates
+	templateCache, err := newTemplateCache(config.htmlTemplatesPath)
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
 	// Application
 	return &application{
-		errorLog: errorLog,
-		infoLog:  infoLog,
-		config:   config,
-		db:       db,
-		snippets: models.NewSnippetModel(db),
+		errorLog:      errorLog,
+		infoLog:       infoLog,
+		config:        config,
+		db:            db,
+		snippets:      models.NewSnippetModel(db),
+		templateCache: templateCache,
 	}
 }
 
