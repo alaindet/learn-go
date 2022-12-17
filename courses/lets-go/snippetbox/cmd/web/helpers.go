@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"runtime/debug"
@@ -20,6 +21,8 @@ func (app *application) notFound(w http.ResponseWriter) {
 	app.clientError(w, http.StatusNotFound)
 }
 
+// Renders the given page into a buffer first, then writes the actual output
+// If everything is OK
 func (app *application) render(
 	w http.ResponseWriter,
 	status int,
@@ -34,11 +37,17 @@ func (app *application) render(
 		return
 	}
 
-	w.WriteHeader(status)
+	// Write into a buffer first
+	buf := new(bytes.Buffer)
 
-	err := ts.ExecuteTemplate(w, "base", templateData)
+	err := ts.ExecuteTemplate(buf, "base", templateData)
 
 	if err != nil {
 		app.serverError(w, err)
+		return
 	}
+
+	// Write to real output
+	w.WriteHeader(status)
+	buf.WriteTo(w)
 }

@@ -1,6 +1,6 @@
 :root {
   --font-size: 18px;
-  --font-family: "Ubuntu Mono", monospace;
+  --font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   --font-size-h1: 36px;
   --font-size-h2: 22px;
 
@@ -14,14 +14,22 @@
   --size-header-nav-padding-top: 17px;
   --size-header-nav-padding-bottom: 15px;
 
+  --color-primary-300: #3f4ae6;
+  --color-primary-500: #2732ca;
+  --color-accent-300: #8b49e2;
+  --color-accent-500: #6e27ca;
+  --color-accent-600: #6524b9;
   --color-white: #FFFFFF;
   --color-grey-25: #F7F9FA;
   --color-grey-50: #F1F3F6;
+  --color-grey-75: #efeff0;
   --color-grey-100: #E4E5E7;
   --color-grey-400: #6A6C6F;
   --color-grey-500: #34495E;
-  --color-link: #62CB31;
-  --color-link-hover: #4EB722;
+  /* --color-link: #62CB31;
+  --color-link-hover: #4EB722; */
+  --color-link: var(--color-accent-500);
+    --color-link-hover: var(--color-accent-600);
   --color-error: #C0392B;
   --color-gradient-header: linear-gradient(to right, #34495e, #34495e 25%, #9b59b6 25%, #9b59b6 35%, #3498db 35%, #3498db 45%, #62cb31 45%, #62cb31 55%, #ffb606 55%, #ffb606 65%, #e67e22 65%, #e67e22 75%, #e74c3c 85%, #e74c3c 85%, #c0392b 85%, #c0392b 100%);
 }
@@ -101,7 +109,10 @@ input:not([type="submit"]) {
 }
 
 header {
-  background-image: var(--color-gradient-header);
+  background-image: linear-gradient(
+    var(--color-primary-300),
+    var(--color-accent-300)
+  );
   background-size: 100% var(--size-header-stripe-height);
   background-repeat: no-repeat;
   border-bottom: 1px solid var(--color-grey-100);
@@ -273,7 +284,7 @@ button:hover {
 }
 
 .snippet .metadata {
-  background-color: var(--color-grey-25);
+  background-color: var(--color-grey-75);
   color: var(--color-grey-400);
   padding: 0.75em 1rem;
   overflow: auto;
