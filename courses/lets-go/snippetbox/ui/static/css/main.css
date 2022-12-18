@@ -14,24 +14,41 @@
   --size-header-nav-padding-top: 17px;
   --size-header-nav-padding-bottom: 15px;
 
-  --color-primary-300: #3f4ae6;
-  --color-primary-500: #2732ca;
-  --color-accent-300: #8b49e2;
-  --color-accent-500: #6e27ca;
-  --color-accent-600: #6524b9;
-  --color-white: #FFFFFF;
-  --color-grey-25: #F7F9FA;
-  --color-grey-50: #F1F3F6;
-  --color-grey-75: #efeff0;
-  --color-grey-100: #E4E5E7;
-  --color-grey-400: #6A6C6F;
-  --color-grey-500: #34495E;
-  /* --color-link: #62CB31;
-  --color-link-hover: #4EB722; */
-  --color-link: var(--color-accent-500);
-    --color-link-hover: var(--color-accent-600);
+  --color-primary-100: #D2D7EF;
+  --color-primary-200: #B4BCE4;
+  --color-primary-300: #95A0DA;
+  --color-primary-400: #7784CF;
+  --color-primary-500: #5969c5;
+  --color-primary-600: #3F51B5;
+  --color-primary-700: #354497;
+  --color-primary-800: #2A3679;
+  --color-primary-900: #20295B;
+
+  --color-accent-50: #FFC2D6;
+  --color-accent-100: #FF99BB;
+  --color-accent-200: #FF70A0;
+  --color-accent-300: #FF4081;
+  --color-accent-400: #FF1F69;
+  --color-accent-500: #F50052;
+  --color-accent-600: #CC0044;
+  --color-accent-700: #A30036;
+  --color-accent-800: #7A0029;
+  --color-accent-900: #52001B;
+
+  --color-grey-50: #DAE2E7;
+  --color-grey-100: #C2CFD6;
+  --color-grey-200: #AABBC5;
+  --color-grey-300: #92A8B5;
+  --color-grey-400: #7994A4;
+  --color-grey-500: #638192;
+  --color-grey-600: #536C79;
+  --color-grey-700: #425661;
+  --color-grey-800: #324149;
+  --color-grey-900: #212B30;
+
+  --color-link: var(--color-primary-600);
+  --color-link-hover: var(--color-primary-700);
   --color-error: #C0392B;
-  --color-gradient-header: linear-gradient(to right, #34495e, #34495e 25%, #9b59b6 25%, #9b59b6 35%, #3498db 35%, #3498db 45%, #62cb31 45%, #62cb31 55%, #ffb606 55%, #ffb606 65%, #e67e22 65%, #e67e22 75%, #e74c3c 85%, #e74c3c 85%, #c0392b 85%, #c0392b 100%);
 }
 
 * {
@@ -48,7 +65,7 @@ html {
 body {
   line-height: 1.5;
   background-color: var(--color-grey-50);
-  color: var(--color-grey-500);
+  color: var(--color-grey-700);
   overflow-y: auto;
   font-size: inherit;
   font-family: inherit;
@@ -71,6 +88,7 @@ main {
 
 h1 a {
   font-size: var(--font-size-h1);
+  color: var(--color-grey-900);
   font-weight: bold;
   background-image: url("/static/img/logo.png"); /* TODO */
   background-repeat: no-repeat;
@@ -81,13 +99,12 @@ h1 a {
 }
 
 h1 a:hover {
-  text-decoration: none;
-  color: var(--color-grey-500);
+  color: var(--color-grey-800);
 }
 
 h2 {
   font-size: var(--font-size-h2);
-  /* margin-bottom: calc(1.64 * var(--font-size-h2)); */
+  margin-bottom: calc(1.64 * var(--font-size-h2));
   position: relative;
   top: calc(-0.41 * var(--font-size-h2));
 }
@@ -110,8 +127,9 @@ input:not([type="submit"]) {
 
 header {
   background-image: linear-gradient(
-    var(--color-primary-300),
-    var(--color-accent-300)
+    to right,
+    var(--color-primary-500),
+    var(--color-accent-500)
   );
   background-size: 100% var(--size-header-stripe-height);
   background-repeat: no-repeat;
@@ -120,11 +138,6 @@ header {
   padding-top: var(--size-header-padding-top);
   padding-bottom: var(--size-header-padding-bottom);
   text-align: center;
-}
-
-header a {
-  color: var(--color-grey-500);
-  text-decoration: none;
 }
 
 nav {
@@ -284,8 +297,7 @@ button:hover {
 }
 
 .snippet .metadata {
-  background-color: var(--color-grey-75);
-  color: var(--color-grey-400);
+  background-color: var(--color-grey-100);
   padding: 0.75em 1rem;
   overflow: auto;
 }
@@ -328,6 +340,10 @@ table {
   width: 100%;
 }
 
+thead {
+  background-color: var(--color-grey-200);
+}
+
 td,
 th {
   text-align: left;
@@ -337,15 +353,10 @@ th {
 th:last-child,
 td:last-child {
   text-align: right;
-  color: var(--color-grey-400);
 }
 
 tr {
   border-bottom: 1px solid var(--color-grey-100);
-}
-
-tr:nth-child(2n) {
-  background-color: var(--color-grey-25);
 }
 
 footer {

@@ -17,14 +17,14 @@
             <time>
               <strong>Created:</strong>
               <br>
-              {{friendlyDate .CreatedAt}}
+              {{.CreatedAt | friendlyDate}}
             </time>
           </li>
           <li>
             <time>
               <strong>Expires:</strong>
               <br>
-              {{friendlyDate .ExpiresAt}}
+              {{.ExpiresAt | friendlyDate}}
             </time>
           </li>
         </ul>
