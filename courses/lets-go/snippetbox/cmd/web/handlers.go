@@ -5,14 +5,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/julienschmidt/httprouter"
+
 	"snippetbox.dev/internal/models"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		http.NotFound(w, r)
-		return
-	}
 
 	snippets, err := app.snippets.Latest()
 
@@ -31,13 +29,16 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		w.Header().Set("Allow", http.MethodGet)
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+
+	// TODO: Read the docs
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id := params.ByName("id")
+
+	if id == "" {
+		app.notFound(w)
 		return
 	}
-
-	id := r.URL.Query().Get("id")
 
 	snippet, err := app.snippets.Get(id)
 
@@ -54,20 +55,20 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	data.Snippet = snippet
 	data.Breadcrumbs = []*BreadcrumbLink{
 		{"/", "Home", false},
-		{"/snippets/view?id=" + id, "Snippet", true},
+		{"/snippets/view/" + id, "Snippet", true},
 	}
 
 	app.render(w, http.StatusOK, "snippet-view.html", data)
 }
 
-func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.Header().Set("Allow", http.MethodPost)
-		app.clientError(w, http.StatusMethodNotAllowed)
-		return
-	}
+// TODO: Show page with HTML form
+func (app *application) snippetCreateForm(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Show snippet creation form..."))
+}
 
-	// TODO: Take from input
+func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
+
+	// TODO: Take from form input
 	title := "O snail"
 	content := "O snail\nClimb Mount Fuji,\nBut slowly, slowly!\n\n– Kobayashi Issa"
 	expires := 7
@@ -79,5 +80,5 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// https://en.wikipedia.org/wiki/Post/Redirect/Get
-	http.Redirect(w, r, fmt.Sprintf("/snippets/view?id=%d", snippetId), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/snippets/%d", snippetId), http.StatusSeeOther)
 }

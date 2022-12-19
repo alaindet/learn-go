@@ -50,6 +50,10 @@ func (m *SnippetModel) Insert(title string, content string, expiresInDays int) (
 
 func (m *SnippetModel) Get(id string) (*Snippet, error) {
 
+	if id == "" {
+		return nil, ErrNoRecord
+	}
+
 	stmt := `
 		SELECT id, title, content, created_at, expires_at FROM snippets
 		WHERE expires_at > CURRENT_TIMESTAMP AND id = $1
