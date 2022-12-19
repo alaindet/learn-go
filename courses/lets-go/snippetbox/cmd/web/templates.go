@@ -24,6 +24,7 @@ type BreadcrumbLink struct {
 type templateData struct {
 	CurrentYear int
 	Breadcrumbs []*BreadcrumbLink
+	Form        any
 	Snippet     *models.Snippet
 	Snippets    []*models.Snippet
 }
