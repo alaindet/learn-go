@@ -1,5 +1,11 @@
 {{define "nav"}}
   <nav>
-  <a href="/">Home</a>
+    {{range .Breadcrumbs}}
+      {{if .IsActive}}
+        <a href="{{.Url}}" class="active">{{.Label}}</a>
+      {{else}}
+        <a href="{{.Url}}">{{.Label}}</a>
+      {{end}}
+    {{end}}
   </nav>
 {{end}}

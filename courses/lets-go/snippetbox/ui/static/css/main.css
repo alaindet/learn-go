@@ -46,6 +46,12 @@
   --color-grey-800: #324149;
   --color-grey-900: #212B30;
 
+  --color-gradient-1: linear-gradient(
+    to right,
+    var(--color-primary-500),
+    var(--color-accent-500)
+  );
+  --color-background: #f2f8fd;
   --color-link: var(--color-primary-600);
   --color-link-hover: var(--color-primary-700);
   --color-error: #C0392B;
@@ -64,7 +70,7 @@ html {
 
 body {
   line-height: 1.5;
-  background-color: var(--color-grey-50);
+  background-color: var(--color-background);
   color: var(--color-grey-700);
   overflow-y: auto;
   font-size: inherit;
@@ -86,20 +92,26 @@ main {
   overflow: auto;
 }
 
-h1 a {
+/* The logo */
+.logo a {
   font-size: var(--font-size-h1);
-  color: var(--color-grey-900);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: var(--color-gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: bold;
-  background-image: url("/static/img/logo.png"); /* TODO */
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  height: var(--font-size-h1);
-  padding-left: calc(1.39 * var(--font-size-h1));
-  position: relative;
 }
 
-h1 a:hover {
+/* The logo */
+.logo a:hover {
   color: var(--color-grey-800);
+}
+
+/* The logo */
+.logo a img {
+  margin-right: 0.5rem;
 }
 
 h2 {
@@ -126,11 +138,7 @@ input:not([type="submit"]) {
 }
 
 header {
-  background-image: linear-gradient(
-    to right,
-    var(--color-primary-500),
-    var(--color-accent-500)
-  );
+  background-image: var(--color-gradient-1);
   background-size: 100% var(--size-header-stripe-height);
   background-repeat: no-repeat;
   border-bottom: 1px solid var(--color-grey-100);
@@ -144,9 +152,8 @@ nav {
   border-bottom: 1px solid var(--color-grey-100);
   padding-top: var(--size-header-nav-padding-top);
   padding-bottom: var(--size-header-nav-padding-bottom);
-  background: var(--color-grey-25);
   height: var(--size-header-nav-height);
-  color: var(--color-grey-400);
+  background-color: rgba(0,0,0,0.03);
 }
 
 nav a {
@@ -174,28 +181,7 @@ nav div:last-child a {
 }
 
 nav a.active {
-  color: var(--color-grey-500);
-  cursor: default;
-}
-
-nav a.active:hover {
-  text-decoration: none;
-}
-
-nav a.active:after {
-  --indicator-size: 14px;
-
-  content: '';
-  display: block;
-  position: relative;
-  left: calc(50% - 0.5 * var(--indicator-size));
-  top: 9px;
-  width: var(--indicator-size);
-  height: var(--indicator-size);
-  background: var(--color-grey-25);
-  border-left: 1px solid var(--color-grey-100);
-  border-bottom: 1px solid var(--color-grey-100);
-  transform: rotate(45deg);
+  font-weight: bold;
 }
 
 a.button,
@@ -297,9 +283,13 @@ button:hover {
 }
 
 .snippet .metadata {
-  background-color: var(--color-grey-100);
+  background-color: var(--color-grey-50);
   padding: 0.75em 1rem;
   overflow: auto;
+}
+
+.snippet .metadata h2 {
+  margin-bottom: 0;
 }
 
 .snippet .metadata ul {
@@ -341,7 +331,7 @@ table {
 }
 
 thead {
-  background-color: var(--color-grey-200);
+  background-color: var(--color-grey-50);
 }
 
 td,

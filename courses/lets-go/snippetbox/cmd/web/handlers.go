@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"snippetbox.dev/internal/models"
 )
@@ -24,6 +23,9 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 	data := app.newTemplateData(r)
 	data.Snippets = snippets
+	data.Breadcrumbs = []*BreadcrumbLink{
+		{"/", "Home", true},
+	}
 
 	app.render(w, http.StatusOK, "home.html", data)
 }
@@ -35,12 +37,7 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := strconv.Atoi(r.URL.Query().Get("id"))
-
-	if err != nil || id < 1 {
-		app.notFound(w)
-		return
-	}
+	id := r.URL.Query().Get("id")
 
 	snippet, err := app.snippets.Get(id)
 
@@ -55,6 +52,10 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 
 	data := app.newTemplateData(r)
 	data.Snippet = snippet
+	data.Breadcrumbs = []*BreadcrumbLink{
+		{"/", "Home", false},
+		{"/snippets/view?id=" + id, "Snippet", true},
+	}
 
 	app.render(w, http.StatusOK, "snippet-view.html", data)
 }

@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"reflect"
 	"time"
 
 	"snippetbox.dev/internal/models"
@@ -11,16 +12,28 @@ import (
 
 var templateFunctions = template.FuncMap{
 	"friendlyDate": friendlyDate,
+	"isLastItem":   isLastItem,
+}
+
+type BreadcrumbLink struct {
+	Url      string
+	Label    string
+	IsActive bool
 }
 
 type templateData struct {
 	CurrentYear int
+	Breadcrumbs []*BreadcrumbLink
 	Snippet     *models.Snippet
 	Snippets    []*models.Snippet
 }
 
 func friendlyDate(t time.Time) string {
 	return t.Format("02 Jan 2006 at 15:04")
+}
+
+func isLastItem(index int, list interface{}) bool {
+	return index == reflect.ValueOf(list).Len()-1
 }
 
 func newTemplateCache(basePath string) (map[string]*template.Template, error) {
