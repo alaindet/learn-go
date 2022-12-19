@@ -185,10 +185,11 @@ nav a.active {
 }
 
 a.button,
-input[type="submit"] {
+input[type="submit"],
+button[type="submit"] {
   background-color: var(--color-link);
   border-radius: 3px;
-  color: var(--color-white);
+  color: var(--color-grey-50);
   padding: 18px 27px;
   border: none;
   display: inline-block;
@@ -197,19 +198,26 @@ input[type="submit"] {
 }
 
 a.button:hover,
-input[type="submit"]:hover {
+input[type="submit"]:hover,
+button[type="submit"]:hover {
   background-color: var(--color-link-hover);
-  color: var(--color-white);
+  color: var(--color-grey-50);
   cursor: pointer;
   text-decoration: none;
 }
 
-form div {
+form fieldset {
+  border: 0;
+}
+
+form .form-control {
   margin-bottom: 1rem;
 }
 
-form div:last-child {
-  border-top: 1px dashed var(--color-grey-100);
+form .form-control:last-child {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--color-grey-200);
 }
 
 form input[type="radio"] {
@@ -223,13 +231,13 @@ form input[type="email"] {
   width: 100%;
 }
 
-form input[type=text],
+form input[type="text"],
 form input[type="password"],
 form input[type="email"],
 textarea {
-  color: var(--color-grey-400);
-  background: var(--color-white);
-  border: 1px solid var(--color-grey-100);
+  color: var(--color-grey-900);
+  background: white;
+  border: 2px solid var(--color-grey-100);
   border-radius: 3px;
 }
 
