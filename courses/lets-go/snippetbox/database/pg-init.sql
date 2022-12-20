@@ -12,6 +12,14 @@ ALTER TABLE "snippets"
 DROP CONSTRAINT "snippets_pkey";
 CREATE INDEX "snippets_created_at" ON "snippets" ("created_at");
 
+CREATE TABLE "sessions" (
+	token TEXT PRIMARY KEY,
+	data BYTEA NOT NULL,
+	expiry TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX sessions_expiry_idx ON sessions (expiry);
+
 /* Data */
 INSERT INTO
   snippets (title, content, created_at, expires_at)

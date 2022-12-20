@@ -6,7 +6,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
+	"github.com/alexedwards/scs/postgresstore"
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
 
 	"snippetbox.dev/internal/models"
@@ -14,12 +17,13 @@ import (
 
 type application struct {
 	config
-	errorLog      *log.Logger
-	infoLog       *log.Logger
-	db            *sql.DB // TODO: Remove?
-	snippets      *models.SnippetModel
-	templateCache map[string]*template.Template
-	formDecoder   *form.Decoder
+	errorLog       *log.Logger
+	infoLog        *log.Logger
+	db             *sql.DB // TODO: Remove?
+	snippets       *models.SnippetModel
+	templateCache  map[string]*template.Template
+	formDecoder    *form.Decoder
+	sessionManager *scs.SessionManager
 }
 
 func initApp() *application {
@@ -42,6 +46,11 @@ func initApp() *application {
 	if err != nil {
 		errorLog.Fatal(err)
 	}
+
+	// Init session manager
+	sessionManager := scs.New()
+	sessionManager.Store = postgresstore.New(db)
+	sessionManager.Lifetime = 12 * time.Hour
 
 	// Application
 	return &application{
