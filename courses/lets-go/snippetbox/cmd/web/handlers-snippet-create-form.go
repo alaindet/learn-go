@@ -7,16 +7,16 @@ import (
 )
 
 type snippetCreateForm struct {
-	Title   string
-	Content string
-	Expires int
-	validator.Validator
+	Title               string `form:"title"`
+	Content             string `form:"content"`
+	ExpiresInDays       int    `form:"expires-in-days"`
+	validator.Validator `form:"-"`
 }
 
 func (app *application) snippetCreateForm(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
 	data.Form = snippetCreateForm{
-		Expires: 365,
+		ExpiresInDays: 365,
 	}
 	data.Breadcrumbs = []*BreadcrumbLink{
 		{"/", "Home", false},

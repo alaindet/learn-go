@@ -35,7 +35,7 @@
       {{end}}
     </div>
 
-    <!-- Expires in -->
+    <!-- Expires in days -->
     <div class="form-control">
       <fieldset>
         <legend>Delete in:</legend>
@@ -43,35 +43,35 @@
         <!-- 365 days -->
         <input
           type="radio"
-          name="expires"
-          id="expires-field-365"
+          name="expires-in-days"
+          id="expires-in-days-field-365"
           value="365"
-          {{if (eq .Form.Expires 365)}}checked{{end}}
+          {{if (eq .Form.ExpiresInDays 365)}}checked{{end}}
         >
-        <label for="expires-field-365">One year</label>
+        <label for="expires-in-days-field-365">One year</label>
 
         <!-- 7 days -->
         <input
           type="radio"
-          name="expires"
-          id="expires-field-7"
+          name="expires-in-days"
+          id="expires-in-days-field-7"
           value="7"
-          {{if (eq .Form.Expires 7)}}checked{{end}}
+          {{if (eq .Form.ExpiresInDays 7)}}checked{{end}}
         >
-        <label for="expires-field-7">One week</label>
+        <label for="expires-in-days-field-7">One week</label>
 
         <!-- 1 day -->
         <input
           type="radio"
-          name="expires"
-          id="expires-field-1"
+          name="expires-in-days"
+          id="expires-in-days-field-1"
           value="1"
-          {{if (eq .Form.Expires 1)}}checked{{end}}
+          {{if (eq .Form.ExpiresInDays 1)}}checked{{end}}
         >
-        <label for="expires-field-1">One day</label>
+        <label for="expires-in-days-field-1">One day</label>
 
       </fieldset>
-      {{with .Form.FieldErrors.expires}}
+      {{with index .Form.FieldErrors "expires-in-days"}}
         <p class="error-message">{{.}}</p>
       {{end}}
     </div>

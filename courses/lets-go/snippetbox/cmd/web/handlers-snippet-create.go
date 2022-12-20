@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"snippetbox.dev/internal/validator"
 )
@@ -13,29 +12,15 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	// Limit the POST body at 8Kb, default is 10 Mb usually
 	r.Body = http.MaxBytesReader(w, r.Body, 8192)
 
-	// Parse input
-	err := r.ParseForm()
+	var form snippetCreateForm
+	err := app.decodePostForm(r, &form)
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
 		return
-	}
-
-	title := r.PostForm.Get("title")
-	content := r.PostForm.Get("content")
-	expires, err := strconv.Atoi(r.PostForm.Get("expires"))
-
-	if err != nil {
-		app.clientError(w, http.StatusBadRequest)
-		return
-	}
-
-	form := snippetCreateForm{
-		Title:   title,
-		Content: content,
-		Expires: expires,
 	}
 
 	// Validation
+	// TODO: Simplify or move validation to middleware
 	form.Check(
 		"title",
 		validator.Required(form.Title),
@@ -55,8 +40,8 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	)
 
 	form.Check(
-		"expires",
-		validator.InInts(form.Expires, 1, 7, 365),
+		"expires-in-days",
+		validator.InInts(form.ExpiresInDays, 1, 7, 365),
 		"This field must equal 1, 7 or 365",
 	)
 
@@ -73,7 +58,7 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Save into database
-	snippetId, err := app.snippets.Insert(title, content, expires)
+	snippetId, err := app.snippets.Insert(form.Title, form.Content, form.ExpiresInDays)
 	if err != nil {
 		app.serverError(w, err)
 		return

@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/go-playground/form/v4"
+
 	"snippetbox.dev/internal/models"
 )
 
@@ -17,6 +19,7 @@ type application struct {
 	db            *sql.DB // TODO: Remove?
 	snippets      *models.SnippetModel
 	templateCache map[string]*template.Template
+	formDecoder   *form.Decoder
 }
 
 func initApp() *application {
@@ -48,6 +51,7 @@ func initApp() *application {
 		db:            db,
 		snippets:      models.NewSnippetModel(db),
 		templateCache: templateCache,
+		formDecoder:   form.NewDecoder(),
 	}
 }
 

@@ -3,7 +3,9 @@ module snippetbox.dev
 go 1.18
 
 require (
+	github.com/go-playground/form/v4 v4.2.0
 	github.com/jackc/pgx/v5 v5.2.0
+	github.com/julienschmidt/httprouter v1.3.0
 	github.com/justinas/alice v1.2.0
 	github.com/spf13/viper v1.14.0
 )
@@ -14,7 +16,6 @@ require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/puddle/v2 v2.1.2 // indirect
-	github.com/julienschmidt/httprouter v1.3.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
