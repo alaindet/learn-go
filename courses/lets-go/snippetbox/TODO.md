@@ -1,2 +1,3 @@
 - [ ] Minify CSS and JS assets
 - [ ] https://github.com/cosmtrek/air
+- [ ] Refactor related files (ex.: `handlers-home.go`, `handlers-snippet-create.go` etc) as packages

@@ -4,24 +4,14 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
-	"unicode/utf8"
-)
 
-// TODO: Show page with HTML form
-func (app *application) snippetCreateForm(w http.ResponseWriter, r *http.Request) {
-	data := app.newTemplateData(r)
-	data.Breadcrumbs = []*BreadcrumbLink{
-		{"/", "Home", false},
-		{"/snippets/new", "Create new snippet", true},
-	}
-	app.render(w, http.StatusOK, "create.html", data)
-}
+	"snippetbox.dev/internal/validator"
+)
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 
-	// Limit the POST body at 4Kb, default is 10 Mb usually
-	r.Body = http.MaxBytesReader(w, r.Body, 4096)
+	// Limit the POST body at 8Kb, default is 10 Mb usually
+	r.Body = http.MaxBytesReader(w, r.Body, 8192)
 
 	// Parse input
 	err := r.ParseForm()
@@ -39,28 +29,46 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	form := snippetCreateForm{
+		Title:   title,
+		Content: content,
+		Expires: expires,
+	}
+
 	// Validation
-	fieldErrors := make(map[string]string)
+	form.Check(
+		"title",
+		validator.Required(form.Title),
+		"This field is required",
+	)
 
-	if strings.TrimSpace(title) == "" {
-		fieldErrors["title"] = "This field is required"
-	}
+	form.Check(
+		"title",
+		validator.MaxChars(form.Title, 100),
+		"This field must be less than 100 characters long",
+	)
 
-	if utf8.RuneCountInString(title) > 100 {
-		fieldErrors["title"] = "This field must be less than 100 characters long"
-	}
+	form.Check(
+		"content",
+		validator.Required(form.Content),
+		"This field is required",
+	)
 
-	if strings.TrimSpace(content) == "" {
-		fieldErrors["content"] = "This field is required"
-	}
+	form.Check(
+		"expires",
+		validator.InInts(form.Expires, 1, 7, 365),
+		"This field must equal 1, 7 or 365",
+	)
 
-	if expires != 1 && expires != 7 && expires != 365 {
-		fieldErrors["expires"] = "This field must equal 1, 7 or 365"
-	}
-
-	// TODO: Show validation errors in a friendly way
-	if len(fieldErrors) > 0 {
-		fmt.Fprint(w, fieldErrors)
+	// Render form again, with validation errors
+	if !form.Valid() {
+		data := app.newTemplateData(r)
+		data.Form = form
+		data.Breadcrumbs = []*BreadcrumbLink{
+			{"/", "Home", false},
+			{"/snippets/new", "Create new snippet", true},
+		}
+		app.render(w, http.StatusUnprocessableEntity, "create.html", data)
 		return
 	}
 

@@ -6,28 +6,74 @@
     <!-- Title -->
     <div class="form-control">
       <label for="title-field">Title:</label>
-      <input type="text" name="title" id="title-field" placeholder="Snippet title...">
+
+      <input
+        type="text"
+        name="title"
+        id="title-field"
+        placeholder="Snippet title..."
+        value="{{.Form.Title}}"
+      >
+
+      {{with .Form.FieldErrors.title}}
+        <p class="error-message">{{.}}</p>
+      {{end}}
     </div>
 
     <!-- Content -->
     <div class="form-control">
       <label for="content-field">Content:</label>
-      <textarea name="content" id="content-field" placeholder="Snippet content..."></textarea>
+
+      <textarea
+        name="content"
+        id="content-field"
+        placeholder="Snippet content..."
+      >{{.Form.Content}}</textarea>
+
+      {{with .Form.FieldErrors.content}}
+        <p class="error-message">{{.}}</p>
+      {{end}}
     </div>
 
     <!-- Expires in -->
     <div class="form-control">
       <fieldset>
         <legend>Delete in:</legend>
-        <input type="radio" name="expires" id="expires-field-365" value="365" checked>
+
+        <!-- 365 days -->
+        <input
+          type="radio"
+          name="expires"
+          id="expires-field-365"
+          value="365"
+          {{if (eq .Form.Expires 365)}}checked{{end}}
+        >
         <label for="expires-field-365">One year</label>
 
-        <input type="radio" name="expires" id="expires-field-7" value="7">
+        <!-- 7 days -->
+        <input
+          type="radio"
+          name="expires"
+          id="expires-field-7"
+          value="7"
+          {{if (eq .Form.Expires 7)}}checked{{end}}
+        >
         <label for="expires-field-7">One week</label>
 
-        <input type="radio" name="expires" id="expires-field-1" value="1">
+        <!-- 1 day -->
+        <input
+          type="radio"
+          name="expires"
+          id="expires-field-1"
+          value="1"
+          {{if (eq .Form.Expires 1)}}checked{{end}}
+        >
         <label for="expires-field-1">One day</label>
+
       </fieldset>
+      {{with .Form.FieldErrors.expires}}
+        <p class="error-message">{{.}}</p>
+      {{end}}
     </div>
 
     <!-- Submit -->
@@ -36,4 +82,8 @@
     </div>
 
   </form>
+{{end}}
+
+{{define "scripts"}}
+  <script src="/static/js/snippet-create.js" type="text/javascript"></script>
 {{end}}

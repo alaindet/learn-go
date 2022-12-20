@@ -210,14 +210,29 @@ form fieldset {
   border: 0;
 }
 
-form .form-control {
+.form-control {
   margin-bottom: 1rem;
 }
 
-form .form-control:last-child {
+.form-control:last-child {
   margin-top: 2rem;
   padding-top: 1rem;
   border-top: 2px solid var(--color-grey-200);
+}
+
+.form-control.--error input[type="text"],
+.form-control.--error input[type="number"],
+.form-control.--error input[type="password"],
+.form-control.--error input[type="email"],
+.form-control.--error textarea,
+.form-control.--error fieldset {
+  border-width: 2px;
+  border-color: var(--color-error) !important;
+}
+
+.error-message {
+  color: var(--color-error);
+  display: block;
 }
 
 form input[type="radio"] {
@@ -244,18 +259,6 @@ textarea {
 form label {
   display: inline-block;
   margin-bottom: 9px;
-}
-
-.error {
-  color: var(--color-error);
-  font-weight: bold;
-  display: block;
-}
-
-.error+textarea,
-.error+input {
-  border-color: var(--color-error) !important;
-  border-width: 2px !important;
 }
 
 textarea {
