@@ -1,16 +1,20 @@
 package main
 
 import (
+	"context"
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
-	"github.com/alexedwards/scs/postgresstore"
+	"github.com/alexedwards/scs/pgxstore"
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
+	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v4/pgxpool"
 
 	"snippetbox.dev/internal/models"
 )
@@ -24,6 +28,7 @@ type application struct {
 	errorLog       *log.Logger
 	infoLog        *log.Logger
 	db             *sql.DB // TODO: Remove?
+	pgxPool        *pgxpool.Pool
 	snippets       *models.SnippetModel
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
@@ -52,8 +57,16 @@ func initApp() *application {
 	}
 
 	// Init session manager
+	pgxDb, err := openPgxDB(config.dsn)
+
+	pgxDb, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+	defer conn.Close(context.Background())
 	sessionManager := scs.New()
-	sessionManager.Store = postgresstore.New(db)
+	sessionManager.Store = pgxstore.New(pgxDb)
 	sessionManager.IdleTimeout = 30 * time.Minute
 	sessionManager.Lifetime = 3 * time.Hour
 
@@ -79,4 +92,5 @@ func (app *application) initWebServer() *http.Server {
 
 func (app *application) shutdown() {
 	app.db.Close()
+	app.pgxPool.Close()
 }
