@@ -34,6 +34,7 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 
 	data := app.newTemplateData(r)
 	data.Snippet = snippet
+	data.Flash = app.sessionManager.PopString(r.Context(), flashKey)
 	data.Breadcrumbs = []*BreadcrumbLink{
 		{"/", "Home", false},
 		{"/snippets/new", "Create new snippet", false},

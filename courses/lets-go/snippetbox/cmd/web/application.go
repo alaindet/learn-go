@@ -15,6 +15,10 @@ import (
 	"snippetbox.dev/internal/models"
 )
 
+var (
+	flashKey = "flash"
+)
+
 type application struct {
 	config
 	errorLog       *log.Logger
@@ -50,7 +54,8 @@ func initApp() *application {
 	// Init session manager
 	sessionManager := scs.New()
 	sessionManager.Store = postgresstore.New(db)
-	sessionManager.Lifetime = 12 * time.Hour
+	sessionManager.IdleTimeout = 30 * time.Minute
+	sessionManager.Lifetime = 3 * time.Hour
 
 	// Application
 	return &application{

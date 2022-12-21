@@ -19,11 +19,17 @@ func (app *application) routes() http.Handler {
 	fileServerHandler := http.StripPrefix("/static", fileServer)
 	r.Handler(http.MethodGet, "/static/*filepath", fileServerHandler)
 
+	// Routes-only middleware: this chain only applies to application routes,
+	// not to static assets routes
+	routesMiddleware := alice.New(
+		app.sessionManager.LoadAndSave,
+	)
+
 	// Routes
-	r.HandlerFunc(http.MethodGet, "/", app.home)
-	r.HandlerFunc(http.MethodGet, "/snippets/view/:id", app.snippetView)
-	r.HandlerFunc(http.MethodGet, "/snippets/new", app.snippetCreateForm)
-	r.HandlerFunc(http.MethodPost, "/snippets", app.snippetCreate)
+	Get(r, "/", routesMiddleware.ThenFunc(app.home))
+	Get(r, "/snippets/view/:id", routesMiddleware.ThenFunc(app.snippetView))
+	Get(r, "/snippets/new", routesMiddleware.ThenFunc(app.snippetCreateForm))
+	Post(r, "/snippets", routesMiddleware.ThenFunc(app.snippetCreate))
 
 	// Add global middleware
 	globalMiddleware := alice.New(
@@ -33,4 +39,12 @@ func (app *application) routes() http.Handler {
 	)
 
 	return globalMiddleware.Then(r)
+}
+
+func Get(r *httprouter.Router, path string, handler http.Handler) {
+	r.Handler(http.MethodGet, path, handler)
+}
+
+func Post(r *httprouter.Router, path string, handler http.Handler) {
+	r.Handler(http.MethodPost, path, handler)
 }

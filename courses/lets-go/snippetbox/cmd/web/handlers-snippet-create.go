@@ -12,6 +12,7 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	// Limit the POST body at 8Kb, default is 10 Mb usually
 	r.Body = http.MaxBytesReader(w, r.Body, 8192)
 
+	// Parse input
 	var form snippetCreateForm
 	err := app.decodePostForm(r, &form)
 	if err != nil {
@@ -65,5 +66,6 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// https://en.wikipedia.org/wiki/Post/Redirect/Get
+	app.sessionManager.Put(r.Context(), flashKey, "Snippet successfully created!")
 	http.Redirect(w, r, fmt.Sprintf("/snippets/view/%d", snippetId), http.StatusSeeOther)
 }

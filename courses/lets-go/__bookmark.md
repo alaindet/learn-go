@@ -1,2 +1,2 @@
-227
-Setting up the session manager
+238
+Auto-displaying flash messages

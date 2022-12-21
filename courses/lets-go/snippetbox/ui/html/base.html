@@ -21,6 +21,12 @@
     </header>
     {{template "nav" .}}
     <main>
+
+      <div class="flash">
+        The snippet was created successfully.
+        <button type="button" class="flash__dismiss">&times;</button>
+      </div>
+
       {{template "main" .}}
     </main>
     <footer>
