@@ -1,9 +1,7 @@
 package main
 
 import (
-	"context"
 	"database/sql"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -13,7 +11,6 @@ import (
 	"github.com/alexedwards/scs/pgxstore"
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
-	"github.com/jackc/pgx"
 	"github.com/jackc/pgx/v4/pgxpool"
 
 	"snippetbox.dev/internal/models"
@@ -58,13 +55,10 @@ func initApp() *application {
 
 	// Init session manager
 	pgxDb, err := openPgxDB(config.dsn)
-
-	pgxDb, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
+		errorLog.Fatal(err)
 	}
-	defer conn.Close(context.Background())
+
 	sessionManager := scs.New()
 	sessionManager.Store = pgxstore.New(pgxDb)
 	sessionManager.IdleTimeout = 30 * time.Minute

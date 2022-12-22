@@ -1,13 +1,11 @@
 package main
 
 import (
+	"context"
 	"database/sql"
-	"fmt"
-	"os"
 
-	"github.com/jackc/pgx"
-	"github.com/jackc/pgx/v5/pgxpool"
-	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jackc/pgx/v4/pgxpool"
+	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
 func openDB(dsn string) (*sql.DB, error) {
@@ -25,12 +23,14 @@ func openDB(dsn string) (*sql.DB, error) {
 	return db, nil
 }
 
+// TODO: This is only used for alexedwards/scs
+// TODO: Merge this into openDB
 func openPgxDB(dsn string) (*pgxpool.Pool, error) {
-	pgxDb, err := pgx.Connect(dsn)
+	pgxDb, err := pgxpool.Connect(context.Background(), dsn)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
+		return nil, err
 	}
 
+	return pgxDb, nil
 }
