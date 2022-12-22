@@ -66,13 +66,14 @@ func initApp() *application {
 
 	// Application
 	return &application{
-		errorLog:      errorLog,
-		infoLog:       infoLog,
-		config:        config,
-		db:            db,
-		snippets:      models.NewSnippetModel(db),
-		templateCache: templateCache,
-		formDecoder:   form.NewDecoder(),
+		errorLog:       errorLog,
+		infoLog:        infoLog,
+		config:         config,
+		db:             db,
+		snippets:       models.NewSnippetModel(db),
+		templateCache:  templateCache,
+		formDecoder:    form.NewDecoder(),
+		sessionManager: sessionManager,
 	}
 }
 

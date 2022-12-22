@@ -22,10 +22,13 @@
     {{template "nav" .}}
     <main>
 
-      <div class="flash">
-        The snippet was created successfully.
-        <button type="button" class="flash__dismiss">&times;</button>
-      </div>
+      <!-- Flash message -->
+      {{with .Flash}}
+        <div class="flash">
+          {{.}}
+          <button type="button" class="flash__dismiss">&times;</button>
+        </div>
+      {{end}}
 
       {{template "main" .}}
     </main>
