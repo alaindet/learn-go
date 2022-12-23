@@ -54,7 +54,7 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 			{"/", "Home", false},
 			{"/snippets/new", "Create new snippet", true},
 		}
-		app.render(w, http.StatusUnprocessableEntity, "create.html", data)
+		app.render(w, http.StatusUnprocessableEntity, "snippet-create.html", data)
 		return
 	}
 

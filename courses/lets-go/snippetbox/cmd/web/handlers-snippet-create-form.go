@@ -22,5 +22,5 @@ func (app *application) snippetCreateForm(w http.ResponseWriter, r *http.Request
 		{"/", "Home", false},
 		{"/snippets/new", "Create new snippet", true},
 	}
-	app.render(w, http.StatusOK, "create.html", data)
+	app.render(w, http.StatusOK, "snippet-create.html", data)
 }
