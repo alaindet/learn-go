@@ -1,4 +1,4 @@
-/* Tables */
+/* Table: snippets */
 CREATE TABLE "snippets" (
   "id" serial NOT NULL,
   PRIMARY KEY ("id"),
@@ -12,6 +12,7 @@ ALTER TABLE "snippets"
 DROP CONSTRAINT "snippets_pkey";
 CREATE INDEX "snippets_created_at" ON "snippets" ("created_at");
 
+/* Table: sessions */
 CREATE TABLE "sessions" (
 	token TEXT PRIMARY KEY,
 	data BYTEA NOT NULL,
@@ -19,6 +20,21 @@ CREATE TABLE "sessions" (
 );
 
 CREATE INDEX sessions_expiry_idx ON sessions (expiry);
+
+/* Table: users */
+DROP TABLE IF EXISTS "users";
+DROP SEQUENCE IF EXISTS users_id_seq;
+CREATE SEQUENCE users_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1;
+
+CREATE TABLE "public"."users" (
+  "id" integer DEFAULT nextval('users_id_seq') NOT NULL,
+  "name" character varying(255) NOT NULL,
+  "email" character varying(255) NOT NULL,
+  "password" character varying(255) NOT NULL,
+  "created_at" timestamptz NOT NULL,
+  CONSTRAINT "users_email" UNIQUE ("email"),
+  CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+) WITH (oids = false);
 
 /* Data */
 INSERT INTO

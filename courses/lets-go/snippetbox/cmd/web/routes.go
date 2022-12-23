@@ -30,6 +30,11 @@ func (app *application) routes() http.Handler {
 	Get(r, "/snippets/view/:id", routesMiddleware.ThenFunc(app.snippetView))
 	Get(r, "/snippets/new", routesMiddleware.ThenFunc(app.snippetCreateForm))
 	Post(r, "/snippets", routesMiddleware.ThenFunc(app.snippetCreate))
+	Get(r, "/users/signup", routesMiddleware.ThenFunc(app.signUpForm))
+	Post(r, "/users/signup", routesMiddleware.ThenFunc(app.signUp))
+	Get(r, "/users/signin", routesMiddleware.ThenFunc(app.signInForm))
+	Post(r, "/users/signin", routesMiddleware.ThenFunc(app.signIn))
+	Post(r, "/users/signout", routesMiddleware.ThenFunc(app.signOut))
 
 	// Add global middleware
 	globalMiddleware := alice.New(

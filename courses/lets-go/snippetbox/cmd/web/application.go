@@ -28,6 +28,7 @@ type application struct {
 	db             *sql.DB // TODO: Remove?
 	pgxPool        *pgxpool.Pool
 	snippets       *models.SnippetModel
+	users          *models.UserModel
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
@@ -72,6 +73,7 @@ func initApp() *application {
 		config:         config,
 		db:             db,
 		snippets:       models.NewSnippetModel(db),
+		users:          models.NewUserModel(db),
 		templateCache:  templateCache,
 		formDecoder:    form.NewDecoder(),
 		sessionManager: sessionManager,

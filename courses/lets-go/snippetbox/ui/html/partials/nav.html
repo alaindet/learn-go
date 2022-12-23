@@ -1,11 +1,29 @@
 {{define "nav"}}
   <nav>
-    {{range .Breadcrumbs}}
-      {{if .IsActive}}
-        <a href="{{.Url}}" class="active">{{.Label}}</a>
-      {{else}}
-        <a href="{{.Url}}">{{.Label}}</a>
+
+    <div class="left">
+      {{range .Breadcrumbs}}
+        {{if .IsActive}}
+          <a href="{{.Url}}" class="active">{{.Label}}</a>
+        {{else}}
+          <a href="{{.Url}}">{{.Label}}</a>
+        {{end}}
       {{end}}
-    {{end}}
+    </div>
+
+    <div class="right">
+
+      <!-- Show only to non-logged users -->
+      <a href="/users/signup">Sign Up</a>
+
+      <!-- Show only to non-logged users -->
+      <a href="/users/signin">Sign In</a>
+
+      <form action="/users/signout" method="POST">
+        <button>Sign Out</button>
+      </form>
+
+    </div>
+
   </nav>
 {{end}}
