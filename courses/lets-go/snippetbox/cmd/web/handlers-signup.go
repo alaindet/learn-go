@@ -1,20 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 
+	"snippetbox.dev/internal/models"
 	"snippetbox.dev/internal/validator"
 )
-
-/*
-type userSignUpForm struct {
-	Name                string `form:"name"`
-	Email               string `form:"email"`
-	Password            string `form:"password"`
-	validator.Validator `form:"-"`
-}
-*/
 
 func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 
@@ -70,6 +62,27 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: Create new user...
-	fmt.Fprintln(w, "Create new user...")
+	// Save into database
+	err = app.users.Insert(form.Name, form.Email, form.Password)
+	if err != nil {
+
+		// Email already exists?
+		if errors.Is(err, models.ErrDuplicateEmail) {
+			form.AddFieldError("email", "Email address is already in use")
+			data := app.newTemplateData(r)
+			data.Form = form
+			data.Breadcrumbs = []*BreadcrumbLink{
+				{"/", "Home", false},
+				{"/users/signup", "Sign Up", true},
+			}
+			app.render(w, http.StatusUnprocessableEntity, "users-signup.html", data)
+		} else {
+			app.serverError(w, err)
+		}
+	}
+
+	app.sessionManager.Put(r.Context(), flashKey, "You successfully signed up on Snippetbox. Welcome!")
+
+	// https://en.wikipedia.org/wiki/Post/Redirect/Get
+	http.Redirect(w, r, "/users/signin", http.StatusSeeOther)
 }

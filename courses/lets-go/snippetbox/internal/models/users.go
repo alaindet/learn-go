@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var (
@@ -30,6 +32,32 @@ func NewUserModel(db *sql.DB) *UserModel {
 }
 
 func (m *UserModel) Insert(name, email, password string) error {
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
+	if err != nil {
+		return err
+	}
+
+	stmt := `
+		INSERT INTO users (name, email, password, created_at)
+		VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+		RETURNING id;
+	`
+	lastInsertId := 0
+	params := []any{name, email, hashedPassword}
+	err = m.db.QueryRow(stmt, params...).Scan(&lastInsertId)
+
+	// TODO: Check for duplicate error
+	// TODO
+	// TODO
+	// TODO
+	// TODO
+	// TODO
+	// TODO
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
