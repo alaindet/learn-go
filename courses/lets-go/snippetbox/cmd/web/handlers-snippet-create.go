@@ -50,9 +50,9 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	if !form.Valid() {
 		data := app.newTemplateData(r)
 		data.Form = form
-		data.Breadcrumbs = []*BreadcrumbLink{
+		data.Breadcrumbs = []BreadcrumbLink{
 			{"/", "Home", false},
-			{"/snippets/new", "Create new snippet", true},
+			{"/snippets/new", "Create snippet", true},
 		}
 		app.render(w, http.StatusUnprocessableEntity, "snippet-create.html", data)
 		return

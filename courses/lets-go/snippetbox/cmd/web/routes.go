@@ -25,6 +25,10 @@ func (app *application) routes() http.Handler {
 		app.sessionManager.LoadAndSave,
 	)
 
+	// TODO...
+	// dynamicRoutes
+	// protectedRoutes
+
 	// Routes
 	Get(r, "/", routesMiddleware.ThenFunc(app.home))
 	Get(r, "/snippets/view/:id", routesMiddleware.ThenFunc(app.snippetView))

@@ -15,10 +15,6 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 	data := app.newTemplateData(r)
 	data.Snippets = snippets
-	data.Breadcrumbs = []*BreadcrumbLink{
-		{"/", "Home", true},
-		{"/snippets/new", "Create new snippet", false},
-	}
 
 	app.render(w, http.StatusOK, "home.html", data)
 }

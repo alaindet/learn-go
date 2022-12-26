@@ -1,2 +1,2 @@
-295
-User authorization
+300
+Restricting access

@@ -54,7 +54,7 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 	if !form.Valid() {
 		data := app.newTemplateData(r)
 		data.Form = form
-		data.Breadcrumbs = []*BreadcrumbLink{
+		data.Breadcrumbs = []BreadcrumbLink{
 			{"/", "Home", false},
 			{"/users/signup", "Sign Up", true},
 		}
@@ -71,7 +71,7 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			form.AddFieldError("email", "Email address is already in use")
 			data := app.newTemplateData(r)
 			data.Form = form
-			data.Breadcrumbs = []*BreadcrumbLink{
+			data.Breadcrumbs = []BreadcrumbLink{
 				{"/", "Home", false},
 				{"/users/signup", "Sign Up", true},
 			}

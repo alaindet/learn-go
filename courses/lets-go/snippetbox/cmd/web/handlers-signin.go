@@ -42,7 +42,7 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 	if !form.Valid() {
 		data := app.newTemplateData(r)
 		data.Form = form
-		data.Breadcrumbs = []*BreadcrumbLink{
+		data.Breadcrumbs = []BreadcrumbLink{
 			{"/", "Home", false},
 			{"/users/signin", "Sign In", true},
 		}
@@ -56,7 +56,7 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 			form.AddNonFieldError("Email/password incorrect")
 			data := app.newTemplateData(r)
 			data.Form = form
-			data.Breadcrumbs = []*BreadcrumbLink{
+			data.Breadcrumbs = []BreadcrumbLink{
 				{"/", "Home", false},
 				{"/users/signin", "Sign In", true},
 			}

@@ -15,7 +15,7 @@ type userSignInForm struct {
 func (app *application) signInForm(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
 	data.Form = userSignUpForm{}
-	data.Breadcrumbs = []*BreadcrumbLink{
+	data.Breadcrumbs = []BreadcrumbLink{
 		{"/", "Home", false},
 		{"/users/signin", "Sign In", true},
 	}

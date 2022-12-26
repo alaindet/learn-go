@@ -4,7 +4,7 @@ import "net/http"
 
 func (app *application) customNotFound(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
-	data.Breadcrumbs = []*BreadcrumbLink{
+	data.Breadcrumbs = []BreadcrumbLink{
 		{"/", "Home", true},
 		{r.URL.Path, "Page not found", true},
 	}

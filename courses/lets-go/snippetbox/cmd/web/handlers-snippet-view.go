@@ -34,11 +34,9 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 
 	data := app.newTemplateData(r)
 	data.Snippet = snippet
-	data.Breadcrumbs = []*BreadcrumbLink{
-		{"/", "Home", false},
-		{"/snippets/new", "Create new snippet", false},
+	data.AddBreadcrumbs([]BreadcrumbLink{
 		{"/snippets/view/" + id, "Snippet #" + id, true},
-	}
+	})
 
 	app.render(w, http.StatusOK, "snippet-view.html", data)
 }

@@ -18,9 +18,5 @@ func (app *application) snippetCreateForm(w http.ResponseWriter, r *http.Request
 	data.Form = snippetCreateForm{
 		ExpiresInDays: 365,
 	}
-	data.Breadcrumbs = []*BreadcrumbLink{
-		{"/", "Home", false},
-		{"/snippets/new", "Create new snippet", true},
-	}
 	app.render(w, http.StatusOK, "snippet-create.html", data)
 }
