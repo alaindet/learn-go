@@ -230,6 +230,12 @@ form fieldset {
   border-color: var(--color-error) !important;
 }
 
+.error-messages {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-error);
+}
+
 .error-message {
   color: var(--color-error);
   display: block;

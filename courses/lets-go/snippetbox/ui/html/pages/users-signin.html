@@ -1,0 +1,38 @@
+{{define "title"}}Sign In{{end}}
+{{define "main"}}
+  <form action="/users/signin" method="POST" novalidate>
+
+    <!-- Errors -->
+    {{if ne (len .Form.NonFieldErrors) 0}}
+      <div class="error-messages">
+        {{range .Form.NonFieldErrors}}
+          <p class="error-message">{{.}}</p>
+        {{end}}
+      </div>
+    {{end}}
+
+    <!-- Email -->
+    <div class="form-control">
+      <label for="email-field">Email</label>
+      <input type="email" id="email-field" name="email" value="{{.Form.Email}}">
+      {{with .Form.FieldErrors.email}}
+        <p class="error-message">{{.}}</p>
+      {{end}}
+    </div>
+
+    <!-- Password -->
+    <div class="form-control">
+      <label for="password-field">Password</label>
+      <input type="password" id="password-field" name="password">
+      {{with .Form.FieldErrors.password}}
+        <p class="error-message">{{.}}</p>
+      {{end}}
+    </div>
+
+    <!-- Submit -->
+    <div class="form-control">
+      <button type="submit">Sign In</button>
+    </div>
+
+  </form>
+{{end}}

@@ -18,7 +18,8 @@ import (
 )
 
 var (
-	flashKey = "flash"
+	sessionKeyFlash  = "flash"
+	sessionKeyUserId = "userId"
 )
 
 type application struct {

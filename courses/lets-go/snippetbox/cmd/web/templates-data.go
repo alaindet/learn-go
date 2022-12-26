@@ -25,6 +25,6 @@ type templateData struct {
 func (app *application) newTemplateData(r *http.Request) *templateData {
 	return &templateData{
 		CurrentYear: time.Now().Year(),
-		Flash:       app.sessionManager.PopString(r.Context(), flashKey),
+		Flash:       app.sessionManager.PopString(r.Context(), sessionKeyFlash),
 	}
 }

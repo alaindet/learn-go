@@ -5,6 +5,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/jackc/pgconn"
+	"github.com/jackc/pgerrcode"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -47,15 +49,10 @@ func (m *UserModel) Insert(name, email, password string) error {
 	params := []any{name, email, hashedPassword}
 	err = m.db.QueryRow(stmt, params...).Scan(&lastInsertId)
 
-	// TODO: Check for duplicate error
-	// TODO
-	// TODO
-	// TODO
-	// TODO
-	// TODO
-	// TODO
-	if err != nil {
-		return err
+	// Thanks to https://www.reddit.com/r/golang/comments/ruevh6/comment/hqyn1o8
+	var e *pgconn.PgError
+	if errors.As(err, &e) && e.Code == pgerrcode.UniqueViolation {
+		return ErrDuplicateEmail
 	}
 
 	return nil
@@ -63,7 +60,32 @@ func (m *UserModel) Insert(name, email, password string) error {
 
 // Returns User ID if found
 func (m *UserModel) Authenticate(email, password string) (int, error) {
-	return 0, nil
+	var id int
+	var hashedPassword []byte
+
+	// Fetch user from database by email
+	stmt := `SELECT id, password FROM users WHERE email = $1`
+	params := []any{email}
+	err := m.db.QueryRow(stmt, params...).Scan(&id, &hashedPassword)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return 0, ErrInvalidCredentials
+		} else {
+			return 0, err
+		}
+	}
+
+	// Check email
+	err = bcrypt.CompareHashAndPassword(hashedPassword, []byte(password))
+	if err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			return 0, ErrInvalidCredentials
+		} else {
+			return 0, err
+		}
+	}
+
+	return id, err
 }
 
 func (m *UserModel) Exists(userId int) (bool, error) {

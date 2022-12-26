@@ -66,6 +66,6 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// https://en.wikipedia.org/wiki/Post/Redirect/Get
-	app.sessionManager.Put(r.Context(), flashKey, "Snippet successfully created!")
+	app.sessionManager.Put(r.Context(), sessionKeyFlash, "Snippet successfully created!")
 	http.Redirect(w, r, fmt.Sprintf("/snippets/view/%d", snippetId), http.StatusSeeOther)
 }

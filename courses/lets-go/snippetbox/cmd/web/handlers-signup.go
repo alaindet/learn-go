@@ -81,7 +81,12 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	app.sessionManager.Put(r.Context(), flashKey, "You successfully signed up on Snippetbox. Welcome!")
+	// Notify the user
+	app.sessionManager.Put(
+		r.Context(),
+		sessionKeyFlash,
+		"You successfully signed up on Snippetbox. Welcome!",
+	)
 
 	// https://en.wikipedia.org/wiki/Post/Redirect/Get
 	http.Redirect(w, r, "/users/signin", http.StatusSeeOther)
