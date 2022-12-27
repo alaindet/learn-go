@@ -14,6 +14,8 @@
     <div class="right">
       {{if .IsAuthenticated}}
         <form action="/users/signout" method="POST">
+          <!-- CSRF Token -->
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
           <button>Sign Out</button>
         </form>
       {{else}}

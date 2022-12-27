@@ -19,26 +19,34 @@ func (app *application) routes() http.Handler {
 	fileServerHandler := http.StripPrefix("/static", fileServer)
 	r.Handler(http.MethodGet, "/static/*filepath", fileServerHandler)
 
-	// Routes-only middleware: this chain only applies to application routes,
-	// not to static assets routes
-	routesMiddleware := alice.New(
+	// Setup route-specific middleware
+	baseMiddleware := alice.New(
 		app.sessionManager.LoadAndSave,
+		noSurf,
 	)
 
-	// TODO...
-	// dynamicRoutes
-	// protectedRoutes
+	baseRoute := func(handler func(w http.ResponseWriter, r *http.Request)) http.Handler {
+		return baseMiddleware.ThenFunc(handler)
+	}
+
+	protectedMiddleware := baseMiddleware.Append(
+		app.requireAuthentication,
+	)
+
+	protectedRoute := func(handler func(w http.ResponseWriter, r *http.Request)) http.Handler {
+		return protectedMiddleware.ThenFunc(handler)
+	}
 
 	// Routes
-	Get(r, "/", routesMiddleware.ThenFunc(app.home))
-	Get(r, "/snippets/view/:id", routesMiddleware.ThenFunc(app.snippetView))
-	Get(r, "/snippets/new", routesMiddleware.ThenFunc(app.snippetCreateForm))
-	Post(r, "/snippets", routesMiddleware.ThenFunc(app.snippetCreate))
-	Get(r, "/users/signup", routesMiddleware.ThenFunc(app.signUpForm))
-	Post(r, "/users/signup", routesMiddleware.ThenFunc(app.signUp))
-	Get(r, "/users/signin", routesMiddleware.ThenFunc(app.signInForm))
-	Post(r, "/users/signin", routesMiddleware.ThenFunc(app.signIn))
-	Post(r, "/users/signout", routesMiddleware.ThenFunc(app.signOut))
+	Get(r, "/", baseRoute(app.home))
+	Get(r, "/snippets/view/:id", baseRoute(app.snippetView))
+	Get(r, "/snippets/new", protectedRoute(app.snippetCreateForm))
+	Post(r, "/snippets", protectedRoute(app.snippetCreate))
+	Get(r, "/users/signup", baseRoute(app.signUpForm))
+	Post(r, "/users/signup", baseRoute(app.signUp))
+	Get(r, "/users/signin", baseRoute(app.signInForm))
+	Post(r, "/users/signin", baseRoute(app.signIn))
+	Post(r, "/users/signout", protectedRoute(app.signOut))
 
 	// Add global middleware
 	globalMiddleware := alice.New(

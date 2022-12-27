@@ -3,6 +3,9 @@
 {{define "main"}}
   <form action="/snippets" method="POST">
 
+    <!-- CSRF Token -->
+    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
     <!-- Title -->
     <div class="form-control">
       <label for="title-field">Title:</label>

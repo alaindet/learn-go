@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/justinas/nosurf"
 	"snippetbox.dev/internal/models"
 )
 
@@ -21,6 +22,7 @@ type templateData struct {
 	IsAuthenticated bool
 	Snippet         *models.Snippet
 	Snippets        []*models.Snippet
+	CSRFToken       string
 }
 
 func (app *application) newTemplateData(r *http.Request) *templateData {
@@ -41,6 +43,7 @@ func (app *application) newTemplateData(r *http.Request) *templateData {
 		Flash:           app.sessionManager.PopString(r.Context(), sessionKeyFlash),
 		IsAuthenticated: isAuthenticated,
 		Breadcrumbs:     breadcrumbs,
+		CSRFToken:       nosurf.Token(r),
 	}
 }
 
