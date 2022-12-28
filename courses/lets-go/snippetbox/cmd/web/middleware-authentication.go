@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -24,9 +25,10 @@ func (app *application) requireAuthentication(next http.Handler) http.Handler {
 // Checks if the user ID from session exists on the database
 func (app *application) authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
 		userId := app.sessionManager.GetInt(r.Context(), sessionKeyUserId)
 
-		// Skip this
+		// No value stored in session, user is not authenticated, leave it as it is
 		if userId == 0 {
 			next.ServeHTTP(w, r)
 			return
@@ -44,5 +46,5 @@ func (app *application) authenticate(next http.Handler) http.Handler {
 		}
 
 		next.ServeHTTP(w, r)
-	}
+	})
 }

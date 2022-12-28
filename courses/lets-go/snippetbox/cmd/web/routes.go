@@ -23,6 +23,7 @@ func (app *application) routes() http.Handler {
 	baseMiddleware := alice.New(
 		app.sessionManager.LoadAndSave,
 		noSurf,
+		app.authenticate,
 	)
 
 	baseRoute := func(handler func(w http.ResponseWriter, r *http.Request)) http.Handler {
