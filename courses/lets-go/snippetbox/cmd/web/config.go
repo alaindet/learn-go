@@ -26,12 +26,12 @@ type config struct {
 	dsn        string
 }
 
-func NewConfig() *config {
+func NewConfig() config {
 	var cfg config
 	cfg.loadEnvFile()
 	cfg.loadDefaultsFromEnv()
 	cfg.overrideWithFlags()
-	return &cfg
+	return cfg
 }
 
 func (c *config) loadEnvFile() {

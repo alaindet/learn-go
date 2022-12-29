@@ -42,8 +42,8 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 
 	form.Check(
 		"expires-in-days",
-		validator.InInts(form.ExpiresInDays, 1, 7, 365),
-		"This field must equal 1, 7 or 365",
+		validator.In(form.ExpiresInDays, []int{1, 7, 365}),
+		"This field must equal 1, 7 or 365 days",
 	)
 
 	// Render form again, with validation errors

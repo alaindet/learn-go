@@ -19,12 +19,13 @@ func MaxChars(value string, n int) bool {
 	return utf8.RuneCountInString(value) <= n
 }
 
-func InInts(value int, permittedValues ...int) bool {
-	for i := range permittedValues {
-		if value == permittedValues[i] {
+func In[T comparable](value T, allowedValues []T) bool {
+	for _, allowed := range allowedValues {
+		if value == allowed {
 			return true
 		}
 	}
+
 	return false
 }
 

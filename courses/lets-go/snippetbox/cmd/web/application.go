@@ -42,7 +42,7 @@ func initApp() *application {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 
 	// Init config
-	config := *NewConfig()
+	config := NewConfig()
 
 	// Init database
 	db, err := openDB(config.dsn)
