@@ -51,7 +51,7 @@ func initApp() *application {
 	}
 
 	// Init templates
-	templateCache, err := newTemplateCache(config.htmlTemplatesPath)
+	templateCache, err := newTemplateCache()
 	if err != nil {
 		errorLog.Fatal(err)
 	}

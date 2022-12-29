@@ -2,15 +2,17 @@ package main
 
 import (
 	"html/template"
+	"io/fs"
 	"path/filepath"
+
+	"snippetbox.dev/ui"
 )
 
-func newTemplateCache(basePath string) (map[string]*template.Template, error) {
+func newTemplateCache() (map[string]*template.Template, error) {
 
 	cache := map[string]*template.Template{}
 
-	baseTmpl := basePath + "/base.html"
-	pages, err := filepath.Glob(basePath + "/pages/*.html")
+	pages, err := fs.Glob(ui.Files, "html/pages/*.html")
 
 	if err != nil {
 		return nil, err
@@ -19,21 +21,15 @@ func newTemplateCache(basePath string) (map[string]*template.Template, error) {
 	for _, page := range pages {
 		fileName := filepath.Base(page)
 
-		// Create a template with given name, HTML from base template and common
-		// template functions
-		ts, err := template.New(fileName).Funcs(templateFunctions).ParseFiles(baseTmpl)
-		if err != nil {
-			return nil, err
+		patterns := []string{
+			"html/base.html",
+			"html/partials/*.html",
+			page,
 		}
 
-		// Add all partials to this template set
-		ts, err = ts.ParseGlob(basePath + "/partials/*.html")
-		if err != nil {
-			return nil, err
-		}
+		ts := template.New(fileName).Funcs(templateFunctions)
+		ts, err := ts.ParseFS(ui.Files, patterns...)
 
-		// Add the current page to this template set
-		ts, err = ts.ParseFiles(page)
 		if err != nil {
 			return nil, err
 		}

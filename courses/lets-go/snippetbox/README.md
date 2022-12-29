@@ -19,3 +19,12 @@ cd ./snippetbox && go run ./cmd/web
 cd ./tls
 go run generate_cert.go --rsa-bits=2048 --host=localhost
 ```
+
+## Build
+```
+go build -o ./tmp/web ./cmd/web
+cp -r ./tls ./tmp/
+cp .env ./tmp/.env
+cd ./tmp
+./web
+```

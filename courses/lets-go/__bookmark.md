@@ -1,2 +1,2 @@
-326
-Embedding HTML templates
+329
+Using generics
