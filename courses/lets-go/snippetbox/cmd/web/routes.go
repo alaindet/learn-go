@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 
+	"snippetbox.dev/ui"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
 )
@@ -15,9 +17,15 @@ func (app *application) routes() http.Handler {
 	r.NotFound = http.HandlerFunc(app.customNotFound)
 
 	// Static content serving
-	fileServer := http.FileServer(http.Dir(app.config.staticPath + "/"))
-	fileServerHandler := http.StripPrefix("/static", fileServer)
-	r.Handler(http.MethodGet, "/static/*filepath", fileServerHandler)
+	// NOTE: Files created/modified at runtime cannot be served because
+	// they're loaded at compile-time
+	fileServer := http.FileServer(http.FS(ui.Files))
+	r.Handler(http.MethodGet, "/static/*filepath", fileServer)
+
+	// Static content serving (allows runtime creation/modification)
+	// fileServer := http.FileServer(http.Dir(app.config.staticPath + "/"))
+	// fileServerHandler := http.StripPrefix("/static", fileServer)
+	// r.Handler(http.MethodGet, "/static/*filepath", fileServerHandler)
 
 	// Setup route-specific middleware
 	baseMiddleware := alice.New(

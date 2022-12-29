@@ -1,2 +1,2 @@
-321
-Optional Go features
+326
+Embedding HTML templates
