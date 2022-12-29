@@ -11,7 +11,7 @@
 - Tests are contained in functions starting with `Test*`, like `TestFriendlyDate`
 - Test functions must accept only one argument of type `*testing.T` from the `testing` standard library's package
 - Use `testing.T.Errorf()` to signal and log that a test has failed; it works like `fmt.Printf()`
-- Failed test **do not** halt execution of the remaining tests
+- Recording a failed test via `testing.T.Fatal()` stops execution of current test/subtest, while recording a failure via `testing.T.Errorf()` keeps executing the test
 - Some basic test setup could be
   ```go
   // silly_sum.go file
