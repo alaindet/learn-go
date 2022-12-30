@@ -17,12 +17,18 @@ type Snippet struct {
 }
 
 type SnippetModel struct {
-	*baseModel
+	*BaseModel
 }
 
-func NewSnippetModel(db *sql.DB) *SnippetModel {
+type SnippetModelInterface interface {
+	Insert(title, content string, expires int) (int, error)
+	Get(id string) (*Snippet, error)
+	Latest() ([]*Snippet, error)
+}
+
+func NewSnippetModel(db *sql.DB) SnippetModelInterface {
 	return &SnippetModel{
-		baseModel: &baseModel{db},
+		BaseModel: &BaseModel{db},
 	}
 }
 
@@ -39,7 +45,7 @@ func (m *SnippetModel) Insert(title string, content string, expiresInDays int) (
 	lastInsertId := 0
 	expires := fmt.Sprintf("%d days", expiresInDays)
 	params := []any{title, content, expires}
-	err := m.db.QueryRow(stmt, params...).Scan(&lastInsertId)
+	err := m.DB.QueryRow(stmt, params...).Scan(&lastInsertId)
 
 	if err != nil {
 		return 0, err
@@ -61,7 +67,7 @@ func (m *SnippetModel) Get(id string) (*Snippet, error) {
 	params := []any{id}
 
 	s := &Snippet{}
-	err := m.db.QueryRow(stmt, params...).Scan(
+	err := m.DB.QueryRow(stmt, params...).Scan(
 		&s.ID,
 		&s.Title,
 		&s.Content,
@@ -90,7 +96,7 @@ func (m *SnippetModel) Latest() ([]*Snippet, error) {
 		LIMIT 10
 	`
 
-	rows, err := m.db.Query(stmt)
+	rows, err := m.DB.Query(stmt)
 
 	if err != nil {
 		return nil, err

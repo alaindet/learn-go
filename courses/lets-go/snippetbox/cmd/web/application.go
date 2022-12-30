@@ -28,8 +28,8 @@ type application struct {
 	infoLog        *log.Logger
 	db             *sql.DB // TODO: Remove?
 	pgxPool        *pgxpool.Pool
-	snippets       *models.SnippetModel
-	users          *models.UserModel
+	snippets       models.SnippetModelInterface
+	users          models.UserModelInterface
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager

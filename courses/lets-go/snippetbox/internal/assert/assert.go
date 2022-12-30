@@ -1,17 +1,22 @@
 package assert
 
 import (
+	"strings"
 	"testing"
 )
 
 func Equal[T comparable](t *testing.T, actual, expected T) {
-
-	// Marks this as an helper that can be skipped on logs
 	t.Helper()
-
 	assertion := actual == expected
-
 	if !assertion {
-		t.Errorf("Result: %v; Expected:: %v", actual, expected)
+		t.Errorf("Value %v should be to be equal to %v", actual, expected)
+	}
+}
+
+func StringContains(t *testing.T, actual, expected string) {
+	t.Helper()
+	assertion := strings.Contains(actual, expected)
+	if !assertion {
+		t.Errorf("Value %q should contain %q", actual, expected)
 	}
 }

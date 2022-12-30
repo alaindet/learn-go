@@ -61,7 +61,7 @@
 
 - Testing requires faking dependencies of the tested code
 - Dependencies are replaced by a variety of **testing doubles**
-- Testing doubles are broadly split into 3 to 5 categories
+- Testing doubles are broadly split into 3 to 5 categories, which varies in definition among literature, but they all fulfill some tested code depedency
   - **Stub**: A stub is some static code with hard-coded values used as a dependency just to make a test run; returns static values
   - **Spy**: Has the same API as the replaced dependency, but measures ("spies") the behavior of the calling code (ex.: counts the functions calls, checks arguments); they are not very much used
   - **Mock**: It's similar to a stub, but semi-static values can be conditionally calculated; it can process arguments, it can spy tested code like a spy

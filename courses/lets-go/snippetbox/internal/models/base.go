@@ -9,6 +9,6 @@ var (
 	ErrNoRecord = errors.New("models: no matching record found")
 )
 
-type baseModel struct {
-	db *sql.DB
+type BaseModel struct {
+	DB *sql.DB
 }

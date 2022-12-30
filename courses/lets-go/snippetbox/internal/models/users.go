@@ -24,12 +24,18 @@ type User struct {
 }
 
 type UserModel struct {
-	*baseModel
+	*BaseModel
 }
 
-func NewUserModel(db *sql.DB) *UserModel {
+type UserModelInterface interface {
+	Insert(name, email, password string) error
+	Authenticate(email, password string) (int, error)
+	Exists(id int) (bool, error)
+}
+
+func NewUserModel(db *sql.DB) UserModelInterface {
 	return &UserModel{
-		baseModel: &baseModel{db},
+		BaseModel: &BaseModel{db},
 	}
 }
 
@@ -47,7 +53,7 @@ func (m *UserModel) Insert(name, email, password string) error {
 	`
 	lastInsertId := 0
 	params := []any{name, email, hashedPassword}
-	err = m.db.QueryRow(stmt, params...).Scan(&lastInsertId)
+	err = m.DB.QueryRow(stmt, params...).Scan(&lastInsertId)
 
 	// Thanks to https://www.reddit.com/r/golang/comments/ruevh6/comment/hqyn1o8
 	var e *pgconn.PgError
@@ -66,7 +72,7 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 	// Fetch user from database by email
 	stmt := `SELECT id, password FROM users WHERE email = $1`
 	params := []any{email}
-	err := m.db.QueryRow(stmt, params...).Scan(&id, &hashedPassword)
+	err := m.DB.QueryRow(stmt, params...).Scan(&id, &hashedPassword)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return 0, ErrInvalidCredentials
@@ -91,6 +97,6 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 func (m *UserModel) Exists(userId int) (bool, error) {
 	exists := false
 	stmt := `SELECT EXISTS(SELECT true FROM users WHERE id = $1)`
-	err := m.db.QueryRow(stmt, userId).Scan(&exists)
+	err := m.DB.QueryRow(stmt, userId).Scan(&exists)
 	return exists, err
 }
