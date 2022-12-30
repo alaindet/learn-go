@@ -12,6 +12,7 @@
 - Test functions must accept only one argument of type `*testing.T` from the `testing` standard library's package
 - Use `testing.T.Errorf()` to signal and log that a test has failed; it works like `fmt.Printf()`
 - Recording a failed test via `testing.T.Fatal()` stops execution of current test/subtest, while recording a failure via `testing.T.Errorf()` keeps executing the test
+- If you pass the `-fastfail` flag to `go test`, any failure stops execution of tests only for that package
 - Some basic test setup could be
   ```go
   // silly_sum.go file

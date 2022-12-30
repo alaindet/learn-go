@@ -4,3 +4,5 @@
 - [ ] Refactor related files (ex.: `handlers-home.go`, `handlers-snippet-create.go` etc) as packages
 - [ ] Try `postgresstore` instead of `pgxstore` for `alexedwards/Scs`
 - [ ] Embed `.env`
+- [ ] Test race conditions
+- [ ] Test with fuzzy testing

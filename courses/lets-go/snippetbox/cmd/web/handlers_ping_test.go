@@ -9,6 +9,9 @@ import (
 
 func TestPing(t *testing.T) {
 
+	// It's OK to run this in parallel
+	t.Parallel()
+
 	// Arrange
 	app := newTestApplication(t)
 	server := newTestServer(t, app.routes())
