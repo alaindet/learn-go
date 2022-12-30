@@ -1,12 +1,16 @@
 package main
 
+// TODO: Refactor this into a package?
 import (
 	"bytes"
+	"html"
 	"io"
 	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"net/http/httptest"
+	"net/url"
+	"regexp"
 	"testing"
 	"time"
 
@@ -80,4 +84,41 @@ func (ts *testServer) get(t *testing.T, urlPath string) (int, http.Header, strin
 
 	bytes.TrimSpace(body)
 	return res.StatusCode, res.Header, string(body)
+}
+
+func (ts *testServer) postForm(
+	t *testing.T,
+	urlPath string,
+	form url.Values,
+) (int, http.Header, string) {
+	res, err := ts.Client().PostForm(ts.URL+urlPath, form)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer res.Body.Close()
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	return res.StatusCode, res.Header, string(body)
+}
+
+var csrfTokenRegex = regexp.MustCompile(
+	`<input type="hidden" name="csrf_token" value="(.+)">`,
+)
+
+func extractCSRFToken(t *testing.T, body string) string {
+	matches := csrfTokenRegex.FindStringSubmatch(body)
+
+	// There must be at least 2 matches as
+	// the first match is always the whole string
+	if len(matches) < 2 {
+		t.Fatal("no CSRF token found in body")
+	}
+
+	csrfToken := matches[1]
+
+	return html.UnescapeString(csrfToken)
 }
