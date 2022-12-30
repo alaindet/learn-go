@@ -27,6 +27,8 @@ func (app *application) routes() http.Handler {
 	// fileServerHandler := http.StripPrefix("/static", fileServer)
 	// r.Handler(http.MethodGet, "/static/*filepath", fileServerHandler)
 
+	r.HandlerFunc(http.MethodGet, "/ping", ping)
+
 	// Setup route-specific middleware
 	baseMiddleware := alice.New(
 		app.sessionManager.LoadAndSave,
