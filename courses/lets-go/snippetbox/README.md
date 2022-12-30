@@ -31,6 +31,12 @@ cd ./tmp
 
 ## Test
 
+For integration and e2e tests, run test containers via Docker
+```
+docker-compose up -d -f ./docker-compose.test.yaml
+docker-compose down
+```
+
 ## All tests in the module
 ```
 go test ./...

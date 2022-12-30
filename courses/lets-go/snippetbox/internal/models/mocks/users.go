@@ -7,6 +7,7 @@ import (
 )
 
 var MockEmail = "mock@example.com"
+var MockDuplicateEmail = "mock@example.com"
 var MockPassword = "mockpassword"
 
 type UserModel struct {
@@ -21,7 +22,7 @@ func NewUserModel(db *sql.DB) models.UserModelInterface {
 
 func (m *UserModel) Insert(name, email, password string) error {
 	switch email {
-	case MockEmail:
+	case MockDuplicateEmail:
 		return models.ErrDuplicateEmail
 	default:
 		return nil

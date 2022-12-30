@@ -14,8 +14,7 @@ type config struct {
 	addr string
 
 	// Paths
-	staticPath        string
-	htmlTemplatesPath string
+	staticPath string
 
 	// Database
 	dbUsername string
@@ -48,7 +47,6 @@ func (c *config) loadDefaultsFromEnv() {
 	c.name = viper.GetString("SNIPPETBOX_NAME")
 	c.addr = viper.GetString("SNIPPETBOX_ADDRESS")
 	c.staticPath = viper.GetString("SNIPPETBOX_STATIC_PATH")
-	c.htmlTemplatesPath = viper.GetString("SNIPPETBOX_HTML_TEMPLATES_PATH")
 	c.dbUsername = viper.GetString("SNIPPETBOX_DB_USERNAME")
 	c.dbPassword = viper.GetString("SNIPPETBOX_DB_PASSWORD")
 	c.dbHost = viper.GetString("SNIPPETBOX_DB_HOST")

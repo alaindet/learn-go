@@ -6,11 +6,12 @@ import (
 	"testing"
 
 	"snippetbox.dev/internal/assert"
+	"snippetbox.dev/internal/models/mocks"
 )
 
 // Run this with
-// go test -count=1 -v -run="^TestSnippetCreate$" ./cmd/web
-func TestSnippetCreate(t *testing.T) {
+// go test -count=1 -v -run="^TestSignUp$" ./cmd/web
+func TestSignUp(t *testing.T) {
 
 	// Arrange
 	app := newTestApplication(t)
@@ -52,7 +53,8 @@ func TestSnippetCreate(t *testing.T) {
 			csrfToken:         "wrongToken",
 			expectedCode:      http.StatusBadRequest,
 		},
-		{name: "Empty name",
+		{
+			name:              "Empty name",
 			inputUserName:     "",
 			inputUserEmail:    validEmail,
 			inputUserPassword: validPassword,
@@ -99,7 +101,7 @@ func TestSnippetCreate(t *testing.T) {
 		{
 			name:              "Duplicate email",
 			inputUserName:     validName,
-			inputUserEmail:    "dupe@example.com",
+			inputUserEmail:    mocks.MockDuplicateEmail,
 			inputUserPassword: validPassword,
 			csrfToken:         validCSRFToken,
 			expectedCode:      http.StatusUnprocessableEntity,
