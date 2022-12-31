@@ -1,0 +1,92 @@
+{{define "title"}}Create a New Snippet{{end}}
+
+{{define "main"}}
+  <form action="/snippets" method="POST">
+
+    <!-- CSRF Token -->
+    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+    <!-- Title -->
+    <div class="form-control">
+      <label for="title-field">Title:</label>
+
+      <input
+        type="text"
+        name="title"
+        id="title-field"
+        placeholder="Snippet title..."
+        value="{{.Form.Title}}"
+      >
+
+      {{with .Form.FieldErrors.title}}
+        <p class="error-message">{{.}}</p>
+      {{end}}
+    </div>
+
+    <!-- Content -->
+    <div class="form-control">
+      <label for="content-field">Content:</label>
+
+      <textarea
+        name="content"
+        id="content-field"
+        placeholder="Snippet content..."
+      >{{.Form.Content}}</textarea>
+
+      {{with .Form.FieldErrors.content}}
+        <p class="error-message">{{.}}</p>
+      {{end}}
+    </div>
+
+    <!-- Expires in days -->
+    <div class="form-control">
+      <fieldset>
+        <legend>Delete in:</legend>
+
+        <!-- 365 days -->
+        <input
+          type="radio"
+          name="expires-in-days"
+          id="expires-in-days-field-365"
+          value="365"
+          {{if (eq .Form.ExpiresInDays 365)}}checked{{end}}
+        >
+        <label for="expires-in-days-field-365">One year</label>
+
+        <!-- 7 days -->
+        <input
+          type="radio"
+          name="expires-in-days"
+          id="expires-in-days-field-7"
+          value="7"
+          {{if (eq .Form.ExpiresInDays 7)}}checked{{end}}
+        >
+        <label for="expires-in-days-field-7">One week</label>
+
+        <!-- 1 day -->
+        <input
+          type="radio"
+          name="expires-in-days"
+          id="expires-in-days-field-1"
+          value="1"
+          {{if (eq .Form.ExpiresInDays 1)}}checked{{end}}
+        >
+        <label for="expires-in-days-field-1">One day</label>
+
+      </fieldset>
+      {{with index .Form.FieldErrors "expires-in-days"}}
+        <p class="error-message">{{.}}</p>
+      {{end}}
+    </div>
+
+    <!-- Submit -->
+    <div class="form-control">
+      <button type="submit">Publish</button>
+    </div>
+
+  </form>
+{{end}}
+
+{{define "scripts"}}
+  <script src="/static/js/snippet-create.js" type="text/javascript"></script>
+{{end}}

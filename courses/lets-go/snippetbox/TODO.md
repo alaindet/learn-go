@@ -1,1 +1,10 @@
 - [ ] Minify CSS and JS assets
+- [ ] https://github.com/cosmtrek/air
+- [ ] https://github.com/rakyll/hey
+- [ ] Refactor related files (ex.: `handlers-home.go`, `handlers-snippet-create.go` etc) as packages
+- [ ] Try `postgresstore` instead of `pgxstore` for `alexedwards/Scs`
+- [ ] Embed `.env`
+- [ ] Test race conditions
+- [ ] Test with fuzzy testing
+- [ ] Try creating a validator which accepts a schema of validation
+- [ ] Cron job to clear old sessions

@@ -1,0 +1,28 @@
+{{define "nav"}}
+  <nav>
+
+    <div class="left">
+      {{range .Breadcrumbs}}
+        {{if .IsActive}}
+          <a href="{{.Url}}" class="active">{{.Label}}</a>
+        {{else}}
+          <a href="{{.Url}}">{{.Label}}</a>
+        {{end}}
+      {{end}}
+    </div>
+
+    <div class="right">
+      {{if .IsAuthenticated}}
+        <form action="/users/signout" method="POST">
+          <!-- CSRF Token -->
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+          <button>Sign Out</button>
+        </form>
+      {{else}}
+        <a href="/users/signup">Sign Up</a>
+        <a href="/users/signin">Sign In</a>
+      {{end}}
+    </div>
+
+  </nav>
+{{end}}

@@ -1,0 +1,39 @@
+{{define "title"}}Snippet #{{.Snippet.ID}}{{end}}
+
+{{define "main"}}
+  {{with .Snippet}}
+    <div class="snippet">
+
+      <div class="metadata">
+        <h1>{{.Title}}</h1>
+        <h2>#{{.ID}}</h2>
+      </div>
+
+      <pre class="snippet__content"><code>{{.Content}}</code></pre>
+
+      <div class="metadata">
+        <ul>
+          <li>
+            <time>
+              <strong>Created:</strong>
+              <br>
+              {{.CreatedAt | friendlyDate}}
+            </time>
+          </li>
+          <li>
+            <time>
+              <strong>Expires:</strong>
+              <br>
+              {{.ExpiresAt | friendlyDate}}
+            </time>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  {{end}}
+{{end}}
+
+{{define "scripts"}}
+  <script src="/static/js/snippet-view.js" type="text/javascript"></script>
+{{end}}

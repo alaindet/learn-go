@@ -1,0 +1,47 @@
+{{define "base"}}
+  <!doctype html>
+  <html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>{{template "title" .}} | Snippetbox</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700">
+  </head>
+
+  <body>
+    <header>
+      <h1 class="logo">
+        <a href="/">
+          <img src="/static/img/logo.png">
+          Snippetbox
+        </a>
+      </h1>
+    </header>
+    {{template "nav" .}}
+    <main>
+
+      <!-- Flash message -->
+      {{with .Flash}}
+        <div class="flash">
+          {{.}}
+          <button type="button" class="flash__dismiss">&times;</button>
+        </div>
+      {{end}}
+
+      {{template "main" .}}
+    </main>
+    <footer>
+      Made by
+      <a href="https://github.com/alaindet" target="_blank">alaindet</a>
+      with <a href="https://golang.org/" target="_blank">Go</a>
+      |
+      {{.CurrentYear}}
+    </footer>
+    <script src="/static/js/main.js" type="text/javascript"></script>
+    {{block "scripts" .}}{{end}}
+  </body>
+
+  </html>
+{{end}}

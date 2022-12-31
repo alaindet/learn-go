@@ -1,0 +1,19 @@
+# TEST environment
+version: '3.8'
+services:
+  db:
+    image: postgres:15.1-alpine
+    environment:
+      - POSTGRES_USER=snippetboxtest
+      - POSTGRES_PASSWORD=snippetboxtest
+      - POSTGRES_DB=snippetboxtest
+    ports:
+      - '5432:5432'
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+  adminer:
+    image: adminer:4.8.1
+    ports:
+      - '8081:8080'
+volumes:
+  dbdata: {}
