@@ -4,14 +4,13 @@
 
 ```
 cd ./snippetbox
-cp .env.example .env
-# Fill the file
+cp .env.example .env # Then fill the file
 go mod download # Equivalent to `npm install`
 go mod verify
+cd ./tls
+go run generate_cert.go --rsa-bits=2048 --host=localhost
+cd ..
 go run ./cmd/web
-
-## One liner
-cd ./snippetbox && go run ./cmd/web
 ```
 
 ## Generate TLS key pair
