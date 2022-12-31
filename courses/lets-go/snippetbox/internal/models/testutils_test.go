@@ -50,7 +50,7 @@ func newTestDB(t *testing.T) *sql.DB {
 		t.Fatal(err)
 	}
 
-	// Database teardown
+	// Database teardown when test is done
 	t.Cleanup(func() {
 		script, err := os.ReadFile("./testdata/teardown.sql")
 		if err != nil {

@@ -7,6 +7,13 @@ import (
 )
 
 func TestUserModelExists(t *testing.T) {
+
+	// This is flagged as a "long" test since it's interacting with the database
+	// Skip this if "go test -short" is executed
+	if testing.Short() {
+		t.Skip("models: skipping integration test")
+	}
+
 	testCases := []struct {
 		name     string
 		userID   int

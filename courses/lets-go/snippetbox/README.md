@@ -29,7 +29,7 @@ cd ./tmp
 ./web
 ```
 
-## Test
+## Testing
 
 For integration and e2e tests, run test containers via Docker
 ```
@@ -73,4 +73,24 @@ go test ./...
 ```
 go test -race ./...
 go test -race ./cmd/web
+```
+
+## Skip long tests
+Tests are marked as "long" or "short" by the user via `testing.Short()` and `testing.T.Skip()`
+```
+go test -short ./...
+```
+
+## Check code coverage
+```
+go test -cover ./...
+
+# Export a detailed report
+go test -coverprofile=./coverage-profile.dat ./...
+
+# See report in terminal
+go tool cover -func=./coverage-profile.dat
+
+# See report as HTML in browser
+go tool cover -html=./coverage-profile.dat
 ```
