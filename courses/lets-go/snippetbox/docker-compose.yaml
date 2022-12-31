@@ -10,15 +10,12 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - db:/var/lib/postgresql/data
+      - dbdata:/var/lib/postgresql/data
       # Initialization script
       - ./database/pg-init.sql:/docker-entrypoint-initdb.d/pg-init.sql
   adminer:
     image: adminer:4.8.1
     ports:
       - '8081:8080'
-    depends_on:
-      - db
 volumes:
-  db:
-    driver: local
+  dbdata: {}

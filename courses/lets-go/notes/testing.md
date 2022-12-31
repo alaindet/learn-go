@@ -33,8 +33,9 @@
       t.Errorf("Expected %d but got %+v instead", expected, result)
     }
   }
-  
   ```
+- Other similar conventions apply to Examples, Benchmarks and Fuzzy Tests
+- Any folder named `testdata`, or prefixed with `_` or `.` is ignored when building, but included when testing
 
 ## Theory snippet: Testing Pyramid
 - It's a recommendation for the distribution of tests of a software
