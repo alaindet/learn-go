@@ -5,4 +5,5 @@ use (
     ./chained-channels-2
     ./distributed-sums
     ./slice-functions
+    ./struct-to-map
 )

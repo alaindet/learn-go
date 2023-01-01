@@ -31,7 +31,8 @@ func (v *Validator) GetResult() ValidationResult {
 }
 
 // TODO: Generic type for data?
-func (v *Validator) Validate(data map[string]any) ValidationResult {
+// TODO: Use reflection?
+func (v *Validator) Validate(data any) ValidationResult {
 
 	result := make(ValidationResult, len(v.schema))
 
