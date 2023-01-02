@@ -1,73 +1,121 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"struct-validator/utils"
-	"unicode/utf8"
 )
 
-type ValidationRule interface {
-	Run(val any) (message string, isValid bool)
+type Rule struct {
+	Name string
+	Err  error
+	// Data  map[string]any
 }
+
+type RuleInterface interface {
+	Run(val any)
+	// GetErrorMessage() string
+}
+
+// func (r *Rule) GetErrorMessage() string {
+// 	m := r.Error.Error()
+// 	for replaceThis, val := range r.Data {
+// 		withThis, ok := val.(string)
+// 		if ok {
+// 			m = strings.Replace(m, replaceThis, withThis, -1)
+// 		}
+// 	}
+// 	return m
+// }
 
 // Required
-const ValidationRuleRequiredName = "required"
+const RuleRequiredName = "required"
 
-type ValidationRuleRequired struct {
-	Name string
+// var ErrRuleRequired = errors.New("Field is required")
+
+type RuleRequired struct {
+	Rule
 }
 
-func Required() *ValidationRuleRequired {
-	return &ValidationRuleRequired{Name: ValidationRuleRequiredName}
-}
-
-func (r *ValidationRuleRequired) Run(val any) (string, bool) {
-	isValid := utils.AsBoolean(val)
+func (r *RuleRequired) Run(val any) {
+	isValid := requiredRule(val)
 	if !isValid {
-		return "Field is required", false
+		r.Err = errors.New("Field is required")
 	}
-	return "", true
+}
+
+func requiredRule(val any) bool {
+	return utils.AsBoolean(val)
+}
+
+func Required() *RuleRequired {
+	return &RuleRequired{Rule: Rule{Name: RuleRequiredName}}
 }
 
 // Min
-const ValidationRuleMinName = "min"
+const RuleMinName = "min"
 
-type ValidationRuleMin struct {
-	Name string
-	Min  int
+type RuleMin struct {
+	Rule
+	Min int
 }
 
-func Min(min int) *ValidationRuleMin {
-	return &ValidationRuleMin{Name: ValidationRuleMinName, Min: min}
-}
-
-func (r *ValidationRuleMin) Run(_val any) (string, bool) {
-	val, ok := _val.(int)
-
-	if !ok {
-		return "Value must be an integer", false
-	}
-
-	isValid := val >= r.Min
-
+func (r *RuleMin) Run(val any) {
+	isValid := minRule(val, r.Min)
 	if !isValid {
-		return fmt.Sprintf("Must be greater than %f", float64(r.Min)), false
+		r.Err = errors.New(fmt.Sprintf("Must be greater than %d", r.Min))
+	}
+}
+
+func minRule(_val any, _min any) bool {
+
+	val, ok := _val.(int)
+	if !ok {
+		return false
 	}
 
-	return "", true
+	min, ok := _min.(int)
+	if !ok {
+		return false
+	}
+
+	return val >= min
 }
 
-// Min float
-const ValidationRuleMinFloatName = "minfloat"
-
-type ValidationRuleMinFloat struct {
-	Name string
-	Min  float64
+func Min(min int) *RuleMin {
+	return &RuleMin{Rule: Rule{Name: RuleMinName}, Min: min}
 }
 
-func MinFloat(min float64) *ValidationRuleMinFloat {
-	return &ValidationRuleMinFloat{Name: ValidationRuleMinFloatName, Min: min}
-}
+// // Required
+// const ValidationRuleRequiredName = "required"
+
+// type ValidationRuleRequired struct {
+// 	Name string
+// }
+
+// func Required() *ValidationRuleRequired {
+// 	return &ValidationRuleRequired{Name: ValidationRuleRequiredName}
+// }
+
+// func (r *ValidationRuleRequired) Run(val any) (string, bool) {
+// 	isValid := utils.AsBoolean(val)
+// 	if !isValid {
+// 		return "Field is required", false
+// 	}
+// 	return "", true
+// }
+
+// // Min
+// const ValidationRuleMinName = "min"
+
+// type ValidationRuleMin struct {
+// 	Name string
+// 	Min  int
+// }
+
+// func Min(min int) *ValidationRuleMin {
+// 	return &ValidationRuleMin{Name: ValidationRuleMinName, Min: min}
+// }
 
 // func (r *ValidationRuleMin) Run(_val any) (string, bool) {
 // 	val, ok := _val.(int)
@@ -85,32 +133,60 @@ func MinFloat(min float64) *ValidationRuleMinFloat {
 // 	return "", true
 // }
 
-// Min chars
-const ValidationRuleMinCharsName = "minchars"
+// // Min float
+// const ValidationRuleMinFloatName = "minfloat"
 
-type ValidationRuleMinChars struct {
-	Name string
-	Min  int
-}
+// type ValidationRuleMinFloat struct {
+// 	Name string
+// 	Min  float64
+// }
 
-func MinChars(min int) *ValidationRuleMinChars {
-	return &ValidationRuleMinChars{Name: ValidationRuleMinCharsName, Min: min}
-}
+// func MinFloat(min float64) *ValidationRuleMinFloat {
+// 	return &ValidationRuleMinFloat{Name: ValidationRuleMinFloatName, Min: min}
+// }
 
-func (r *ValidationRuleMinChars) Run(_val any) (string, bool) {
+// // func (r *ValidationRuleMin) Run(_val any) (string, bool) {
+// // 	val, ok := _val.(int)
 
-	val, ok := _val.(string)
+// // 	if !ok {
+// // 		return "Value must be an integer", false
+// // 	}
 
-	if !ok {
-		return "Value must be a string", false
-	}
+// // 	isValid := val >= r.Min
 
-	isValid := utf8.RuneCountInString(val) >= r.Min
+// // 	if !isValid {
+// // 		return fmt.Sprintf("Must be greater than %f", float64(r.Min)), false
+// // 	}
 
-	if !isValid {
-		message := fmt.Sprintf("Must be longer than %d characters", r.Min)
-		return message, isValid
-	}
+// // 	return "", true
+// // }
 
-	return "", true
-}
+// // Min chars
+// const ValidationRuleMinCharsName = "minchars"
+
+// type ValidationRuleMinChars struct {
+// 	Name string
+// 	Min  int
+// }
+
+// func MinChars(min int) *ValidationRuleMinChars {
+// 	return &ValidationRuleMinChars{Name: ValidationRuleMinCharsName, Min: min}
+// }
+
+// func (r *ValidationRuleMinChars) Run(_val any) (string, bool) {
+
+// 	val, ok := _val.(string)
+
+// 	if !ok {
+// 		return "Value must be a string", false
+// 	}
+
+// 	isValid := utf8.RuneCountInString(val) >= r.Min
+
+// 	if !isValid {
+// 		message := fmt.Sprintf("Must be longer than %d characters", r.Min)
+// 		return message, isValid
+// 	}
+
+// 	return "", true
+// }
