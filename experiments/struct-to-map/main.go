@@ -6,7 +6,7 @@ import (
 
 func main() {
 	// Convert an anonymous struct to a map, recursively
-	fmt.Printf("%+v\n", structToMap(struct {
+	fmt.Printf("%+v\n", StructToMap(struct {
 		Name    string
 		Hobbies []string
 		Partner struct {

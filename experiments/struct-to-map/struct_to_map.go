@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 )
 
@@ -46,18 +47,17 @@ func structToMap(t reflect.Type, v reflect.Value) map[string]any {
 
 func structFieldToMapItem(t reflect.Type, v reflect.Value) (any, error) {
 
-	k := t.Kind()
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+		v = v.Elem()
+	}
 
-	if k == reflect.Struct {
+	switch t.Kind() {
+	case reflect.Struct:
 		return structToMap(t, v), nil
-	}
-
-	// TODO: Unsupported types
-	if k == reflect.Uintptr {
-		return nil, nil
-	}
-
-	if k == reflect.Array || k == reflect.Slice {
+	case reflect.Uintptr, reflect.Chan, reflect.Func, reflect.UnsafePointer:
+		return nil, fmt.Errorf("unsupported type %v", t)
+	case reflect.Array, reflect.Slice:
 		count := v.Len()
 		list := make([]any, 0, count)
 
@@ -71,7 +71,7 @@ func structFieldToMapItem(t reflect.Type, v reflect.Value) (any, error) {
 		}
 
 		return list, nil
+	default:
+		return v, nil
 	}
-
-	return v, nil
 }
