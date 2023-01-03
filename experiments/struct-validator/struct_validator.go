@@ -1,20 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
 
-/*
-TODO: Try this
+	"struct_validator/rules"
+)
 
-type Rule struct {
-	Name string
-}
-
-type RequiredRule struct {
-	Rule
-}
-*/
-
-type ValidatorSchema map[string][]ValidationRule // <-- TODO
+type ValidatorSchema map[string][]rules.RuleInterface
 
 type ValidatorResult map[string]map[string]string
 
@@ -38,8 +30,8 @@ func main() {
 	fmt.Println(p)
 
 	schema := ValidatorSchema{
-		"Name": []ValidationRule{Required(), MinChars(2)},
-		"Age":  []ValidationRule{Required(), Min(18)},
+		"Name": {rules.Required(), rules.MinChars(2)},
+		"Age":  {rules.Required(), rules.Min(18)},
 	}
 	fmt.Println(schema)
 
