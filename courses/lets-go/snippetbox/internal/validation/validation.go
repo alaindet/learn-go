@@ -1,47 +1,76 @@
-package validation
+package main
 
-type ValidationRuleResult string
+import (
+	"errors"
+	"reflect"
 
-type ValidationRule func(val any) (ValidationRuleResult, error)
+	"snippetbox.dev/internal/validation/rules"
+)
 
-type ValidationRuleFactory func(args ...[]any) ValidationRule
+type ValidationSchema map[string][]rules.RuleInterface
 
-type ValidationSchema map[string][]ValidationRule
+type ValidationFieldErrors map[string]string
 
-type ValidationResult map[string][]ValidationResult
+type ValidationErrors map[string]ValidationFieldErrors
 
 type Validator struct {
-	schema ValidationSchema
-	result ValidationResult
+	Schema ValidationSchema
+	Errors ValidationErrors
 }
 
 func NewValidator(schema ValidationSchema) *Validator {
 	return &Validator{
-		schema: schema,
-		result: make(ValidationResult, len(schema)),
+		Schema: schema,
+		Errors: make(ValidationErrors, len(schema)),
 	}
 }
 
-func (v *Validator) SetSchema(schema ValidationSchema) {
-	v.schema = schema
+func (v *Validator) IsValid() bool {
+	return len(v.Errors) == 0
 }
 
-func (v *Validator) GetResult() ValidationResult {
-	return v.result
+func (v *Validator) Validate(_val any) (bool, error) {
+	_, sv, err := getStructFromReflection(_val)
+
+	v.Errors = make(ValidationErrors, len(v.Schema))
+
+	if err != nil {
+		return false, err
+	}
+
+	for fieldName, rules := range v.Schema {
+
+		fieldVal := sv.FieldByName(fieldName).Interface()
+		fieldErrors := make(ValidationFieldErrors, len(rules))
+
+		for _, rule := range rules {
+			rule.Run(fieldVal)
+			if err := rule.Error(); err != "" {
+				fieldErrors[rule.Name()] = err
+			}
+		}
+
+		if len(fieldErrors) != 0 {
+			v.Errors[fieldName] = fieldErrors
+		}
+	}
+
+	return v.IsValid(), nil
 }
 
-// TODO: Generic type for data?
-// TODO: Use reflection?
-func (v *Validator) Validate(data any) ValidationResult {
+func getStructFromReflection(_val any) (reflect.Type, reflect.Value, error) {
 
-	result := make(ValidationResult, len(v.schema))
+	sv := reflect.ValueOf(_val)
+	st := reflect.TypeOf(_val)
 
-	// TODO
+	if st.Kind() == reflect.Pointer {
+		sv = sv.Elem()
+		st = st.Elem()
+	}
 
-	// for key, rules := range v.schema {
-	// 	val := data[key]
-	// }
+	if st.Kind() != reflect.Struct {
+		return st, sv, errors.New("invalid input: not a struct")
+	}
 
-	v.result = result
-	return result
+	return st, sv, nil
 }

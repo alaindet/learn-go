@@ -8,6 +8,7 @@ import (
 
 type Person struct {
 	Name      string
+	Email     string
 	Age       int
 	Interests []string
 }
@@ -15,14 +16,16 @@ type Person struct {
 func main() {
 	p := Person{
 		Name:      "Ginger",
+		Email:     "ginger@example.com",
 		Age:       18,
 		Interests: []string{"Reading", "Traveling"},
 	}
 
 	schema := ValidatorSchema{
 		"Name":      {rules.Required(), rules.MinChars(2)},
+		"Email":     {rules.Required(), rules.Email()},
 		"Age":       {rules.Required(), rules.Min(18)},
-		"Interests": {rules.Required(), rules.MinLength(3)},
+		"Interests": {rules.Required(), rules.MinLength(2)},
 	}
 
 	v := NewValidator(schema)
