@@ -1,0 +1,6 @@
+*.env
+!*.env.example
+/tls/cert.pem
+/tls/key.pem
+/tmp/
+*coverage*

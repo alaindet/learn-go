@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15.1-alpine
+    environment:
+      - POSTGRES_USER=greenlight
+      - POSTGRES_PASSWORD=greenlight
+      - POSTGRES_DB=greenlight
+    ports:
+      - '5432:5432'
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./database/pg-init.sql:/docker-entrypoint-initdb.d/pg-init.sql
+  adminer:
+    image: adminer:4.8.1
+    ports:
+      - '8081:8080'
+volumes:
+  dbdata: {}
