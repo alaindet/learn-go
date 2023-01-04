@@ -1,3 +1,3 @@
 # Validation
 
-This replaces `snippetbox.dev/internal/validator`
+- Use this instead of `snippetbox.dev/internal/validator`

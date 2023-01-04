@@ -3,25 +3,22 @@ package main
 import (
 	"errors"
 	"reflect"
-
-	"snippetbox.dev/internal/validation/rules"
+	"struct_validator/rules"
 )
 
-type ValidationSchema map[string][]rules.RuleInterface
-
-type ValidationFieldErrors map[string]string
-
-type ValidationErrors map[string]ValidationFieldErrors
+type ValidatorSchema map[string][]rules.RuleInterface
+type ValidatorFieldErrors map[string]string
+type ValidatorErrors map[string]ValidatorFieldErrors
 
 type Validator struct {
-	Schema ValidationSchema
-	Errors ValidationErrors
+	Schema ValidatorSchema
+	Errors ValidatorErrors
 }
 
-func NewValidator(schema ValidationSchema) *Validator {
+func NewValidator(schema ValidatorSchema) *Validator {
 	return &Validator{
 		Schema: schema,
-		Errors: make(ValidationErrors, len(schema)),
+		Errors: make(ValidatorErrors, len(schema)),
 	}
 }
 
@@ -32,7 +29,7 @@ func (v *Validator) IsValid() bool {
 func (v *Validator) Validate(_val any) (bool, error) {
 	_, sv, err := getStructFromReflection(_val)
 
-	v.Errors = make(ValidationErrors, len(v.Schema))
+	v.Errors = make(ValidatorErrors, len(v.Schema))
 
 	if err != nil {
 		return false, err
@@ -41,7 +38,7 @@ func (v *Validator) Validate(_val any) (bool, error) {
 	for fieldName, rules := range v.Schema {
 
 		fieldVal := sv.FieldByName(fieldName).Interface()
-		fieldErrors := make(ValidationFieldErrors, len(rules))
+		fieldErrors := make(ValidatorFieldErrors, len(rules))
 
 		for _, rule := range rules {
 			rule.Run(fieldVal)
