@@ -16,13 +16,13 @@ func (r *MinRule) Run(_val any) {
 
 	val, ok := _val.(int)
 	if !ok {
-		r.Err = errors.New("must be an integer")
+		r.err = errors.New("must be an integer")
 		return
 	}
 
 	err := CheckMin(val, r.Min)
 	if err != nil {
-		r.Err = err
+		r.err = err
 	}
 }
 
@@ -30,12 +30,12 @@ func (r *MinRule) Run(_val any) {
 func CheckMin(val int, min int) error {
 	isValid := val >= min
 	if !isValid {
-		return fmt.Errorf("value %d must be greater than %d", val, min)
+		return fmt.Errorf("must be equal to or greater than %d", min)
 	}
 	return nil
 }
 
 // The validation rule
 func Min(min int) *MinRule {
-	return &MinRule{Rule: Rule{Name: MinRuleName}, Min: min}
+	return &MinRule{Rule: Rule{name: MinRuleName}, Min: min}
 }

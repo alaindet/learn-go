@@ -16,14 +16,14 @@ func (r *MinCharsRule) Run(_val any) {
 
 	val, ok := _val.(string)
 	if !ok {
-		r.Err = errors.New("must be a string")
+		r.err = errors.New("must be a string")
 		return
 	}
 
 	err := CheckMinChars(val, r.Min)
 
 	if err != nil {
-		r.Err = fmt.Errorf("must be greater than %d characters long", r.Min)
+		r.err = fmt.Errorf("must be at least %d characters long", r.Min)
 	}
 }
 
@@ -31,12 +31,12 @@ func CheckMinChars(val string, minChars int) error {
 	isValid := len(val) >= minChars
 
 	if !isValid {
-		return fmt.Errorf("%q must be longer than %d characters", val, minChars)
+		return fmt.Errorf("%q must be at least %d characters long", val, minChars)
 	}
 
 	return nil
 }
 
 func MinChars(min int) *MinCharsRule {
-	return &MinCharsRule{Rule: Rule{Name: MinCharsRuleName}, Min: min}
+	return &MinCharsRule{Rule: Rule{name: MinCharsRuleName}, Min: min}
 }

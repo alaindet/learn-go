@@ -6,15 +6,6 @@ import (
 	"struct_validator/rules"
 )
 
-type ValidatorSchema map[string][]rules.RuleInterface
-
-type ValidatorResult map[string]map[string]string
-
-type Validator struct {
-	schema ValidatorSchema
-	result ValidatorResult
-}
-
 type Person struct {
 	Name      string
 	Age       int
@@ -24,24 +15,26 @@ type Person struct {
 func main() {
 	p := Person{
 		Name:      "Ginger",
-		Age:       42,
+		Age:       18,
 		Interests: []string{"Reading", "Traveling"},
 	}
-	fmt.Println(p)
 
 	schema := ValidatorSchema{
-		"Name": {rules.Required(), rules.MinChars(2)},
-		"Age":  {rules.Required(), rules.Min(18)},
+		"Name":      {rules.Required(), rules.MinChars(2)},
+		"Age":       {rules.Required(), rules.Min(18)},
+		"Interests": {rules.Required(), rules.MinLength(3)},
 	}
-	fmt.Println(schema)
 
 	v := NewValidator(schema)
-	fmt.Println(v)
-}
+	isValid, err := v.Validate(p)
 
-func NewValidator(schema ValidatorSchema) *Validator {
-	return &Validator{
-		schema: schema,
-		result: make(ValidatorResult, len(schema)),
+	// Invalid input type
+	if err != nil {
+		fmt.Printf("%s\n", err.Error())
+		return
 	}
+
+	fmt.Println("Validate (returns isValid)", isValid)
+	fmt.Println("isValid", v.IsValid())
+	fmt.Printf("Validation errors: %+v\n", v.Errors)
 }

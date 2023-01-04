@@ -14,7 +14,7 @@ type RequiredRule struct {
 func (r *RequiredRule) Run(val any) {
 	err := CheckRequired(val)
 	if err != nil {
-		r.Err = err
+		r.err = err
 	}
 }
 
@@ -29,5 +29,5 @@ func CheckRequired(val any) error {
 
 // The validation rule
 func Required() *RequiredRule {
-	return &RequiredRule{Rule: Rule{Name: RequiredRuleName}}
+	return &RequiredRule{Rule: Rule{name: RequiredRuleName}}
 }
