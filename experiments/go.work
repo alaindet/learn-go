@@ -1,9 +1,10 @@
 go 1.18
 
 use (
-    ./chained-channels
-    ./chained-channels-2
-    ./distributed-sums
-    ./slice-functions
-    ./struct-to-map
+	./chained-channels
+	./chained-channels-2
+	./distributed-sums
+	./slice-functions
+	./struct-to-map
+	./struct-validator
 )
