@@ -6,10 +6,10 @@ import (
 	"time"
 )
 
-func NewServer(mux *http.ServeMux, config *config) *http.Server {
+func NewServer(routes http.Handler, config *config) *http.Server {
 	return &http.Server{
 		Addr:         fmt.Sprintf(":%d", config.port),
-		Handler:      mux,
+		Handler:      routes,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
