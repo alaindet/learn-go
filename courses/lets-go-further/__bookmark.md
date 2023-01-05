@@ -1,2 +1,2 @@
-21
-API Endpoints and RESTful Routing
+23
+Encapsulating the API routes
