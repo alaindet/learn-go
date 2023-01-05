@@ -1,3 +1,3 @@
-module greenlight.dev
+module greenlight
 
 go 1.19
