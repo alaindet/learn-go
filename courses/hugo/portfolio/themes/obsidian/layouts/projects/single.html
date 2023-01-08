@@ -1,11 +1,22 @@
 {{ define "main" }}
-  <div class="project-container">
-    <section class="project-list">
+  <div class="project">
+
+    <aside class="project__aside">
       <h2>Projects</h2>
-    </section>
-    <section class="project">
+      <ul class="projects-list">
+        {{ range (where .Site.RegularPages "Type" "in" "projects").ByDate.Reverse  }}
+          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ul>
+    </aside>
+
+    <article class="project__content">
       <h2>{{ .Title }}</h2>
-      {{ .Content }}
-    </section>
+      <p>{{ .Content }}</p>
+    </article>
+
   </div>
+
+  <!-- TODO: Move -->
+  <script src="{{ "js/projects.js" | relURL }}"></script>
 {{ end }}

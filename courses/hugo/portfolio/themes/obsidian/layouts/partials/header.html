@@ -1,5 +1,6 @@
 <header>
-  <h1>{{ .Site.Title }}</h1>
+  <div class="container">
+    <h1>{{ .Site.Title }}</h1>
+    {{- partial "nav.html" . -}}
+  </div>
 </header>
-
-{{- partial "nav.html" . -}}

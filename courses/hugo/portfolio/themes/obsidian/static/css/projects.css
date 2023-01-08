@@ -1,0 +1,17 @@
+.projects-list {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.project__content img {
+  max-width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+  .project {
+    display: flex;
+    gap: 2rem;
+  }
+}
