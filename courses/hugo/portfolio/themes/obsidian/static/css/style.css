@@ -22,14 +22,14 @@ nav {
   flex-direction: column;
 }
 
-nav>a {
+nav > a {
   flex: 1;
   text-align: center;
   text-decoration: none;
   color: #fff;
 }
 
-@media only screen and (min-width: var(--app-breakpoint-mobile)) {
+@media only screen and (min-width: 768px /*var(--app-breakpoint-mobile)*/) {
   nav {
     flex-direction: row;
   }
