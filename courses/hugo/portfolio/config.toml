@@ -2,3 +2,7 @@ baseURL = 'http://example.com/'
 languageCode = 'en-us'
 title = 'Foo portfolio'
 theme = 'obsidian'
+
+[params]
+  author = "John Smith"
+  description = "My portfolio website demo"
