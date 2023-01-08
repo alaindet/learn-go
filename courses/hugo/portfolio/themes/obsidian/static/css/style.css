@@ -1,0 +1,36 @@
+:root {
+  --app-color-foreground: #fff;
+  --app-color-background: #333;
+
+  --app-breakpoint-mobile: 768px;
+}
+
+.container {
+  margin: 0 auto;
+  width: 80%;
+}
+
+nav,
+footer {
+  background-color: var(--app-color-background);
+  color: var(--app-color-foreground);
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+}
+
+nav>a {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+}
+
+@media only screen and (min-width: var(--app-breakpoint-mobile)) {
+  nav {
+    flex-direction: row;
+  }
+}
