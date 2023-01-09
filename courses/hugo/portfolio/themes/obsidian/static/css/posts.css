@@ -1,0 +1,20 @@
+.post {
+  /* TODO */
+}
+
+.post__header {
+  border-bottom: 2px solid var(--app-color-foreground-contrast);
+  font-size: 0.9em;
+}
+
+.post__title {
+  font-size: 1.5rem;
+}
+
+.post__author {
+  font-style: italic;
+}
+
+.post__content {
+  text-align: justify;
+}

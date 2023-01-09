@@ -1,0 +1,16 @@
+{{ define "main" }}
+  <article class="post">
+
+    <header class="post__header">
+      <h2 class="post__title">{{ .Title }}</h2>
+      <p class="post__author">By {{ .Params.Author }}</p>
+      <p class="post__date">{{ .Date.Format "January 2, 2006" }}</p>
+      <p class="post__time">Reading time: {{ math.Round (div (countwords .Content) 200.0) }} minutes </p>
+    </header>
+
+    <section class="post__content">
+      {{ .Content }}
+    </section>
+
+  </article>
+{{ end }}

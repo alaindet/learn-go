@@ -1,2 +1,2 @@
-67
-Adding a Blog
+70
+Organizing Content with Taxonomies
