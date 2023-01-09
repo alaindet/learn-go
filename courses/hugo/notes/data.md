@@ -15,7 +15,10 @@
 
   ```
   // layouts/_default/index.html
-  
+
   <meta name="author" content="{{ .Site.Params.author }}">
   <meta name="description" content="{{ .Site.Params.author }}">
   ```
+
+## `/data/`
+- The `/data/` folder contains `JSON`, `YAML` and `TOML` files that can only be accessed by layouts

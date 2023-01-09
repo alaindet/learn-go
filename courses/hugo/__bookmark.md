@@ -1,2 +1,2 @@
-50
-Populating Page Content Using Data in Front Matter
+67
+Adding a Blog

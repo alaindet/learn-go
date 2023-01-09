@@ -1,13 +1,23 @@
 {{ define "main" }}
   <h2>{{ .Title }}</h2>
+
   {{ .Content }}
 
   <ul class="projects-list">
+
+    {{ with .Site.GetPage "/opensource.md" }}
+      <li class="projects-list__item">
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <p>{{ .Summary }}</p>
+      </li>
+    {{ end }}
+
     {{ range .Pages }}
       <li class="projects-list__item">
         <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <p>{{ .Summary }}</p>
       </li>
     {{ end }}
-  </ul>
 
+  </ul>
 {{ end }}

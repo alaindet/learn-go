@@ -12,14 +12,15 @@
 - The `_index.md` file is the default content for the homepage
 
 ## `data`
-- Contains yaml, json and toml files (TODO?)
+- Contains YAML, JSON and/or TOML files both static or from other sources to be used as dynamic data to populate layouts (ex.: links to show)
 
 ## `layouts`
-- Contains the actual skeletons used by your website
+- Contains the actual HTML with Go expressions skeletons used by your website
 - The `index.html` should be the home page layout
 
 ## `static`
 - Contains CSS, JS, images and assets in general
+- Can be the target of Hugo pipes processing for example `.ts`, `.sass` files etc.
 
 ## `themes`
 - Contains both 3rd-party themes and your own

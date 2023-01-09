@@ -1,0 +1,20 @@
+.oss {
+  display: grid;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+  margin-bottom: 2rem;
+}
+
+.oss article {
+  border: 2px solid var(--app-color-background-contrast);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+@media only screen and (min-width: 768px) {
+  .oss {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
