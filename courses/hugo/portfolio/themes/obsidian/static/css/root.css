@@ -1,0 +1,41 @@
+:root {
+  --app-color-background: #ffffff;
+  --app-color-background-contrast: #e0e0e0;
+  --app-color-foreground: #303030;
+  --app-color-foreground-contrast: #666666;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body.theme-dark {
+  --app-color-background: #303030;
+  --app-color-background-contrast: #666666;
+  --app-color-foreground: #ffffff;
+  --app-color-foreground-contrast: #e0e0e0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-size: 16px;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  background-color: var(--app-color-background);
+  color: var(--app-color-foreground);
+}
+
+.container {
+  margin: 0 auto;
+  width: min(960px, 100vw);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}

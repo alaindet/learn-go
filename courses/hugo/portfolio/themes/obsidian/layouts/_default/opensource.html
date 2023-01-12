@@ -1,0 +1,13 @@
+{{ define "main" }}
+  <h2>{{ .Title }}</h2>
+  {{ .Content }}
+
+  <section class="oss">
+    {{ range .Site.Data.repos.repos }}
+      <article>
+        <h3><a href="{{ .html_url }}" target="_blank">{{ .name }}</a></h3>
+        <p>{{ .description }}</p>
+      </article>
+    {{ end }}
+  </section>
+{{ end }}

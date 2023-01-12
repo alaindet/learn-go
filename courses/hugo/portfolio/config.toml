@@ -1,0 +1,13 @@
+baseURL = 'http://example.com/'
+languageCode = 'en-us'
+title = 'Foo portfolio'
+theme = 'obsidian'
+
+[params]
+  author = "Alain D'Ettorre"
+  description = "My portfolio website demo"
+  github_api = "https://api.github.com/users"
+  github_user = "alaindet"
+
+[permalinks]
+  posts = "posts/:year/:month/:slug"
