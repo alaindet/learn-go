@@ -3,8 +3,14 @@
 
     <header class="post__header">
       <h2 class="post__title">{{ .Title }}</h2>
-      <p class="post__author">By {{ .Params.Author }}</p>
-      <p class="post__date">{{ .Date.Format "January 2, 2006" }}</p>
+      <p class="post__author">{{ .Params.Author }}</p>
+      <p class="post__date">Date: {{ .Date.Format "January 2, 2006" }}</p>
+      <span class="tags">
+        Tags:
+        {{ range .Params.tags }}
+          <a class="tag" href="/tags/{{ . | urlize }}">{{ . }}</a>
+        {{ end }}
+      </span>
       <p class="post__time">Reading time: {{ math.Round (div (countwords .Content) 200.0) }} minutes </p>
     </header>
 

@@ -8,3 +8,6 @@ theme = 'obsidian'
   description = "My portfolio website demo"
   github_api = "https://api.github.com/users"
   github_user = "alaindet"
+
+[permalinks]
+  posts = "posts/:year/:month/:slug"

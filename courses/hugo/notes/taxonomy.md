@@ -27,3 +27,22 @@ aliquip ex ea commodo consequat.
 ```
 
 - Categories and tags are automatically exposed as list pages, for example after creating the post above you can visit `/categories` (`/tags`) with the list of categories (or tags) and then visit `/categories/personal` (or `/tags/software`) with another list of posts with the `Personal` category (or with the `software` tag)
+
+## `config.toml`
+
+You can configure taxonomies via `/config.toml` like so
+
+- Exclude tags
+  ```toml
+  [taxonomies]
+    category = "categories"
+  ```
+- Exclude categories
+  ```toml
+  [taxonomies]
+    tag = "tags"
+  ```
+- Exclude any taxonomy
+  ```toml
+  disableKinds = ["taxonomy", "taxonomyTerm"]
+  ```
