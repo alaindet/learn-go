@@ -3,6 +3,12 @@ title: "First Post"
 date: 2023-01-09T12:15:36+01:00
 draft: false
 author: Alain D'Ettorre
+categories:
+- Personal
+- Thoughts
+tags:
+- software
+- html
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
