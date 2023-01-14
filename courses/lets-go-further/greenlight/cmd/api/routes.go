@@ -8,8 +8,11 @@ import (
 
 func (app *application) routes() *httprouter.Router {
 
-	r := httprouter.New()
 	v := "/v1.0"
+	r := httprouter.New()
+
+	r.NotFound = http.HandlerFunc(app.notFoundResponse)
+	r.MethodNotAllowed = http.HandlerFunc(app.methodNotAllowedResponse)
 
 	Get(r, v+"/healthcheck", app.healthcheckHandler)
 	Post(r, v+"/movies", app.moviesCreateHandler)

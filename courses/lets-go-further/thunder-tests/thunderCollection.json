@@ -1,0 +1,32 @@
+[
+  {
+    "_id": "9f75a7eb-049b-4054-b99c-d9678fb96bae",
+    "colName": "Greenlight API",
+    "created": "2023-01-13T23:56:21.302Z",
+    "sortNum": 10000,
+    "folders": [
+      {
+        "_id": "089a555a-8cf5-41be-8822-c30dc5074c37",
+        "name": "Metrics",
+        "containerId": "",
+        "created": "2023-01-13T23:56:48.311Z",
+        "sortNum": 10000
+      },
+      {
+        "_id": "75d4b0e6-0a34-42ed-9a99-46a79221d159",
+        "name": "Movies",
+        "containerId": "",
+        "created": "2023-01-13T23:57:22.565Z",
+        "sortNum": 20000
+      }
+    ],
+    "settings": {
+      "headers": [],
+      "tests": [],
+      "options": {
+        "baseUrl": "{{URL_BASE}}"
+      },
+      "envId": "20a33ef0-638e-45d8-ae72-e0d12b596c8c"
+    }
+  }
+]

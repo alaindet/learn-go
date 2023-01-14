@@ -5,10 +5,15 @@ import (
 	"net/http"
 )
 
+type JSONPayload struct {
+	Message string `json:"message,omitempty"`
+	Data    any    `json:"data"`
+}
+
 func (app *application) writeJSON(
 	w http.ResponseWriter,
 	httpStatus int,
-	data any,
+	data JSONPayload,
 	headers http.Header,
 ) error {
 

@@ -1,0 +1,24 @@
+[
+  {
+    "_id": "20a33ef0-638e-45d8-ae72-e0d12b596c8c",
+    "name": "Greenlight API",
+    "default": true,
+    "sortNum": 10000,
+    "created": "2023-01-13T23:55:30.732Z",
+    "modified": "2023-01-13T23:55:30.732Z",
+    "data": [
+      {
+        "name": "URL_PREFIX",
+        "value": "http://localhost:4000"
+      },
+      {
+        "name": "API_VERSION",
+        "value": "v1.0"
+      },
+      {
+        "name": "URL_BASE",
+        "value": "{{URL_PREFIX}}/{{API_VERSION}}"
+      }
+    ]
+  }
+]
