@@ -5,8 +5,10 @@ import (
 )
 
 func main() {
-	basic_examples.FromJson()
-	basic_examples.ToJson()
-	basic_examples.FromJsonFile()
-	basic_examples.ToJsonFile()
+	// basic_examples.FromJson()
+	// basic_examples.ToJson()
+	// basic_examples.FromJsonFile()
+	// basic_examples.ToJsonFile()
+
+	basic_examples.DecodeJSON()
 }

@@ -26,5 +26,24 @@
     "headers": [],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "382d468f-b00d-4dcd-b3db-fdee4f1a5de9",
+    "colId": "9f75a7eb-049b-4054-b99c-d9678fb96bae",
+    "containerId": "75d4b0e6-0a34-42ed-9a99-46a79221d159",
+    "name": "Create Movie",
+    "url": "/movies",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2023-01-16T07:12:05.304Z",
+    "modified": "2023-01-16T07:15:38.385Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"title\": \"The Matrix\",\n  \"year\": 1999,\n  \"runtime\": 136,\n  \"genres\": [\"sci-fi\", \"action\"]\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]
