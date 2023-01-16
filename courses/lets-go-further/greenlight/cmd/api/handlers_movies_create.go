@@ -1,12 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
-type CreateMovieDto struct {
+type CreateMovieDTO struct {
 	Title   string   `json:"title"`
 	Year    int32    `json:"year"`
 	Runtime int32    `json:"runtime"`
@@ -16,11 +15,10 @@ type CreateMovieDto struct {
 // POST /movies
 func (app *application) moviesCreateHandler(w http.ResponseWriter, r *http.Request) {
 
-	var input CreateMovieDto
-
-	err := json.NewDecoder(r.Body).Decode(&input)
+	var input CreateMovieDTO
+	err := app.readJSON(w, r, &input)
 	if err != nil {
-		app.badRequestResponse(w, r, err.Error())
+		app.badRequestResponse(w, r, err)
 		return
 	}
 

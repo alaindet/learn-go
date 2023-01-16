@@ -36,14 +36,9 @@
     "method": "POST",
     "sortNum": 30000,
     "created": "2023-01-16T07:12:05.304Z",
-    "modified": "2023-01-16T07:15:38.385Z",
+    "modified": "2023-01-16T23:29:01.945Z",
     "headers": [],
     "params": [],
-    "body": {
-      "type": "json",
-      "raw": "{\n  \"title\": \"The Matrix\",\n  \"year\": 1999,\n  \"runtime\": 136,\n  \"genres\": [\"sci-fi\", \"action\"]\n}",
-      "form": []
-    },
     "tests": []
   }
 ]

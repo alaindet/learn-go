@@ -71,7 +71,7 @@
 - Example RFC3339 date `"2023-01-06T10:17:08.8241416+01:00"`
 
 ## Encoding
-- For encoding, `json.Marshal()` is preferred
+- For encoding, `json.Marshal()` is preferred, performance is on par with `json.Encode()`
 
 ```go
 import (
@@ -142,6 +142,7 @@ func toJson(data any) string {
 
 ## Decoding
 - For decoding, `json.Decoder()` is preferred
+-  `json.Unmarshal()` is a bit slower `json.Decoder()` and uses almost 2x memory compared to `json.Unmarshal()`
 
 ```go
 import (
