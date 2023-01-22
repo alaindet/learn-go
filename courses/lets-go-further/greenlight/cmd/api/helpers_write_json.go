@@ -7,7 +7,8 @@ import (
 
 type JSONPayload struct {
 	Message string `json:"message,omitempty"`
-	Data    any    `json:"data"`
+	Data    any    `json:"data,omitempty"`
+	Error   any    `json:"errors,omitempty"`
 }
 
 func (app *application) writeJSON(

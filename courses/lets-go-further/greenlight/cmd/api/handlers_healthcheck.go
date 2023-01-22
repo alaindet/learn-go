@@ -10,8 +10,8 @@ import (
 func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 
 	data := JSONPayload{
-		fmt.Sprintf("healthcheck %s", time.Now()),
-		map[string]any{
+		Message: fmt.Sprintf("healthcheck %s", time.Now()),
+		Data: map[string]any{
 			"status":      "available",
 			"environment": app.config.env,
 			"version":     app.version,
