@@ -5,8 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"greenlight/internal/database"
 )
 
 type application struct {
@@ -20,7 +18,7 @@ func NewApplication(cfg *config) *application {
 
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-	db, err := database.OpenDB(cfg.dsn)
+	db, err := openDB(cfg.db)
 	if err != nil {
 		logger.Fatal(err)
 	}
