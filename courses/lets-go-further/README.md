@@ -51,7 +51,24 @@ go run ./cmd/api -help
   ```console
   migrate create -seq -ext=.sql -dir=./database/migrations create_movies_table
   ```
-- Run a migration
+- Run all migrations
   ```console
-  TODO
+  cd ./greenlight && \
+  export $(grep -v '^#' .env | xargs -d '\n') && \
+  migrate -path=./database/migrations -database=$GREENLIGHT_DB_DSN up
   ```
+
+## Open Bash on running Docker container
+```console
+docker exec -it <container name> /bin/bash
+```
+
+## Execute command on running Docker container
+```console
+docker exec -it <container name> <command>
+```
+
+## Open Bash on database service
+```console
+docker-compose run db /bin/bash
+```
