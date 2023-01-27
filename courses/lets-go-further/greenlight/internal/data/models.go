@@ -10,7 +10,7 @@ var (
 )
 
 type Models struct {
-	Movies MovieModelInterface
+	Movies ModelInterface[Movie]
 }
 
 func NewModels(db *sql.DB) Models {

@@ -4,6 +4,13 @@ import (
 	"greenlight/internal/validator"
 )
 
+type CreateMovieData struct {
+	Title   string   `json:"title"`
+	Year    int      `json:"year"`
+	Runtime Runtime  `json:"runtime"`
+	Genres  []string `json:"genres"`
+}
+
 func (d *CreateMovieData) Validate(v *validator.Validator) {
 	ValidateMovieTitle(v, d.Title)
 	ValidateMovieYear(v, d.Year)

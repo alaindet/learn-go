@@ -12,6 +12,11 @@ func (m MockMovieModel) Get(id int64) (*Movie, error) {
 	return nil, nil
 }
 
+func (m MockMovieModel) GetAll(filters map[string]any) ([]*Movie, error) {
+	// TODO: Mock
+	return nil, nil
+}
+
 func (m MockMovieModel) Update(movie *Movie) error {
 	// TODO: Mock
 	return nil
