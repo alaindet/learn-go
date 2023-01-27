@@ -1,27 +1,9 @@
 package data
 
 import (
-	"time"
-
 	"greenlight/internal/validator"
+	"time"
 )
-
-type Movie struct {
-	ID        int64     `json:"id"`
-	CreatedAt time.Time `json:"-"`
-	Title     string    `json:"title"`
-	Year      int       `json:"year,omitempty"`
-	Runtime   Runtime   `json:"runtime,omitempty"`
-	Genres    []string  `json:"genres,omitempty"`
-	Version   int       `json:"version"`
-}
-
-type CreateMovieDTO struct {
-	Title   string   `json:"title"`
-	Year    int      `json:"year"`
-	Runtime Runtime  `json:"runtime"`
-	Genres  []string `json:"genres"`
-}
 
 func ValidateMovieTitle(v *validator.Validator, t string) {
 	v.Check(t != "", "title", "required")
@@ -45,11 +27,4 @@ func ValidateMovieGenres(v *validator.Validator, g []string) {
 	v.Check(len(g) >= 1, "genres", "must contain at least 1 genre")
 	v.Check(len(g) <= 5, "genres", "must not contain more than 5 genres")
 	v.Check(validator.Unique(g), "genres", "must not contain duplicate values")
-}
-
-func ValidateCreateMovieDTO(v *validator.Validator, dto CreateMovieDTO) {
-	ValidateMovieTitle(v, dto.Title)
-	ValidateMovieYear(v, dto.Year)
-	ValidateMovieRuntime(v, dto.Runtime)
-	ValidateMovieGenres(v, dto.Genres)
 }

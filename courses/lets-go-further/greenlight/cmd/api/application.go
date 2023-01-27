@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"greenlight/internal/data"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +13,7 @@ type application struct {
 	config  *config
 	db      *sql.DB
 	logger  *log.Logger
+	models  data.Models
 }
 
 func NewApplication(cfg *config) *application {
@@ -29,6 +31,7 @@ func NewApplication(cfg *config) *application {
 		config:  cfg,
 		db:      db,
 		logger:  logger,
+		models:  data.NewModels(db),
 	}
 }
 
