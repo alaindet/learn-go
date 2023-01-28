@@ -14,6 +14,7 @@ func (app *application) moviesCreateHandler(w http.ResponseWriter, r *http.Reque
 	// Parse
 	var input data.CreateMovieData
 	err := app.readJSON(w, r, &input)
+
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
@@ -31,6 +32,7 @@ func (app *application) moviesCreateHandler(w http.ResponseWriter, r *http.Reque
 	// Execute
 	movie := input.ToMovie()
 	err = app.models.Movies.Insert(movie)
+
 	if err != nil {
 		app.internalServerErrorResponse(w, r, err)
 		return
@@ -48,6 +50,7 @@ func (app *application) moviesCreateHandler(w http.ResponseWriter, r *http.Reque
 	headers := make(http.Header)
 	headers.Set("Location", url)
 	err = app.writeJSON(w, http.StatusCreated, data, headers)
+
 	if err != nil {
 		app.internalServerErrorResponse(w, r, err)
 	}
