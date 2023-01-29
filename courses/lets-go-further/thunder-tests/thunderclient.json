@@ -45,5 +45,38 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "6997977f-cc00-45bf-b77d-ebaf8081041d",
+    "colId": "9f75a7eb-049b-4054-b99c-d9678fb96bae",
+    "containerId": "75d4b0e6-0a34-42ed-9a99-46a79221d159",
+    "name": "Update Movie",
+    "url": "/movies/1",
+    "method": "PUT",
+    "sortNum": 40000,
+    "created": "2023-01-28T18:42:21.362Z",
+    "modified": "2023-01-28T18:47:47.699Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"title\": \"The Matrix\",\n  \"year\": 2999,\n  \"runtime\": \"136 mins\",\n  \"genres\": [\n    \"sci-fi\",\n    \"action\"\n  ]\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "e64d8981-3bc5-4e3e-9a4d-91f246db65cf",
+    "colId": "9f75a7eb-049b-4054-b99c-d9678fb96bae",
+    "containerId": "75d4b0e6-0a34-42ed-9a99-46a79221d159",
+    "name": "Delete Movie",
+    "url": "/movies/4",
+    "method": "DELETE",
+    "sortNum": 50000,
+    "created": "2023-01-29T08:43:38.773Z",
+    "modified": "2023-01-29T08:44:58.183Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]
