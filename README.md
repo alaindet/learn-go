@@ -23,6 +23,7 @@ This repository contains the learning material, demo, tests and everything I use
 - [Learn Data Structures and Algorithms with Golang](https://www.packtpub.com/product/learn-data-structures-and-algorithms-with-golang/9781789618501)
 - [Let's Go - Alex Edwards](https://lets-go.alexedwards.net/)
 - [Build Websites with Hugo - Brian P. Hogan](https://pragprog.com/titles/bhhugo/build-websites-with-hugo/)
+- [Powerful Command-Line Applications in Go - Build Fast and Maintainable Tools](https://pragprog.com/titles/rggo/powerful-command-line-applications-in-go/)
 
 ### Other
 - [https://gophercises.com/](https://gophercises.com/)
