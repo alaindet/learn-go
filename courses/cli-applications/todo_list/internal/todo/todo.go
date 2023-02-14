@@ -8,52 +8,69 @@ import (
 	"time"
 )
 
-type item struct {
-	Task        string
+type Todo struct {
+	Name        string
 	Done        bool
 	CreatedAt   time.Time
 	CompletedAt time.Time
 }
 
-type List []item
+type Todos []Todo
 
-func (l *List) Add(task string) {
-	*l = append(*l, item{
-		Task:        task,
+func NewTodos() *Todos {
+	return &Todos{}
+}
+
+func (t *Todos) Add(name string) {
+	*t = append(*t, Todo{
+		Name:        name,
 		Done:        false,
 		CreatedAt:   time.Now(),
 		CompletedAt: time.Time{},
 	})
 }
 
-func (l *List) Complete(i int) error {
-	ls := *l
-	if i <= 0 || i > len(ls) {
-		return fmt.Errorf("item %d does not exist", i)
+func (t *Todos) Get(i int) (*Todo, error) {
+
+	if err := t.checkIndex(i); err != nil {
+		return nil, err
 	}
-	ls[i-1].Done = true
-	ls[i-1].CompletedAt = time.Now()
+
+	return &(*t)[i], nil
+}
+
+func (t *Todos) Complete(i int) error {
+
+	if err := t.checkIndex(i); err != nil {
+		return err
+	}
+
+	todos := *t
+	todos[i].Done = true
+	todos[i].CompletedAt = time.Now()
 	return nil
 }
 
-func (l *List) Delete(i int) error {
-	ls := *l
-	if i <= 0 || i > len(ls) {
-		return fmt.Errorf("item %d does not exist", i)
+func (t *Todos) Delete(i int) error {
+
+	if err := t.checkIndex(i); err != nil {
+		return err
 	}
-	*l = append(ls[:i-1], ls[i:]...)
+
+	todos := *t
+	*t = append(todos[:i-1], todos[i:]...)
 	return nil
 }
 
-func (l *List) SaveToStorage(filename string) error {
-	js, err := json.Marshal(l)
+func (t *Todos) SaveToStorage(filename string) error {
+	js, err := json.Marshal(t)
 	if err != nil {
 		return err
 	}
 	return os.WriteFile(filename, js, 0644)
 }
 
-func (l *List) FetchFromStorage(filename string) error {
+func (t *Todos) FetchFromStorage(filename string) error {
 	file, err := os.ReadFile(filename)
 
 	if errors.Is(err, os.ErrNotExist) {
@@ -68,5 +85,14 @@ func (l *List) FetchFromStorage(filename string) error {
 		return nil
 	}
 
-	return json.Unmarshal(file, l)
+	return json.Unmarshal(file, t)
+}
+
+func (t *Todos) checkIndex(i int) error {
+
+	if i < 0 || i > (len(*t)-1) {
+		return fmt.Errorf("todo #%d does not exist", i)
+	}
+
+	return nil
 }
