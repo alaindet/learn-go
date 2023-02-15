@@ -6,8 +6,25 @@ type InputFlag[T any] struct {
 	name         string
 	defaultValue T
 	description  string
-	value        T
-	parser       func(name string, value T, description string) *T
+	value        *T
+}
+
+func NewInputFlag[T any](
+	parser func(name string, value T, usage string) *T,
+	name string,
+	val T,
+	desc string,
+) InputFlag[T] {
+	return InputFlag[T]{
+		name:         name,
+		defaultValue: val,
+		description:  desc,
+		value:        parser(name, val, desc),
+	}
+}
+
+func (f *InputFlag[T]) Value() T {
+	return *f.value
 }
 
 type TodoCliInput struct {
@@ -18,26 +35,26 @@ type TodoCliInput struct {
 
 func NewInput() *TodoCliInput {
 
-	addTodo := InputFlag[string]{
-		name:         "todo",
-		defaultValue: "",
-		description:  "New todo to be included in the To Do list",
-		parser:       flag.String,
-	}
+	addTodo := NewInputFlag(
+		flag.String,
+		"todo",
+		"",
+		"New todo to be included in the To Do list",
+	)
 
-	showList := InputFlag[bool]{
-		name:         "list",
-		defaultValue: false,
-		description:  "Show list of all todos",
-		parser:       flag.Bool,
-	}
+	showList := NewInputFlag(
+		flag.Bool,
+		"list",
+		false,
+		"Show list of all todos",
+	)
 
-	completeTodo := InputFlag[int]{
-		name:         "complete",
-		defaultValue: -1,
-		description:  "Complete given todo by index",
-		parser:       flag.Int,
-	}
+	completeTodo := NewInputFlag(
+		flag.Int,
+		"complete",
+		-1,
+		"Complete given todo by index",
+	)
 
 	return &TodoCliInput{
 		addTodo:      addTodo,
@@ -47,15 +64,5 @@ func NewInput() *TodoCliInput {
 }
 
 func (t *TodoCliInput) Parse() {
-
-	at := t.addTodo
-	t.addTodo.value = *at.parser(at.name, at.defaultValue, at.description)
-
-	sl := t.showList
-	t.showList.value = *sl.parser(sl.name, sl.defaultValue, sl.description)
-
-	ct := t.completeTodo
-	t.completeTodo.value = *ct.parser(ct.name, ct.defaultValue, ct.description)
-
 	flag.Parse()
 }
