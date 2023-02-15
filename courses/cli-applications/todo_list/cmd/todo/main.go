@@ -16,6 +16,10 @@ func setup() (*TodoCliInput, *todo.Todos) {
 	input := NewInput()
 	input.Parse()
 
+	if os.Getenv("TODOS_FILENAME") != "" {
+		todosFilename = os.Getenv("TODOS_FILENAME")
+	}
+
 	todos := todo.NewTodos()
 	err := todos.FetchFromStorage(todosFilename)
 	if err != nil {
@@ -27,14 +31,21 @@ func setup() (*TodoCliInput, *todo.Todos) {
 }
 
 func execute(input *TodoCliInput, todos *todo.Todos) {
+	var err error
+
 	switch {
-	case input.addTodo.Value() != "":
-		addTodoCommand(todos, input.addTodo.Value())
+	case input.addTodo.Value():
+		err = addTodoCommand(todos)
 	case input.showList.Value():
-		showListCommand(todos)
+		err = showListCommand(todos)
 	case input.completeTodo.Value() != -1:
-		completeTodoCommand(todos, input.completeTodo.Value())
+		err = completeTodoCommand(todos, input.completeTodo.Value())
 	default:
-		showListCommand(todos)
+		err = showListCommand(todos)
+	}
+
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(todosErrCannotExecuteCommand)
 	}
 }

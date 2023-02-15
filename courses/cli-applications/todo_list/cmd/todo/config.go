@@ -1,7 +1,9 @@
 package main
 
 const (
-	todosFilename          = "todos.json"
-	todosErrCannotReadFile = 1
-	todosErrCannotSaveFile = 2
+	todosErrCannotReadFile       = 1
+	todosErrCannotSaveFile       = 2
+	todosErrCannotExecuteCommand = 3
 )
+
+var todosFilename = "todos.json"

@@ -21,13 +21,15 @@ func NewTodos() *Todos {
 	return &Todos{}
 }
 
-func (t *Todos) Add(name string) {
+func (t *Todos) Add(name string) error {
 	*t = append(*t, Todo{
 		Name:        name,
 		Done:        false,
 		CreatedAt:   time.Now(),
 		CompletedAt: time.Time{},
 	})
+
+	return nil
 }
 
 func (t *Todos) Get(i int) (*Todo, error) {

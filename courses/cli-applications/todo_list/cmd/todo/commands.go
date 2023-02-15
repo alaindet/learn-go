@@ -2,23 +2,63 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"todo_list/internal/todo"
 )
 
-func addTodoCommand(todos *todo.Todos, newTodo string) {
-	todos.Add(newTodo)
-	err := todos.SaveToStorage(todosFilename)
+func addTodoCommand(todos *todo.Todos) error {
+
+	/*
+		errors.Try(
+			func (try errors.ErrorCatcher) {
+				try(todos.Add(newTodo))
+				try(todos.SaveToStorage(todosFilename))
+				fmt.Printf("Todo \"%s\" created.\n\n", newTodo)
+				try(showListCommand(todos))
+			},
+			func (err error) {
+				fmt.Println("Oops", err)
+			}
+		)
+
+		errors.Try(
+			func(try errors.ErrorCatcher) {
+				try(todos.Add(newTodo))
+				try(todos.SaveToStorage(todosFilename))
+				fmt.Printf("Todo \"%s\" created.\n\n", newTodo)
+				try(showListCommand(todos))
+			},
+			func (err error) {
+				fmt.Println("Oops", err)
+			}
+		)
+	*/
+
+	newTodo := "" // TODO
+
+	err := todos.Add(newTodo)
+
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(todosErrCannotSaveFile)
+		return err
 	}
+
+	err = todos.SaveToStorage(todosFilename)
+
+	if err != nil {
+		return err
+	}
+
 	fmt.Printf("Todo \"%s\" created.\n\n", newTodo)
-	showListCommand(todos)
+	err = showListCommand(todos)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func showListCommand(todos *todo.Todos) {
+func showListCommand(todos *todo.Todos) error {
 	for _, todo := range *todos {
 
 		checkbox := "[ ]"
@@ -28,15 +68,20 @@ func showListCommand(todos *todo.Todos) {
 
 		fmt.Printf("%s %s\n", checkbox, todo.Name)
 	}
+
+	return nil
 }
 
-func completeTodoCommand(todos *todo.Todos, todoIndex int) {
-	todos.Complete(todoIndex)
-	err := todos.SaveToStorage(todosFilename)
+func completeTodoCommand(todos *todo.Todos, todoIndex int) error {
+	err := todos.Complete(todoIndex)
+
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(todosErrCannotSaveFile)
+		return err
 	}
+
+	storeTodos(todos)
 	fmt.Printf("Todo #%d completed.\n\n", todoIndex)
 	showListCommand(todos)
+
+	return nil
 }

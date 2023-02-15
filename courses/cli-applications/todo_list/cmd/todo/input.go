@@ -28,7 +28,7 @@ func (f *InputFlag[T]) Value() T {
 }
 
 type TodoCliInput struct {
-	addTodo      InputFlag[string]
+	addTodo      InputFlag[bool]
 	showList     InputFlag[bool]
 	completeTodo InputFlag[int]
 }
@@ -36,10 +36,10 @@ type TodoCliInput struct {
 func NewInput() *TodoCliInput {
 
 	addTodo := NewInputFlag(
-		flag.String,
-		"todo",
-		"",
-		"New todo to be included in the To Do list",
+		flag.Bool,
+		"add",
+		false,
+		"Add new todo from stdin (if provided) or args",
 	)
 
 	showList := NewInputFlag(
