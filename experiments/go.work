@@ -7,4 +7,5 @@ use (
 	./slice-functions
 	./struct-to-map
 	./struct-validator
+	./try_catch
 )
