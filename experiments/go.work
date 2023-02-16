@@ -1,6 +1,7 @@
 go 1.18
 
 use (
+	./cards_deck_review
 	./chained-channels
 	./chained-channels-2
 	./distributed-sums

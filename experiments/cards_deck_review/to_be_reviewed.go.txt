@@ -1,0 +1,142 @@
+// https://go.dev/play/p/zWy8jP4lNEJ
+
+package main
+
+import (
+	"crypto/rand"
+	"errors"
+	"fmt"
+	"math/big"
+)
+
+type Deck struct {
+	Cards        map[int64]string
+	ShuffledDeck []string
+}
+
+func (d *Deck) create(suits [4]string, values [13]string) {
+
+	var i int64 = 0
+	cards := make(map[int64]string)
+
+	for _, suite := range suits {
+
+		for _, value := range values {
+
+			card := fmt.Sprintf("%s Of %s", value, suite)
+
+			cards[i] = card
+			i++
+
+		}
+
+	}
+
+	d.Cards = cards
+
+}
+
+func (d *Deck) shuffle() {
+
+	number_of_cards := len(d.Cards)
+
+	for {
+
+		if len(d.Cards) == 0 {
+			break
+		}
+
+		el, _ := rand.Int(rand.Reader, big.NewInt(int64(number_of_cards)))
+
+		key := el.Int64()
+
+		card, found := d.Cards[key]
+
+		if found {
+			delete(d.Cards, key)
+			d.ShuffledDeck = append(d.ShuffledDeck, card)
+		}
+
+	}
+
+}
+
+func (d *Deck) draw(quantity int) (cards []string, err error) {
+
+	err = d.check(quantity)
+
+	if err == nil {
+
+		for i := 0; i < quantity; i++ {
+			card := d.ShuffledDeck[i]
+			cards = append(cards, card)
+		}
+
+		d.ShuffledDeck = d.ShuffledDeck[quantity:]
+	}
+
+	return
+}
+
+func (d *Deck) burn(quantity int) (err error) {
+
+	err = d.check(quantity)
+
+	if err == nil {
+
+		d.ShuffledDeck = d.ShuffledDeck[quantity:]
+	}
+
+	return
+
+}
+
+func (d *Deck) check(quantity int) (err error) {
+
+	if len(d.ShuffledDeck) == 0 {
+		err = errors.New("no cards left")
+	} else if len(d.ShuffledDeck) < quantity {
+		err = errors.New("not enough cards left")
+	}
+
+	return
+
+}
+
+func main() {
+
+	suits := [4]string{"Hearts", "Diamonds", "Clubs", "Spades"}
+	values := [13]string{"Ace", "Two", "Three", "Four",
+		"Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"}
+
+	new_deck := Deck{}
+
+	new_deck.create(suits, values)
+	new_deck.shuffle()
+
+	// package usage example
+	for i := 0; i < 100; i++ {
+
+		err := new_deck.burn(1)
+
+		if err != nil {
+			fmt.Println(err.Error())
+			break
+		}
+
+		drawn_cards, err := new_deck.draw(2)
+
+		if err != nil {
+			fmt.Println(err.Error())
+			break
+		}
+
+		for _, card := range drawn_cards {
+
+			fmt.Printf("You drew: %s \n", card)
+
+		}
+
+	}
+
+}
