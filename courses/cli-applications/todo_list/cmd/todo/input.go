@@ -1,65 +1,30 @@
 package main
 
-import "flag"
-
-type InputFlag[T any] struct {
-	name         string
-	defaultValue T
-	description  string
-	value        *T
-}
-
-func NewInputFlag[T any](
-	parser func(name string, value T, usage string) *T,
-	name string,
-	val T,
-	desc string,
-) InputFlag[T] {
-	return InputFlag[T]{
-		name:         name,
-		defaultValue: val,
-		description:  desc,
-		value:        parser(name, val, desc),
-	}
-}
-
-func (f *InputFlag[T]) Value() T {
-	return *f.value
-}
+import (
+	"flag"
+	"todo_list/internal/input"
+)
 
 type TodoCliInput struct {
-	addTodo      InputFlag[bool]
-	showList     InputFlag[bool]
-	completeTodo InputFlag[int]
+	addTodo      bool
+	showList     bool
+	completeTodo int
 }
 
 func NewInput() *TodoCliInput {
 
-	addTodo := NewInputFlag(
-		flag.Bool,
-		"add",
-		false,
-		"Add new todo from stdin (if provided) or args",
-	)
+	f := input.NewCLIFlags()
 
-	showList := NewInputFlag(
-		flag.Bool,
-		"list",
-		false,
-		"Show list of all todos",
-	)
+	f.Bool("add", false, "Add new todo from stdin (if provided) or args")
+	f.Bool("list", false, "Show list of all todos")
+	f.Int("complete", -1, "Complete given todo by index")
 
-	completeTodo := NewInputFlag(
-		flag.Int,
-		"complete",
-		-1,
-		"Complete given todo by index",
-	)
+	f.Parse()
 
 	return &TodoCliInput{
-		addTodo:      addTodo,
-		showList:     showList,
-		completeTodo: completeTodo,
+		addTodo:      f.GetBool("add"),
+		showList:     f.GetBool("list"),
+		completeTodo: f.GetInt("complete"),
 	}
 }
 

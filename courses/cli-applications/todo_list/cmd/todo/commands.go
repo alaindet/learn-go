@@ -1,20 +1,42 @@
 package main
 
 import (
+	"bufio"
+	"flag"
 	"fmt"
+	"io"
+	"os"
+	"strings"
 
 	"todo_list/internal/todo"
 	"todo_list/internal/try"
 )
 
 func addTodoCommand(todos *todo.Todos) error {
-	return try.Try(func(err try.Catcher) {
-		newTodo := "" // TODO
-		err(todos.Add(newTodo))
-		err(todos.SaveToStorage(todosFilename))
+	return try.Try(func(catch try.Catcher) {
+		newTodo, err := getTask(os.Stdin, flag.Args()...)
+		catch(err)
+		catch(todos.Add(newTodo))
+		catch(todos.SaveToStorage(todosFilename))
 		fmt.Printf("Todo \"%s\" created.\n\n", newTodo)
-		err(showListCommand(todos))
+		catch(showListCommand(todos))
 	})
+}
+
+func getTask(r io.Reader, args ...string) (string, error) {
+	if len(args) > 0 {
+		return strings.Join(args, " "), nil
+	}
+	s := bufio.NewScanner(r)
+	s.Scan()
+	err := s.Err()
+	if err != nil {
+		return "", err
+	}
+	if len(s.Text()) == 0 {
+		return "", fmt.Errorf("new todo cannot be blank")
+	}
+	return s.Text(), nil
 }
 
 func showListCommand(todos *todo.Todos) error {

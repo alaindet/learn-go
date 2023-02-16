@@ -16,8 +16,8 @@ func setup() (*TodoCliInput, *todo.Todos) {
 	input := NewInput()
 	input.Parse()
 
-	if os.Getenv("TODOS_FILENAME") != "" {
-		todosFilename = os.Getenv("TODOS_FILENAME")
+	if os.Getenv(todosEnvFileName) != "" {
+		todosFilename = os.Getenv(todosEnvFileName)
 	}
 
 	todos := todo.NewTodos()
@@ -31,15 +31,16 @@ func setup() (*TodoCliInput, *todo.Todos) {
 }
 
 func execute(input *TodoCliInput, todos *todo.Todos) {
+
 	var err error
 
 	switch {
-	case input.addTodo.Value():
+	case input.addTodo:
 		err = addTodoCommand(todos)
-	case input.showList.Value():
+	case input.showList:
 		err = showListCommand(todos)
-	case input.completeTodo.Value() != -1:
-		err = completeTodoCommand(todos, input.completeTodo.Value())
+	case input.completeTodo != -1:
+		err = completeTodoCommand(todos, input.completeTodo)
 	default:
 		err = showListCommand(todos)
 	}
