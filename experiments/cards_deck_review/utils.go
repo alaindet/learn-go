@@ -24,3 +24,16 @@ func at[T any](s []T, i int) (T, bool) {
 
 	return s[i], true
 }
+
+// https://go.dev/play/p/hPdr9749FHS
+func removeAt[T any](s []T, i int) ([]T, bool) {
+	if i < 0 || i > len(s)-1 {
+		return nil, false
+	}
+
+	result := make([]T, 0, len(s)-1)
+	result = append(result, s[:i]...)
+	result = append(result, s[i+1:]...)
+
+	return result, true
+}

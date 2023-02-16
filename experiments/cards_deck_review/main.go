@@ -8,7 +8,6 @@ import (
 func main() {
 
 	d := NewDeck()
-	d.Shuffle()
 
 	for i := 0; i < 100; i++ {
 

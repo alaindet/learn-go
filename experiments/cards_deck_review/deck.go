@@ -5,6 +5,12 @@ import (
 	"fmt"
 )
 
+type Deck []string
+
+type DeckSuits [4]string
+
+type DeckValues [13]string
+
 var suits DeckSuits = DeckSuits{
 	"Hearts",
 	"Diamonds",
@@ -33,43 +39,30 @@ var (
 	ErrInsufficientCards = errors.New("insufficient number of cards left")
 )
 
-type Deck struct {
-	Cards        []string
-	ShuffledDeck []string
-}
-
-type DeckSuits [4]string
-
-type DeckValues [13]string
-
 func NewDeck() *Deck {
 
-	cards := make([]string, 0, len(suits)*len(values))
-	shuffledCards := make([]string, 0, len(suits)*len(values))
+	cardsCount := len(suits) * len(values)
+	orderedCards := make([]string, 0, cardsCount)
+	shuffledCards := make([]string, 0, cardsCount)
 
+	// Get all available cards
 	for _, suite := range suits {
 		for _, value := range values {
 			card := fmt.Sprintf("%s of %s", value, suite)
-			cards = append(cards, card)
+			orderedCards = append(orderedCards, card)
 		}
 	}
 
-	copy(shuffledCards, cards)
-
-	return &Deck{Cards: cards, ShuffledDeck: cards}
-}
-
-func (d *Deck) Shuffle() {
-
-	shuffled := make([]string, 0, len(d.Cards))
-
-	for i := 0; i < len(d.Cards); i++ {
-		randomIndex, _ := getRandomInt(0, len(d.Cards)-1)
-		card, _ := at(d.Cards, randomIndex)
-		shuffled = append(shuffled, card)
+	// Shuffle cards
+	for i := 0; i < cardsCount; i++ {
+		randomIndex, _ := getRandomInt(0, len(orderedCards)-1)
+		card, _ := at(orderedCards, randomIndex)
+		shuffledCards = append(shuffledCards, card)
+		orderedCards, _ = removeAt(orderedCards, randomIndex)
 	}
 
-	d.ShuffledDeck = shuffled
+	deck := Deck(shuffledCards)
+	return &deck
 }
 
 func (d *Deck) Draw(quantity int) ([]string, error) {
@@ -79,14 +72,9 @@ func (d *Deck) Draw(quantity int) ([]string, error) {
 		return nil, err
 	}
 
-	cards := make([]string, 0, len(d.Cards))
-
-	for i := 0; i < quantity; i++ {
-		card := d.ShuffledDeck[i]
-		cards = append(cards, card)
-	}
-
-	d.ShuffledDeck = d.ShuffledDeck[quantity:]
+	cards := make(Deck, quantity)
+	copy(cards, *d)
+	*d = Deck(*d)[quantity:]
 
 	return cards, nil
 }
@@ -98,7 +86,8 @@ func (d *Deck) Burn(quantity int) error {
 		return err
 	}
 
-	d.ShuffledDeck = d.ShuffledDeck[quantity:]
+	*d = []string(*d)[quantity:]
+
 	return nil
 }
 
@@ -108,7 +97,7 @@ func (d *Deck) CheckAvailableCards(quantity int) error {
 		return ErrInvalidQuantity
 	}
 
-	if len(d.ShuffledDeck) < quantity {
+	if len(*d) < quantity {
 		return ErrInsufficientCards
 	}
 
