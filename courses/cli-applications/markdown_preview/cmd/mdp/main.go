@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday/v2"
@@ -34,8 +33,11 @@ func run(filename string) error {
 		return err
 	}
 	htmlData := parseContent(input)
-	outputFilename := fmt.Sprintf("%s.html", filepath.Base(filename))
-	fmt.Println(outputFilename)
+
+	// The output file is in the same folder and has the same filename
+	// it just has a .html suffix
+	outputFilename := filename + ".html"
+
 	return saveHTML(outputFilename, htmlData)
 }
 
