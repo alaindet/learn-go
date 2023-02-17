@@ -11,16 +11,17 @@ import (
 )
 
 func main() {
+
+	// Input
 	filename := flag.String("file", "", "Markdown file to preview")
 	flag.Parse()
-
 	if *filename == "" {
 		flag.Usage()
 		os.Exit(1)
 	}
 
+	// Execute
 	err := run(*filename)
-
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -29,15 +30,25 @@ func main() {
 
 func run(filename string) error {
 	input, err := os.ReadFile(filename)
+
 	if err != nil {
 		return err
 	}
+
 	htmlData := parseContent(input)
+	temp, err := os.CreateTemp("", "mdp*.html")
 
-	// The output file is in the same folder and has the same filename
-	// it just has a .html suffix
-	outputFilename := filename + ".html"
+	if err != nil {
+		return err
+	}
 
+	err = temp.Close()
+
+	if err != nil {
+		return err
+	}
+
+	outputFilename := temp.Name()
 	return saveHTML(outputFilename, htmlData)
 }
 
