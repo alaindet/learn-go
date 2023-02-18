@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -21,34 +22,32 @@ func main() {
 	}
 
 	// Execute
-	err := run(*filename)
+	err := run(*filename, os.Stdout)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
-func run(filename string) error {
+func run(filename string, out io.Writer) error {
 	input, err := os.ReadFile(filename)
-
 	if err != nil {
 		return err
 	}
 
 	htmlData := parseContent(input)
 	temp, err := os.CreateTemp("", "mdp*.html")
-
 	if err != nil {
 		return err
 	}
 
 	err = temp.Close()
-
 	if err != nil {
 		return err
 	}
 
 	outputFilename := temp.Name()
+	fmt.Fprintln(out, outputFilename)
 	return saveHTML(outputFilename, htmlData)
 }
 
