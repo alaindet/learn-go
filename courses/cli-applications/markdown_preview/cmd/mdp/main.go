@@ -52,7 +52,6 @@ func run(filename string, userTemplate string, out io.Writer, showPreview bool) 
 		return err
 	}
 
-	defer os.Remove(temp.Name())
 	err = temp.Close()
 	if err != nil {
 		return err
@@ -69,6 +68,10 @@ func run(filename string, userTemplate string, out io.Writer, showPreview bool) 
 		return nil
 	}
 
+	defer os.Remove(temp.Name())
+
+	// This gives time to open the file
+	time.Sleep(2 * time.Second)
 	return preview(outputFilename)
 }
 
@@ -112,7 +115,7 @@ func preview(filename string) error {
 
 	switch runtime.GOOS {
 	case "linux":
-		cmdName = "wslview"
+		cmdName = "xdg-open"
 	case "windows":
 		cmdName = "cdm.exe"
 		cmdParams = []string{"/C", "start"}
@@ -131,7 +134,5 @@ func preview(filename string) error {
 	cmd := exec.Command(cmdPath, cmdParams...)
 	err = cmd.Run()
 
-	// This gives time to open the file
-	time.Sleep(2 * time.Second)
 	return err
 }
