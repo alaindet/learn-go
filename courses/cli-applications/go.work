@@ -1,6 +1,7 @@
 go 1.19
 
 use (
+	./filesystem_walk
 	./markdown_preview
 	./todo_list
 	./words_count
