@@ -15,6 +15,7 @@ type config struct {
 	size    int64
 	list    bool
 	del     bool
+	archive string
 	logFile io.Writer
 }
 
@@ -34,6 +35,7 @@ func parseInput() config {
 	root := flag.String("root", ".", "Root directory to start")
 	logFile := flag.String("log", "", "Log deletes to this file")
 	list := flag.Bool("list", false, "List files only")
+	archive := flag.String("archive", "", "Archive directory")
 	ext := flag.String("ext", "", "File extension to filter out")
 	size := flag.Int64("size", 0, "Minimum file size")
 	del := flag.Bool("del", false, "Delete files")
@@ -60,6 +62,7 @@ func parseInput() config {
 		size:    *size,
 		list:    *list,
 		del:     *del,
+		archive: *archive,
 		logFile: f,
 	}
 }
@@ -82,6 +85,14 @@ func run(rootDir string, out io.Writer, cfg config) error {
 
 			if cfg.list {
 				return listFile(path, out)
+			}
+
+			if cfg.archive != "" {
+				err := archiveFile(cfg.archive, cfg.root, path)
+				if err != nil {
+					return err
+				}
+				// Notice there's no return here to allow deletion to happen
 			}
 
 			if cfg.del {
