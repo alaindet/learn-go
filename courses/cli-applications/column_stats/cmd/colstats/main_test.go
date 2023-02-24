@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"errors"
+	"io"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -91,4 +93,29 @@ func TestRun(t *testing.T) {
 			}
 		})
 	}
+}
+
+func BenchmarkRun(b *testing.B) {
+
+	// TODO: Generate benchmark .csv files like
+	// Col1,Col2
+	// Data0,60707
+	// Data1,25641
+	// Data2,79731
+	// Data3,18485
+	// ...
+	filenames, err := filepath.Glob("./testdata/benchmark/*.csv")
+	if err != nil {
+		b.Fatal(err)
+	}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		err := run(filenames, "avg", 1, io.Discard)
+		if err != nil {
+			b.Error(err)
+		}
+	}
+
 }
