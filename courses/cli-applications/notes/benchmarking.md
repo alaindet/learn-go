@@ -55,3 +55,10 @@
 
   benchstat benchresults00m.txt benchresults01m.txt
   ```
+
+### Profiling vs Tracing
+
+- In a nutshell, profiling is the set of tools and practices to analyze how your program uses the resources it has, e.g. how much memory it uses, how much CPU, how many function calls
+- At its core, profilers just periodically sample various aspects of your code, effectively "pausing" it and taking snapshots of the stack, the heap, the memory usage etc.
+- Tracing is advanced logging of "events" in your code in chronological order, it helps understand the flow and and track waits slowing down your application
+- A very detailed trace can become a profile as it tracks everything the program does, while not event a good profile can become a trace
