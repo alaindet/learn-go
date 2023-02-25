@@ -97,13 +97,6 @@ func TestRun(t *testing.T) {
 
 func BenchmarkRun(b *testing.B) {
 
-	// TODO: Generate benchmark .csv files like
-	// Col1,Col2
-	// Data0,60707
-	// Data1,25641
-	// Data2,79731
-	// Data3,18485
-	// ...
 	filenames, err := filepath.Glob("./testdata/benchmark/*.csv")
 	if err != nil {
 		b.Fatal(err)
@@ -117,5 +110,4 @@ func BenchmarkRun(b *testing.B) {
 			b.Error(err)
 		}
 	}
-
 }

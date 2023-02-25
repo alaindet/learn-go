@@ -6,3 +6,31 @@
   ```
   go test -bench . -run ^$
   ```
+- When benchmarks take long (> 1s), Go can decide to run it only once. To force into running it multiple times, run this
+  ```
+  go test -bench . -run ^$ -benchtime=10x
+  ```
+- With the CPU profiler enabled
+  ```
+  go test -bench . -run ^$ -benchtime=10x -cpuprofile cpu00.pprof
+  ```
+- Analyze the `cpu00.pprof` generated file via
+  ```
+  go tool pprof cpu00.pprof
+  ```
+- With the memory profiler enabled
+  ```
+  go test -bench . -benchtime=10x -run ^$ -memprofile mem00.pprof
+  ```
+- Analyze the `mem00.pprof` file like this
+  ```
+  go tool pprof -alloc_space mem00.pprof
+  ```
+- Create a comparison file for memory usage
+  ```
+  go test -bench . -benchtime=10x -run ^$ -benchmem | tee benchresults00m.txt
+  ```
+- Create a comparison file for CPU usage
+  ```
+  go test -bench . -benchtime=10x -run ^$ | tee benchresults00.txt
+  ```

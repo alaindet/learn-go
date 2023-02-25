@@ -1,0 +1,7 @@
+goos: linux
+goarch: amd64
+pkg: column_stats/cmd/colstats
+cpu: Intel(R) Core(TM) i5-4300M CPU @ 2.60GHz
+BenchmarkRun-4   	      10	 940637480 ns/op	499117922 B/op	 5092539 allocs/op
+PASS
+ok  	column_stats/cmd/colstats	10.360s
