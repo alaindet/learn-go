@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"sync"
 )
 
@@ -25,12 +26,6 @@ func run(filenames []string, op string, column int, out io.Writer) error {
 
 	var operationFunc statsFunc
 
-	resCh := make(chan []float64)
-	errCh := make(chan error)
-	doneCh := make(chan struct{})
-
-	wg := sync.WaitGroup{}
-
 	if len(filenames) == 0 {
 		return ErrNoFiles
 	}
@@ -50,40 +45,53 @@ func run(filenames []string, op string, column int, out io.Writer) error {
 
 	totalData := make([]float64, 0)
 
-	for _, fname := range filenames {
+	resCh := make(chan []float64)
+	errCh := make(chan error)
+	doneCh := make(chan struct{})
+	filesCh := make(chan string)
 
+	wg := sync.WaitGroup{}
+
+	go func() {
+		defer close(filesCh)
+		for _, fname := range filenames {
+			filesCh <- fname
+		}
+	}()
+
+	for i := 0; i < runtime.NumCPU(); i++ {
 		wg.Add(1)
-
-		go func(fname string) {
+		go func() {
 			defer wg.Done()
+			for fname := range filesCh {
 
-			// Open file
-			f, err := os.Open(fname)
-			if err != nil {
-				errCh <- fmt.Errorf("cannot open file: %w", err)
+				// Open file
+				f, err := os.Open(fname)
+				if err != nil {
+					errCh <- fmt.Errorf("cannot open file: %w", err)
+					return
+				}
+
+				// Extract data
+				data, err := csv2float(f, column)
+				if err != nil {
+					errCh <- err
+				}
+
+				// Close file
+				if err := f.Close(); err != nil {
+					errCh <- err
+				}
+
+				resCh <- data
 			}
-
-			// Extract data
-			data, err := csv2float(f, column)
-			if err != nil {
-				errCh <- err
-			}
-
-			// Close file
-			err = f.Close()
-			if err != nil {
-				errCh <- err
-			}
-
-			resCh <- data
-		}(fname)
+		}()
 	}
 
 	// Wait for all goroutines to finish
 	go func() {
 		wg.Wait()
-		doneCh <- struct{}{}
-		// close(doneCh)
+		close(doneCh)
 	}()
 
 	for {

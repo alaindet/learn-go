@@ -1,6 +1,6 @@
 module markdown_preview
 
-go 1.19
+go 1.20
 
 require (
 	github.com/microcosm-cc/bluemonday v1.0.22
