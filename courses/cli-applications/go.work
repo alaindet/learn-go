@@ -4,6 +4,7 @@ use (
 	./column_stats
 	./csv_files_generator
 	./filesystem_walk
+	./go_ci
 	./markdown_preview
 	./todo_list
 	./words_count
