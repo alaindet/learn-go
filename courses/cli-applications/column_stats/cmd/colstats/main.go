@@ -53,7 +53,7 @@ func run(filenames []string, op string, column int, out io.Writer) error {
 	wg := sync.WaitGroup{}
 
 	go func() {
-		defer close(filesCh) // TODO
+		defer close(filesCh)
 		for _, fname := range filenames {
 			filesCh <- fname
 		}
@@ -91,7 +91,7 @@ func run(filenames []string, op string, column int, out io.Writer) error {
 	// Wait for all goroutines to finish
 	go func() {
 		wg.Wait()
-		close(doneCh) // TODO
+		close(doneCh)
 	}()
 
 	for {

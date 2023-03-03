@@ -32,7 +32,7 @@ func TestOperations(t *testing.T) {
 			name := fmt.Sprintf("%sData%d", tc.name, i)
 			t.Run(name, func(t *testing.T) {
 				res := tc.operation(data[i])
-				if !close(res, expectedVal) {
+				if !approxEqual(res, expectedVal) {
 					t.Errorf("Expected %g, got %g instead", expectedVal, res)
 				}
 			})

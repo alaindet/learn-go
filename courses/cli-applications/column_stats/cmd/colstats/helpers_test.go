@@ -23,7 +23,4 @@ func tolerance(a, b, e float64) bool {
 }
 
 // https://go.dev/src/math/all_test.go
-func close(a, b float64) bool { return tolerance(a, b, 1e-14) }
-
-// https://go.dev/src/math/all_test.go
-// func veryclose(a, b float64) bool { return tolerance(a, b, 4e-16) }
+func approxEqual(a, b float64) bool { return tolerance(a, b, 1e-14) }
