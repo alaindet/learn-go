@@ -15,7 +15,7 @@ type stepErr struct {
 	cause error
 }
 
-func NewStepErr(step, msg string, err error) *stepErr {
+func newStepErr(step, msg string, err error) *stepErr {
 	return &stepErr{step: step, msg: msg, cause: err}
 }
 

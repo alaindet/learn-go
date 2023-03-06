@@ -19,7 +19,7 @@ func run(cfg config) error {
 
 	err := cmd.Run()
 	if err != nil {
-		return NewStepErr("go build", "go build failed", err)
+		return newStepErr("go build", "go build failed", err)
 	}
 
 	_, err = fmt.Fprintln(cfg.out, "Go Build: SUCCESS")
