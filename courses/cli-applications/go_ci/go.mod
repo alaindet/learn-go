@@ -1,3 +1,3 @@
-module go_chi
+module go_ci
 
 go 1.20

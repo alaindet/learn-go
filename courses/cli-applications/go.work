@@ -7,6 +7,7 @@ use (
 	./go_ci
 	./go_ci/testdata/tool
 	./go_ci/testdata/tool_err
+	./go_ci/testdata/tool_gofmt_err
 	./markdown_preview
 	./todo_list
 	./words_count
