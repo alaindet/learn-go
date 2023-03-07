@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 func run(cfg config) error {
@@ -9,7 +10,7 @@ func run(cfg config) error {
 		return fmt.Errorf("project directory is required: %w", ErrValidation)
 	}
 
-	pipeline := make([]executer, 3)
+	pipeline := make([]executer, 4)
 
 	// Build step
 	pipeline[0] = newStep(
@@ -36,6 +37,16 @@ func run(cfg config) error {
 		"Gofmt: SUCCESS",
 		cfg.projectDir,
 		[]string{"-l", "."},
+	)
+
+	// Git push
+	pipeline[3] = newTimeoutStep(
+		"git push",
+		"git",
+		"Git Push: SUCCESS",
+		cfg.projectDir,
+		[]string{"push", "origin", "master"},
+		10*time.Second,
 	)
 
 	for _, s := range pipeline {

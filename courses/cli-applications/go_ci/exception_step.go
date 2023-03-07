@@ -14,7 +14,10 @@ type executer interface {
 	execute() (string, error)
 }
 
-func newExceptionStep(name, exe, message, projectDir string, args []string) exceptionStep {
+func newExceptionStep(
+	name, exe, message, projectDir string,
+	args []string,
+) exceptionStep {
 	s := exceptionStep{}
 	s.step = newStep(name, exe, message, projectDir, args)
 	return s
