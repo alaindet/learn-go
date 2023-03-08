@@ -28,10 +28,13 @@ func newTimeoutStep(
 	return s
 }
 
+// Store it here, so you can swap it for test mocks
+var command = exec.CommandContext
+
 func (s timeoutStep) execute() (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), s.timeout)
 	defer cancel()
-	cmd := exec.CommandContext(ctx, s.exe, s.args...)
+	cmd := command(ctx, s.exe, s.args...)
 	cmd.Dir = s.projectDir
 	err := cmd.Run()
 
