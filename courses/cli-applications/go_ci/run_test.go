@@ -5,9 +5,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 	"testing"
 	"time"
 )
@@ -118,6 +121,88 @@ func TestRun(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestRunKill(t *testing.T) {
+	var testCases = []struct {
+		name          string
+		inputProject  string
+		sig           syscall.Signal
+		expectedError error
+	}{
+		{
+			name:          "SIGINT",
+			inputProject:  "./testdata/tool",
+			sig:           syscall.SIGINT,
+			expectedError: ErrSignal,
+		},
+		{
+			name:          "SIGTERM",
+			inputProject:  "./testdata/tool",
+			sig:           syscall.SIGTERM,
+			expectedError: ErrSignal,
+		},
+		{
+			name:          "SIGQUIT",
+			inputProject:  "./testdata/tool",
+			sig:           syscall.SIGQUIT,
+			expectedError: nil,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+
+			command = mockCmdTimeout
+			errCh := make(chan error)
+			ignoredSigCh := make(chan os.Signal, 1)
+			expectedSigCh := make(chan os.Signal, 1)
+
+			signal.Notify(ignoredSigCh, syscall.SIGQUIT)
+			defer signal.Stop(ignoredSigCh)
+
+			signal.Notify(expectedSigCh, tc.sig)
+			defer signal.Stop(expectedSigCh)
+
+			// Run the function
+			go func() {
+				errCh <- run(config{
+					projectDir: tc.inputProject,
+					out:        io.Discard,
+				})
+			}()
+
+			// Kill if after 2 seconds
+			go func() {
+				time.Sleep(1 * time.Second)
+				syscall.Kill(syscall.Getpid(), tc.sig)
+			}()
+
+			// Read the signal
+			select {
+			case err := <-errCh:
+				if err == nil {
+					t.Errorf("Expected error. Got 'nil' instead.")
+					return
+				}
+				if !errors.Is(err, tc.expectedError) {
+					t.Errorf("Expected error: %q. Got %q", tc.expectedError, err)
+				}
+				// Read the error
+				select {
+				case rec := <-expectedSigCh:
+					if rec != tc.sig {
+						t.Errorf("Expected signal %q, got %q", tc.sig, rec)
+					}
+				default:
+					t.Errorf("Signal not received")
+				}
+			case <-ignoredSigCh:
+				// Do nothing
+			}
+		})
+	}
+
 }
 
 // Test helper

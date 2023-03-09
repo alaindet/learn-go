@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 )
 
@@ -11,6 +14,15 @@ func run(cfg config) error {
 	}
 
 	pipeline := make([]executer, 4)
+	errCh := make(chan error)
+	doneCh := make(chan struct{})
+	sigCh := make(chan os.Signal, 1)
+
+	// Capture signals SIGINT (Signal interrupt - Ctrl + C) and
+	// SIGTERM (Signal terminate) and send them to signCh channel
+	// They can both be ignored by the program or used to gracefully terminate
+	// SIGKILL abrutply kills a process and cannot be captured
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
 	// Build step
 	pipeline[0] = newStep(
@@ -49,17 +61,35 @@ func run(cfg config) error {
 		10*time.Second,
 	)
 
-	for _, s := range pipeline {
-		msg, err := s.execute()
-		if err != nil {
-			return err
-		}
+	// Execute in a goroutine
+	go func() {
+		for _, s := range pipeline {
+			msg, err := s.execute()
+			if err != nil {
+				errCh <- err
+				return
+			}
 
-		_, err = fmt.Fprintln(cfg.out, msg)
-		if err != nil {
+			_, err = fmt.Fprintln(cfg.out, msg)
+			if err != nil {
+				errCh <- err
+				return
+			}
+		}
+		close(doneCh)
+	}()
+
+	// Listen for errors, signals or completion
+	for {
+		select {
+		case capturedSignal := <-sigCh:
+			// Stop capturing signals
+			signal.Stop(sigCh)
+			return fmt.Errorf("%s: Exiting %w", capturedSignal, ErrSignal)
+		case err := <-errCh:
 			return err
+		case <-doneCh:
+			return nil
 		}
 	}
-
-	return nil
 }
