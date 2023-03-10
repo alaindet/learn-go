@@ -172,7 +172,7 @@ func TestRunKill(t *testing.T) {
 				})
 			}()
 
-			// Kill if after 2 seconds
+			// Kill if after 1 second
 			go func() {
 				time.Sleep(1 * time.Second)
 				syscall.Kill(syscall.Getpid(), tc.sig)

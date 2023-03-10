@@ -9,6 +9,7 @@ use (
 	./go_ci/testdata/tool_err
 	./go_ci/testdata/tool_gofmt_err
 	./markdown_preview
+	./pscan
 	./todo_list
 	./words_count
 )
