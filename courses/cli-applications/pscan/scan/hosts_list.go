@@ -1,0 +1,77 @@
+package scan
+
+import (
+	"bufio"
+	"errors"
+	"fmt"
+	"os"
+	"sort"
+	"strings"
+)
+
+var (
+	ErrExists    = errors.New("host already in the list")
+	ErrNotExists = errors.New("host not in the list")
+)
+
+type HostsList struct {
+	Hosts []string
+}
+
+func (hl *HostsList) search(host string) (bool, int) {
+	sort.Strings(hl.Hosts)
+
+	// This works differently than you imagine!
+	// It pretends the host does not exist in the list, even if it does,
+	// then returns the spot where it would be placed in the list
+	i := sort.SearchStrings(hl.Hosts, host)
+
+	if i < len(hl.Hosts) && hl.Hosts[i] == host {
+		return true, i
+	}
+	return false, -1
+}
+
+func (hl *HostsList) Add(host string) error {
+	found, _ := hl.search(host)
+	if found {
+		return fmt.Errorf("%w: %s", ErrExists, host)
+	}
+	hl.Hosts = append(hl.Hosts, host)
+	return nil
+}
+
+func (hl *HostsList) Remove(host string) error {
+	found, i := hl.search(host)
+	if !found {
+		return fmt.Errorf("%w: %s", ErrNotExists, host)
+	}
+	hl.Hosts = append(hl.Hosts[:i], hl.Hosts[i+1:]...)
+	return nil
+}
+
+func (hl *HostsList) Load(hostsFile string) error {
+	f, err := os.Open(hostsFile)
+
+	// No existing file was provided, it's ok
+	if errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		hl.Hosts = append(hl.Hosts, scanner.Text())
+	}
+	return nil
+}
+
+func (hl *HostsList) Save(hostsFile string) error {
+	output := make([]string, 0, len(hl.Hosts))
+	output = append(output, hl.Hosts...)
+	return os.WriteFile(hostsFile, []byte(strings.Join(output, "\n")), 0644)
+}
