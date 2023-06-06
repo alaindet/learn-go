@@ -18,7 +18,7 @@ func main() {
 	if workers > len(nums) {
 		workers = len(nums)
 	}
-	partials := make(chan int, workers+1)
+	partialSums := make(chan int, workers+1)
 	chunkSize := len(nums) / workers
 	rest := len(nums) % workers
 
@@ -28,9 +28,6 @@ func main() {
 
 	var wg sync.WaitGroup
 	wg.Add(workers)
-	onDone := func() {
-		wg.Done()
-	}
 
 	for i := 0; i < workers; i++ {
 		inf := chunkSize * i
@@ -41,14 +38,22 @@ func main() {
 		}
 
 		chunk := nums[inf:sup]
-		go compute(partials, onDone, chunk)
+
+		go func() {
+			defer wg.Done()
+			result := 0
+			for _, n := range chunk {
+				result += n
+			}
+			partialSums <- result
+		}()
 	}
 
 	wg.Wait()
 
-	close(partials)
+	close(partialSums)
 	result := 0
-	for partial := range partials {
+	for partial := range partialSums {
 		result += partial
 	}
 	fmt.Printf("Result: %d\n", result)
