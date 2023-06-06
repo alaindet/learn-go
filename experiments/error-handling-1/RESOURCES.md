@@ -1,0 +1,3 @@
+- https://pkg.go.dev/errors
+- https://earthly.dev/blog/golang-errors/
+- https://lukas.zapletalovi.com/posts/2022/wrapping-multiple-errors/

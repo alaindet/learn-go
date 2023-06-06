@@ -4,6 +4,7 @@ use (
 	./chained-channels
 	./chained-channels-2
 	./distributed-sums
+	./error-handling-1
 	./fibonacci-math-big
 	./slice-functions
 	./struct-to-map
