@@ -12,6 +12,7 @@ go mod verify
 docker-compose up -d
 # Install migrate
 migrate -path=./database/migrations -database=$GREENLIGHT_DB_DSN up
+# Load backup
 go run ./cmd/api # Run it in development
 # Or build it (todo)
 curl http://localhost:4000/v1.0/healthcheck | json_pp
