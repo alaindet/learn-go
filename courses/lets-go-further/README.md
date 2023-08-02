@@ -2,36 +2,49 @@
 
 ## Usage
 
-```
+```console
 cd ./greenlight
-cp .env.example .env # Then fill the file
+cp .env.example .env
+# Fill the new .env
+export $(grep -v '^#' .env | xargs -d '\n') # Export all vars from .env
 go mod download # Equivalent to `npm install`
 go mod verify
-# TODO
+docker-compose up -d
+# Install migrate
+migrate -path=./database/migrations -database=$GREENLIGHT_DB_DSN up
+go run ./cmd/api # Run it in development
+# Or build it (todo)
+curl http://localhost:4000/v1.0/healthcheck | json_pp
 ```
 
 ## Start development
-```
+```console
 cd ./greenlight && \
+docker-compose up -d && \
 export $(grep -v '^#' .env | xargs -d '\n') && \
 go run ./cmd/api
 ```
 
-## Check the available CLI flags
+## Stop development
+```console
+docker-compose down
 ```
+
+## Check the available CLI flags
+```console
 go run ./cmd/api -help
 ```
 
 ## Generate TLS key pair
-```
+```console
 ```
 
 ## Build
-```
+```console
 ```
 
 ## Testing
-```
+```console
 ```
 
 ## 3rd-party binaries installed
