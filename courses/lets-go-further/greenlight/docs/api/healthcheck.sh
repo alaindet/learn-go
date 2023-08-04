@@ -1,4 +1,7 @@
+API_URL=http://localhost:4000/v1.0
+
+(
 curl \
-  -X GET \
-  http://localhost:4000/v1.0/healthcheck \
-  | json_pp
+--request GET \
+--url $API_URL/healthcheck
+) | json_pp

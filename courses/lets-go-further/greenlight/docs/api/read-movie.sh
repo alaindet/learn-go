@@ -1,4 +1,7 @@
+API_URL=http://localhost:4000/v1.0
+
+(
 curl \
-  -X GET \
-  http://localhost:4000/v1.0/movies/1 \
-  | json_pp
+--request GET \
+--url $API_URL/movies/1
+) | json_pp
