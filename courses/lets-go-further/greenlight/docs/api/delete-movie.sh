@@ -1,7 +1,9 @@
-API_URL=http://localhost:4000/v1.0
+GL_API="${GL_API:-http://localhost:4000/v1.0}"
 
-(
 curl \
 --request DELETE \
---url $API_URL/movies/1
-) | json_pp
+--url $GL_API/movies/1 \
+--header 'Accept: application/json' \
+--dump-header /dev/stderr \
+--silent \
+| jq

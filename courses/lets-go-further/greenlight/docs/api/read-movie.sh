@@ -1,7 +1,10 @@
-API_URL=http://localhost:4000/v1.0
+GL_API="${GL_API:-http://localhost:4000/v1.0}"
+GL_MOVIE_ID="${GL_MOVIE_ID:-1}"
 
-(
 curl \
 --request GET \
---url $API_URL/movies/1
-) | json_pp
+--url $GL_API/movies/$GL_MOVIE_ID \
+--header 'Accept: application/json' \
+--dump-header /dev/stderr \
+--silent \
+| jq

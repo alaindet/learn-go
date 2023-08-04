@@ -1,7 +1,8 @@
-API_URL=http://localhost:4000/v1.0
+GL_API="${GL_API:-http://localhost:4000/v1.0}"
 
-(
 curl \
 --request GET \
---url $API_URL/healthcheck
-) | json_pp
+--url $GL_API/healthcheck \
+--dump-header /dev/stderr \
+--silent \
+| jq
