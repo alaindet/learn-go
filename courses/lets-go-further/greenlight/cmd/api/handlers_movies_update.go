@@ -28,16 +28,6 @@ func (app *application) moviesUpdateHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// Validate
-	v := validator.New()
-	input.Validate(v)
-
-	// Error: 422
-	if !v.Valid() {
-		app.failedValidationResponse(w, r, v.Errors)
-		return
-	}
-
 	// Fetch
 	movie, err := app.models.Movies.Get(id)
 
@@ -53,14 +43,30 @@ func (app *application) moviesUpdateHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// Execute
+	if input.Title != nil {
+		movie.Title = *input.Title
+	}
 
-	// TODO
-	movie.Title = input.Title
-	movie.Year = input.Year
-	movie.Runtime = input.Runtime
-	movie.Genres = input.Genres
+	if input.Year != nil {
+		movie.Year = *input.Year
+	}
 
+	if input.Runtime != nil {
+		movie.Runtime = *input.Runtime
+	}
+
+	if input.Genres != nil {
+		movie.Genres = input.Genres
+	}
+
+	// Validate movie data
+	v := validator.New()
+	if data.ValidateMovie(v, movie); !v.Valid() {
+		app.failedValidationResponse(w, r, v.Errors)
+		return
+	}
+
+	// Write on database
 	err = app.models.Movies.Update(movie)
 	if err != nil {
 		app.internalServerErrorResponse(w, r, err)

@@ -7,10 +7,7 @@ curl \
 --header 'Content-Type: application/json; charset=utf-8' \
 --data-binary @- << EOF
 {
-  "title": "The Matrix",
-  "year": 1999,
-  "runtime": "136 mins",
-  "genres": ["sci-fi", "action"]
+  "title": "The Matrix"
 }
 EOF
 ) | json_pp

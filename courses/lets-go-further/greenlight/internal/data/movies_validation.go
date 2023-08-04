@@ -5,6 +5,13 @@ import (
 	"time"
 )
 
+func ValidateMovie(v *validator.Validator, m *Movie) {
+	ValidateMovieTitle(v, m.Title)
+	ValidateMovieYear(v, m.Year)
+	ValidateMovieRuntime(v, m.Runtime)
+	ValidateMovieGenres(v, m.Genres)
+}
+
 func ValidateMovieTitle(v *validator.Validator, t string) {
 	v.Check(t != "", "title", "required")
 	v.Check(len(t) <= 500, "title", "must not be more than 500 bytes long")

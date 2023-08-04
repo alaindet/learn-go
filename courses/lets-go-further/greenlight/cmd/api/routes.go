@@ -20,7 +20,8 @@ func (app *application) routes() *httprouter.Router {
 	// Movies
 	Post(r, v+"/movies", app.moviesCreateHandler)
 	Get(r, v+"/movies/:id", app.moviesShowHandler)
-	Put(r, v+"/movies/:id", app.moviesUpdateHandler)
+	// Put(r, v+"/movies/:id", app.moviesUpdateHandler)
+	Patch(r, v+"/movies/:id", app.moviesUpdateHandler)
 	Delete(r, v+"/movies/:id", app.moviesDeleteHandler)
 
 	return r
@@ -37,6 +38,10 @@ func Post(r *httprouter.Router, path string, handler http.HandlerFunc) {
 
 func Put(r *httprouter.Router, path string, handler http.HandlerFunc) {
 	r.HandlerFunc(http.MethodPut, path, handler)
+}
+
+func Patch(r *httprouter.Router, path string, handler http.HandlerFunc) {
+	r.HandlerFunc(http.MethodPatch, path, handler)
 }
 
 func Delete(r *httprouter.Router, path string, handler http.HandlerFunc) {
