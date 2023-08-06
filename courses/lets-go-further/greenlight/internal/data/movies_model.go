@@ -23,6 +23,7 @@ type MovieModel struct {
 }
 
 func (m *MovieModel) Insert(movie *Movie) error {
+
 	stmt := `
 		INSERT INTO
 			movies (title, year, runtime, genres)
@@ -31,8 +32,22 @@ func (m *MovieModel) Insert(movie *Movie) error {
 		RETURNING
 			id, created_at, version;
 	`
-	args := []any{movie.Title, movie.Year, movie.Runtime, movie.Genres}
-	return m.DB.QueryRow(stmt, args...).Scan(&movie.ID, &movie.CreatedAt, &movie.Version)
+
+	args := []any{
+		movie.Title,
+		movie.Year,
+		movie.Runtime,
+		movie.Genres,
+	}
+
+	ctx, cancel := NewDatabaseContext()
+	defer cancel()
+
+	return m.DB.QueryRowContext(ctx, stmt, args...).Scan(
+		&movie.ID,
+		&movie.CreatedAt,
+		&movie.Version,
+	)
 }
 
 func (m *MovieModel) Get(id int64) (*Movie, error) {
@@ -55,8 +70,13 @@ func (m *MovieModel) Get(id int64) (*Movie, error) {
 		WHERE
 			id = $1
 	`
+
 	var movie Movie
-	err := m.DB.QueryRow(stmt, id).Scan(
+
+	ctx, cancel := NewDatabaseContext()
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, stmt, id).Scan(
 		&movie.ID,
 		&movie.CreatedAt,
 		&movie.Title,
@@ -77,6 +97,7 @@ func (m *MovieModel) Get(id int64) (*Movie, error) {
 	return &movie, nil
 }
 
+// TODO
 func (m *MovieModel) GetAll(filters map[string]any) ([]*Movie, error) {
 	return nil, nil
 }
@@ -113,17 +134,17 @@ func (m *MovieModel) Update(movie *Movie) error {
 		movie.Version,
 	}
 
-	err := m.DB.QueryRow(stmt, args...).Scan(&movie.Version)
+	ctx, cancel := NewDatabaseContext()
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, stmt, args...).Scan(&movie.Version)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return ErrEditConflict
+	}
+
 	if err != nil {
-		switch {
-		// ERROR: Someone else has changed this row concurrently a moment ago!
-		// The "version = $6" filter on WHERE clause triggers a ErrNoRows
-		// and enforces an "optimistic locking" of the row via the "version" field
-		case errors.Is(err, sql.ErrNoRows):
-			return ErrEditConflict
-		default:
-			return err
-		}
+		return err
 	}
 
 	return nil
@@ -142,7 +163,10 @@ func (m *MovieModel) Delete(id int64) error {
 			id = $1
 	`
 
-	result, err := m.DB.Exec(stmt, id)
+	ctx, cancel := NewDatabaseContext()
+	defer cancel()
+
+	result, err := m.DB.ExecContext(ctx, stmt, id)
 	if err != nil {
 		return err
 	}

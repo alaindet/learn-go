@@ -43,3 +43,13 @@ export TEST_CASE_FILENAME=my-test-case.sh && ./_new.sh
   ```console
   export GL_MOVIE_ID=5 && ./update-movie.sh
   ```
+
+## How to run two requests sequentially
+```console
+./healthcheck.sh && ./healthcheck.sh
+```
+
+## How to run two requests in parallel
+```console
+./healthcheck.sh & ./healthcheck.sh
+```

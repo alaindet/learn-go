@@ -69,13 +69,14 @@ func (app *application) moviesUpdateHandler(w http.ResponseWriter, r *http.Reque
 	// Write on database
 	// See /docs/api/err-edit-conflict.sh example
 	err = app.models.Movies.Update(movie)
+
+	if errors.Is(err, data.ErrEditConflict) {
+		app.editConflictResponse(w, r, err)
+		return
+	}
+
 	if err != nil {
-		switch {
-		case errors.Is(err, data.ErrEditConflict):
-			app.editConflictResponse(w, r, err)
-		default:
-			app.internalServerErrorResponse(w, r, err)
-		}
+		app.internalServerErrorResponse(w, r, err)
 		return
 	}
 
