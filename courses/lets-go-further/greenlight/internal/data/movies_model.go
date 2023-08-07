@@ -97,9 +97,64 @@ func (m *MovieModel) Get(id int64) (*Movie, error) {
 	return &movie, nil
 }
 
-// TODO
-func (m *MovieModel) GetAll(filters map[string]any) ([]*Movie, error) {
-	return nil, nil
+func (m *MovieModel) GetAll(
+	title string,
+	genres []string,
+	filters Filters,
+) ([]*Movie, error) {
+
+	query := `
+		SELECT
+			id,
+			created_at,
+			title,
+			year,
+			runtime,
+			genres,
+			version
+		FROM
+			movies
+		ORDER BY
+			id
+	`
+
+	ctx, cancel := NewDatabaseContext()
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	movies := []*Movie{}
+
+	for rows.Next() {
+		var movie Movie
+
+		err := rows.Scan(
+			&movie.ID,
+			&movie.CreatedAt,
+			&movie.Title,
+			&movie.Year,
+			&movie.Runtime,
+			pq.Array(&movie.Genres),
+			&movie.Version,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		movies = append(movies, &movie)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return movies, nil
 }
 
 func (m *MovieModel) Update(movie *Movie) error {

@@ -4,6 +4,7 @@ import (
 	"greenlight/internal/validator"
 )
 
+// TODO: Move close to handler
 type CreateMovieData struct {
 	Title   string   `json:"title"`
 	Year    int      `json:"year"`
