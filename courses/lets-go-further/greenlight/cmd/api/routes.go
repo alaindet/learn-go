@@ -8,7 +8,7 @@ import (
 
 func (app *application) routes() *httprouter.Router {
 
-	v := "/v1.0"
+	v := "/v1.0" // TODO: Move?
 	r := httprouter.New()
 
 	r.NotFound = http.HandlerFunc(app.notFoundResponse)
@@ -18,32 +18,11 @@ func (app *application) routes() *httprouter.Router {
 	Get(r, v+"/healthcheck", app.healthcheckHandler)
 
 	// Movies
+	Get(r, v+"/movies", app.moviesListHandler)
 	Post(r, v+"/movies", app.moviesCreateHandler)
 	Get(r, v+"/movies/:id", app.moviesShowHandler)
-	// Put(r, v+"/movies/:id", app.moviesUpdateHandler)
 	Patch(r, v+"/movies/:id", app.moviesUpdateHandler)
 	Delete(r, v+"/movies/:id", app.moviesDeleteHandler)
 
 	return r
-}
-
-// TODO: Move?
-func Get(r *httprouter.Router, path string, handler http.HandlerFunc) {
-	r.HandlerFunc(http.MethodGet, path, handler)
-}
-
-func Post(r *httprouter.Router, path string, handler http.HandlerFunc) {
-	r.HandlerFunc(http.MethodPost, path, handler)
-}
-
-func Put(r *httprouter.Router, path string, handler http.HandlerFunc) {
-	r.HandlerFunc(http.MethodPut, path, handler)
-}
-
-func Patch(r *httprouter.Router, path string, handler http.HandlerFunc) {
-	r.HandlerFunc(http.MethodPatch, path, handler)
-}
-
-func Delete(r *httprouter.Router, path string, handler http.HandlerFunc) {
-	r.HandlerFunc(http.MethodDelete, path, handler)
 }
