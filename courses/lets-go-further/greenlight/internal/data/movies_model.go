@@ -103,6 +103,12 @@ func (m *MovieModel) GetAll(
 	filters Filters,
 ) ([]*Movie, error) {
 
+	// This filtering technique isolates each segment of the WHERE clause so that
+	// If can be entirely skipped if the filter has its default empty value
+	// It's a "fixed" SQL query as opposed to a dynamically-generated one
+	// A fixed SQL query is easier to reason about and it works for a low number
+	// of filters, while a dynamically generated query is required for more
+	// complex scenarios (many filters, negations etc.)
 	query := `
 		SELECT
 			id,
@@ -114,6 +120,9 @@ func (m *MovieModel) GetAll(
 			version
 		FROM
 			movies
+		WHERE
+			(LOWER(title) = LOWER($1) OR $1 = '') AND
+			(genres @> $2 OR $2 = '{}')
 		ORDER BY
 			id
 	`
@@ -121,7 +130,13 @@ func (m *MovieModel) GetAll(
 	ctx, cancel := NewDatabaseContext()
 	defer cancel()
 
-	rows, err := m.DB.QueryContext(ctx, query)
+	rows, err := m.DB.QueryContext(
+		ctx,
+		query,
+		title,
+		pq.Array(genres),
+	)
+
 	if err != nil {
 		return nil, err
 	}
