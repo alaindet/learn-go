@@ -127,6 +127,13 @@ func (m *MovieModel) GetAll(
 			id
 	`
 
+	// TODO: Implement this
+	// Ex.: Search for "c"
+	// SELECT * FROM movies WHERE (LOWER(title) LIKE '%c%')
+
+	// Alternative query for title
+	// WHERE (to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
+
 	ctx, cancel := NewDatabaseContext()
 	defer cancel()
 
