@@ -42,7 +42,7 @@ func (app *application) moviesCreateHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	// Output
-	url := fmt.Sprintf("/v1.0/movies/%d", movie.ID)
+	url := fmt.Sprintf("/v1/movies/%d", movie.ID)
 	data := JSONPayload{
 		Message: fmt.Sprintf("Movie %q created with ID %d", movie.Title, movie.ID),
 		Data: map[string]any{

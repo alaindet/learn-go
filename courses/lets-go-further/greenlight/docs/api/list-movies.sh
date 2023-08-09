@@ -1,4 +1,4 @@
-GL_API=http://localhost:4000/v1.0
+GL_API="${GL_API:-http://localhost:4000/v1}"
 
 # # Without filters
 # curl \
@@ -24,10 +24,18 @@ GL_API=http://localhost:4000/v1.0
 # --silent \
 # | jq
 
-# With partial title filter
+# # With partial (word-sized) title filter
+# curl \
+# --request GET \
+# --url "$GL_API/movies?title=the" \
+# --dump-header /dev/stderr \
+# --silent \
+# | jq
+
+# With sorting
 curl \
 --request GET \
---url "$GL_API/movies?title=m" \
+--url "$GL_API/movies?sort=-runtime" \
 --dump-header /dev/stderr \
 --silent \
 | jq

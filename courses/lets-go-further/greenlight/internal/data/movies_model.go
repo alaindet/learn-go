@@ -3,6 +3,7 @@ package data
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/lib/pq"
@@ -97,6 +98,10 @@ func (m *MovieModel) Get(id int64) (*Movie, error) {
 	return &movie, nil
 }
 
+// WARNING: The "title" filter only matches full words contained in the title
+// Ex.:
+// - The query "breakfast" matches "The Breakfast Club"
+// - The query "break" does NOT match "The Breakfast Club"
 func (m *MovieModel) GetAll(
 	title string,
 	genres []string,
@@ -109,7 +114,8 @@ func (m *MovieModel) GetAll(
 	// A fixed SQL query is easier to reason about and it works for a low number
 	// of filters, while a dynamically generated query is required for more
 	// complex scenarios (many filters, negations etc.)
-	query := `
+	query := fmt.Sprintf(
+		`
 		SELECT
 			id,
 			created_at,
@@ -125,11 +131,12 @@ func (m *MovieModel) GetAll(
 			AND
 			(genres @> $2 OR $2 = '{}')
 		ORDER BY
-			id
-	`
-
-	// Alternative query for  sub-query
-	// WHERE (to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
+			%s %s,
+			id ASC
+		`,
+		filters.sortColumn(),
+		filters.sortDirection(),
+	)
 
 	ctx, cancel := NewDatabaseContext()
 	defer cancel()

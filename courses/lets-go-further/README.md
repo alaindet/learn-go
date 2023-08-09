@@ -18,7 +18,7 @@ make
 # Without make installed
 # go run ./cmd/api # Run it in development
 # Or build it (todo)
-curl http://localhost:4000/v1.0/healthcheck | json_pp
+curl http://localhost:4000/v1/healthcheck | json_pp
 ```
 
 ## Start development
@@ -62,6 +62,7 @@ go run ./cmd/api -help
   sudo apt install jq
   ```
 - `curl`
+- `make`
 - `hey` (todo)
 - `caddy` (todo)
 

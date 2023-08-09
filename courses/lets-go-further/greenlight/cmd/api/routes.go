@@ -8,7 +8,7 @@ import (
 
 func (app *application) routes() *httprouter.Router {
 
-	v := "/v1.0" // TODO: Move?
+	v := "/v1" // TODO: Move?
 	r := httprouter.New()
 
 	r.NotFound = http.HandlerFunc(app.notFoundResponse)

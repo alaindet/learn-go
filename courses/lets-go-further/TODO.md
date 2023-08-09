@@ -1,2 +1,0 @@
-- [ ] Add dependency injection to the project
-- [ ] Organize `.go` files in directories/packages
