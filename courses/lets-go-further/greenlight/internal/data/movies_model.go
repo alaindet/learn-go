@@ -3,6 +3,7 @@ package data
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/lib/pq"
@@ -121,26 +122,28 @@ func (m *MovieModel) GetAll(
 		FROM
 			movies
 		WHERE
-			(LOWER(title) = LOWER($1) OR $1 = '') AND
+			(title ILIKE $1 OR $1 = '') AND
 			(genres @> $2 OR $2 = '{}')
 		ORDER BY
 			id
 	`
 
-	// TODO: Implement this
-	// Ex.: Search for "c"
-	// SELECT * FROM movies WHERE (LOWER(title) LIKE '%c%')
-
-	// Alternative query for title
+	// Alternative query for  sub-query
 	// WHERE (to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
 
 	ctx, cancel := NewDatabaseContext()
 	defer cancel()
 
+	titleParam := ""
+
+	if title != "" {
+		titleParam = fmt.Sprintf("%%%s%%", title)
+	}
+
 	rows, err := m.DB.QueryContext(
 		ctx,
 		query,
-		title,
+		titleParam,
 		pq.Array(genres),
 	)
 

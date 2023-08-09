@@ -8,13 +8,13 @@ GL_API=http://localhost:4000/v1.0
 # --silent \
 # | jq
 
-# With genres filter
-curl \
---request GET \
---url "$GL_API/movies?page=1&page_size=10&genres=comedy&sort=year" \
---dump-header /dev/stderr \
---silent \
-| jq
+# # With genres filter
+# curl \
+# --request GET \
+# --url "$GL_API/movies?page=1&page_size=10&genres=comedy&sort=year" \
+# --dump-header /dev/stderr \
+# --silent \
+# | jq
 
 # # Empty query
 # curl \
@@ -23,3 +23,11 @@ curl \
 # --dump-header /dev/stderr \
 # --silent \
 # | jq
+
+# With partial title filter
+curl \
+--request GET \
+--url "$GL_API/movies?title=m" \
+--dump-header /dev/stderr \
+--silent \
+| jq
