@@ -3,7 +3,6 @@ package data
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/lib/pq"
@@ -122,7 +121,8 @@ func (m *MovieModel) GetAll(
 		FROM
 			movies
 		WHERE
-			(title ILIKE $1 OR $1 = '') AND
+			(to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
+			AND
 			(genres @> $2 OR $2 = '{}')
 		ORDER BY
 			id
@@ -134,16 +134,10 @@ func (m *MovieModel) GetAll(
 	ctx, cancel := NewDatabaseContext()
 	defer cancel()
 
-	titleParam := ""
-
-	if title != "" {
-		titleParam = fmt.Sprintf("%%%s%%", title)
-	}
-
 	rows, err := m.DB.QueryContext(
 		ctx,
 		query,
-		titleParam,
+		title,
 		pq.Array(genres),
 	)
 
