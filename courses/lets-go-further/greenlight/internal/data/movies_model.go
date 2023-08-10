@@ -182,6 +182,7 @@ func (m *MovieModel) GetAll(
 		}
 
 		movies = append(movies, &movie)
+		total += 1
 	}
 
 	if err = rows.Err(); err != nil {

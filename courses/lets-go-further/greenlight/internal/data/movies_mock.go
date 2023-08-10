@@ -16,9 +16,9 @@ func (m MockMovieModel) GetAll(
 	title string,
 	genres []string,
 	filters Filters,
-) ([]*Movie, error) {
+) ([]*Movie, Metadata, error) {
 	// TODO: Mock
-	return nil, nil
+	return nil, Metadata{}, nil
 }
 
 func (m MockMovieModel) Update(movie *Movie) error {

@@ -6,6 +6,11 @@ import (
 	"net/http"
 )
 
+type MoviesListResponse struct {
+	Movies   []*data.Movie `json:"movies"`
+	Metadata data.Metadata `json:"metadata"`
+}
+
 var allowedSort = []string{
 	"id",
 	"-id",
@@ -48,18 +53,14 @@ func (app *application) moviesListHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	// TODO: Declare the data type elsewhere
-	// TODO: Make JSONPayload accept a generic?
-	data := JSONPayload{
-		Data: struct {
-			movies   any
-			metadata any
-		}{
-			movies:   movies,
-			metadata: metadata,
+	payload := JSONPayload{
+		Data: MoviesListResponse{
+			Movies:   movies,
+			Metadata: metadata,
 		},
 	}
-	err = app.writeJSON(w, http.StatusOK, data, nil)
+
+	err = app.writeJSON(w, http.StatusOK, payload, nil)
 
 	if err != nil {
 		app.internalServerErrorResponse(w, r, err)
