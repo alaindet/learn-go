@@ -1,2 +1,2 @@
-222
-Paginating Lists
+234
+Structured Logging and Error Handling

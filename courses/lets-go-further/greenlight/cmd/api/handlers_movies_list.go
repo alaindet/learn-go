@@ -37,7 +37,7 @@ func (app *application) moviesListHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	movies, err := app.models.Movies.GetAll(
+	movies, metadata, err := app.models.Movies.GetAll(
 		input.Title,
 		input.Genres,
 		input.Filters,
@@ -48,7 +48,17 @@ func (app *application) moviesListHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	data := JSONPayload{Data: movies}
+	// TODO: Declare the data type elsewhere
+	// TODO: Make JSONPayload accept a generic?
+	data := JSONPayload{
+		Data: struct {
+			movies   any
+			metadata any
+		}{
+			movies:   movies,
+			metadata: metadata,
+		},
+	}
 	err = app.writeJSON(w, http.StatusOK, data, nil)
 
 	if err != nil {

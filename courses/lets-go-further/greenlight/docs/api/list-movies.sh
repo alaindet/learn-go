@@ -35,7 +35,7 @@ GL_API="${GL_API:-http://localhost:4000/v1}"
 # With sorting
 curl \
 --request GET \
---url "$GL_API/movies?sort=-runtime" \
+--url "$GL_API/movies?sort=-runtime&page=1&page_size=10" \
 --dump-header /dev/stderr \
 --silent \
 | jq

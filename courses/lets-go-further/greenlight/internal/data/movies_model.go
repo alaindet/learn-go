@@ -106,7 +106,7 @@ func (m *MovieModel) GetAll(
 	title string,
 	genres []string,
 	filters Filters,
-) ([]*Movie, error) {
+) ([]*Movie, Metadata, error) {
 
 	// This filtering technique isolates each segment of the WHERE clause so that
 	// If can be entirely skipped if the filter has its default empty value
@@ -117,6 +117,7 @@ func (m *MovieModel) GetAll(
 	query := fmt.Sprintf(
 		`
 		SELECT
+			count(*) OVER()
 			id,
 			created_at,
 			title,
@@ -133,6 +134,10 @@ func (m *MovieModel) GetAll(
 		ORDER BY
 			%s %s,
 			id ASC
+		LIMIT
+			$3
+		OFFSET
+			$4
 		`,
 		filters.sortColumn(),
 		filters.sortDirection(),
@@ -146,14 +151,17 @@ func (m *MovieModel) GetAll(
 		query,
 		title,
 		pq.Array(genres),
+		filters.limit(),
+		filters.offset(),
 	)
 
 	if err != nil {
-		return nil, err
+		return nil, Metadata{}, err
 	}
 
 	defer rows.Close()
 
+	total := 0
 	movies := []*Movie{}
 
 	for rows.Next() {
@@ -170,17 +178,18 @@ func (m *MovieModel) GetAll(
 		)
 
 		if err != nil {
-			return nil, err
+			return nil, Metadata{}, err
 		}
 
 		movies = append(movies, &movie)
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil, err
+		return nil, Metadata{}, err
 	}
 
-	return movies, nil
+	metadata := calculateMetadata(total, filters.Page, filters.PageSize)
+	return movies, metadata, nil
 }
 
 func (m *MovieModel) Update(movie *Movie) error {
