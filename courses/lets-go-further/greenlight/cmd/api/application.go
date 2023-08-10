@@ -2,29 +2,26 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"greenlight/internal/data"
-	"log"
 	"net/http"
 	"os"
+
+	"log/slog"
 )
 
 type application struct {
 	version string
 	config  *config
 	db      *sql.DB
-	logger  *log.Logger
+	logger  *slog.Logger
 	models  data.Models
 }
 
 func NewApplication(cfg *config) *application {
 
-	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
-
-	db, err := openDB(cfg.db)
-	if err != nil {
-		logger.Fatal(err)
-	}
-	logger.Printf("database connection pool established")
+	logger := initLogger()
+	db := initDabase(logger, cfg)
 
 	return &application{
 		version: version,
@@ -35,10 +32,31 @@ func NewApplication(cfg *config) *application {
 	}
 }
 
+func initLogger() *slog.Logger {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+	return logger
+}
+
+func initDabase(logger *slog.Logger, cfg *config) *sql.DB {
+	db, err := openDB(cfg.db)
+	if err != nil {
+		logger.Error(err.Error())
+	}
+	logger.Info("database connection pool established")
+	return db
+}
+
 func (app *application) Start(server *http.Server) {
-	app.logger.Printf("starting %s server on %s", app.config.env, server.Addr)
+
+	app.logger.Info(
+		fmt.Sprintf("starting %s server on %s", app.config.env, server.Addr),
+		"env", app.config.env,
+		"address", server.Addr,
+	)
+
 	err := server.ListenAndServe()
-	app.logger.Fatal(err)
+	app.logger.Error(err.Error())
 }
 
 func (app *application) Shutdown() {

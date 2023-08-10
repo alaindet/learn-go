@@ -6,7 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func (app *application) routes() *httprouter.Router {
+func (app *application) routes() http.Handler {
 
 	v := "/v1" // TODO: Move?
 	r := httprouter.New()
@@ -24,5 +24,5 @@ func (app *application) routes() *httprouter.Router {
 	Patch(r, v+"/movies/:id", app.moviesUpdateHandler)
 	Delete(r, v+"/movies/:id", app.moviesDeleteHandler)
 
-	return r
+	return app.recoverPanic(r)
 }
