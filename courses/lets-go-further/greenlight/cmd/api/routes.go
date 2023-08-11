@@ -24,5 +24,9 @@ func (app *application) routes() http.Handler {
 	Patch(r, v+"/movies/:id", app.moviesUpdateHandler)
 	Delete(r, v+"/movies/:id", app.moviesDeleteHandler)
 
-	return app.recoverPanic(r)
+	// Middleware
+	routerWithRateLimiter := app.rateLimit(r)
+	routerWithPanicRecovery := app.recoverPanic(routerWithRateLimiter)
+
+	return routerWithPanicRecovery
 }

@@ -1,4 +1,4 @@
-GL_API="${GL_API:-http://localhost:4000/v1.0}"
+GL_API="${GL_API:-http://localhost:4000/v1}"
 
 curl \
 --request GET \

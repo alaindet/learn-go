@@ -71,7 +71,7 @@ func (app *application) moviesUpdateHandler(w http.ResponseWriter, r *http.Reque
 	err = app.models.Movies.Update(movie)
 
 	if errors.Is(err, data.ErrEditConflict) {
-		app.editConflictResponse(w, r, err)
+		app.editConflictResponse(w, r)
 		return
 	}
 

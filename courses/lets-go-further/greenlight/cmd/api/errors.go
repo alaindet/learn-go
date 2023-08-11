@@ -20,7 +20,12 @@ func (app *application) errResponse(
 	message string,
 	errors map[string]string,
 ) {
-	payload := JSONPayload{Message: message, Data: nil, Error: errors}
+	payload := JSONPayload{
+		Message: message,
+		Data:    nil,
+		Error:   errors,
+	}
+
 	err := app.writeJSON(w, status, payload, nil)
 
 	if err != nil {
@@ -68,8 +73,12 @@ func (app *application) failedValidationResponse(
 func (app *application) editConflictResponse(
 	w http.ResponseWriter,
 	r *http.Request,
-	err error,
 ) {
 	message := "unable to update the record due to an edit conflict, please try again"
 	app.errResponse(w, r, http.StatusConflict, message, nil)
+}
+
+func (app *application) rateLimitExceededResponse(w http.ResponseWriter, r *http.Request) {
+	message := "rate limit exceeded"
+	app.errResponse(w, r, http.StatusTooManyRequests, message, nil)
 }

@@ -1,4 +1,4 @@
-GL_API="${GL_API:-http://localhost:4000/v1.0}"
+GL_API="${GL_API:-http://localhost:4000/v1}"
 GL_MOVIE_ID="${GL_MOVIE_ID:-1}"
 
 # # All info

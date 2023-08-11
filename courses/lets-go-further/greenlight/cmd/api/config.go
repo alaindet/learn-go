@@ -16,10 +16,16 @@ type databaseConfig struct {
 	maxIdleTime  string
 }
 
+type rateLimitConfig struct {
+	avg float64
+	max int
+}
+
 type config struct {
-	port int
-	env  string
-	db   databaseConfig
+	port      int
+	env       string
+	db        databaseConfig
+	rateLimit rateLimitConfig
 }
 
 func NewConfig() *config {
@@ -74,6 +80,14 @@ func NewConfig() *config {
 		"PostgreSQL max connection idle time",
 	)
 
+	// Rate limit average
+	flag.Float64Var(
+		&cfg.rateLimit.avg,
+		"rate-limit-global-avg",
+		envFloat("GREENLIGHT_RATE_LIMIT_GLOBAL_AVG", 2.0),
+		"Global rate limit average requests/second",
+	)
+
 	flag.Parse()
 
 	return &cfg
@@ -98,4 +112,15 @@ func envInt(key string, defaultVal int) int {
 
 	intVal, _ := strconv.Atoi(val)
 	return intVal
+}
+
+func envFloat(key string, defaultVal float64) float64 {
+	val := os.Getenv(key)
+
+	if val == "" {
+		return defaultVal
+	}
+
+	floatVal, _ := strconv.ParseFloat(val, 64)
+	return floatVal
 }
