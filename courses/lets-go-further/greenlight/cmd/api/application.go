@@ -2,9 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"greenlight/internal/data"
-	"net/http"
 	"os"
 
 	"log/slog"
@@ -45,18 +43,6 @@ func initDabase(logger *slog.Logger, cfg *config) *sql.DB {
 	}
 	logger.Info("database connection pool established")
 	return db
-}
-
-func (app *application) Start(server *http.Server) {
-
-	app.logger.Info(
-		fmt.Sprintf("starting %s server on %s", app.config.env, server.Addr),
-		"env", app.config.env,
-		"address", server.Addr,
-	)
-
-	err := server.ListenAndServe()
-	app.logger.Error(err.Error())
 }
 
 func (app *application) Shutdown() {

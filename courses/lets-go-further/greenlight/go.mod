@@ -8,7 +8,7 @@ require (
 	github.com/lib/pq v1.10.2
 )
 
-require golang.org/x/time v0.3.0 // indirect
+require golang.org/x/time v0.3.0
 
 require (
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -19,6 +19,5 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgtype v1.13.0 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
-	golang.org/x/exp v0.0.0-20230810033253-352e893a4cad
 	golang.org/x/text v0.3.7 // indirect
 )
