@@ -9,24 +9,28 @@ import (
 func (app *application) routes() http.Handler {
 
 	v := "/v1" // TODO: Move?
-	r := httprouter.New()
+	router := httprouter.New()
 
-	r.NotFound = http.HandlerFunc(app.notFoundResponse)
-	r.MethodNotAllowed = http.HandlerFunc(app.methodNotAllowedResponse)
+	router.NotFound = http.HandlerFunc(app.notFoundResponse)
+	router.MethodNotAllowed = http.HandlerFunc(app.methodNotAllowedResponse)
 
 	// Metrics
-	Get(r, v+"/healthcheck", app.healthcheckHandler)
+	Get(router, v+"/healthcheck", app.healthcheckHandler)
 
 	// Movies
-	Get(r, v+"/movies", app.moviesListHandler)
-	Post(r, v+"/movies", app.moviesCreateHandler)
-	Get(r, v+"/movies/:id", app.moviesShowHandler)
-	Patch(r, v+"/movies/:id", app.moviesUpdateHandler)
-	Delete(r, v+"/movies/:id", app.moviesDeleteHandler)
+	Get(router, v+"/movies", app.moviesListHandler)
+	Post(router, v+"/movies", app.moviesCreateHandler)
+	Get(router, v+"/movies/:id", app.moviesShowHandler)
+	Patch(router, v+"/movies/:id", app.moviesUpdateHandler)
+	Delete(router, v+"/movies/:id", app.moviesDeleteHandler)
 
 	// Middleware
-	routerWithRateLimiter := app.rateLimit(r)
-	routerWithPanicRecovery := app.recoverPanic(routerWithRateLimiter)
+	var handler http.Handler
 
-	return routerWithPanicRecovery
+	if app.config.rateLimiter.enabled {
+		handler = app.rateLimit(router)
+	}
+	handler = app.recoverPanic(handler)
+
+	return handler
 }

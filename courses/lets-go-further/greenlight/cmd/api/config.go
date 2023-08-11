@@ -16,16 +16,17 @@ type databaseConfig struct {
 	maxIdleTime  string
 }
 
-type rateLimitConfig struct {
-	avg float64
-	max int
+type rateLimiterConfig struct {
+	rps     float64
+	max     int
+	enabled bool
 }
 
 type config struct {
-	port      int
-	env       string
-	db        databaseConfig
-	rateLimit rateLimitConfig
+	port        int
+	env         string
+	db          databaseConfig
+	rateLimiter rateLimiterConfig
 }
 
 func NewConfig() *config {
@@ -80,20 +81,28 @@ func NewConfig() *config {
 		"PostgreSQL max connection idle time",
 	)
 
-	// Global rate limiter: average requests/second
-	flag.Float64Var(
-		&cfg.rateLimit.avg,
-		"rate-limit-global-avg",
-		envFloat("GREENLIGHT_RATE_LIMIT_GLOBAL_AVG", 2.0),
-		"Global rate limit average requests/second",
+	// Is rate limiter enabled?
+	flag.BoolVar(
+		&cfg.rateLimiter.enabled,
+		"limiter-enabled",
+		true,
+		"Rate limiter enabled",
 	)
 
-	// Global rate limiter: max requests/second
+	// Rate limiter requests/second allowed
+	flag.Float64Var(
+		&cfg.rateLimiter.rps,
+		"limiter-rps",
+		envFloat("GREENLIGHT_RATE_LIMIT_AVG", 2.0),
+		"Rate limiter requests/second to be allowed",
+	)
+
+	// Rate limiter maximum requests/second allowed in bursts
 	flag.IntVar(
-		&cfg.rateLimit.max,
-		"rate-limit-global-max",
-		envInt("GREENLIGHT_RATE_LIMIT_GLOBAL_MAX", 4),
-		"Global rate limit maximum requests/second",
+		&cfg.rateLimiter.max,
+		"limiter-max",
+		envInt("GREENLIGHT_RATE_LIMIT_MAX", 4),
+		"Rate limiter maximum requests/second to be allowed in bursts",
 	)
 
 	flag.Parse()
