@@ -8,9 +8,8 @@ import (
 
 func (app *application) rateLimit(next http.Handler) http.Handler {
 
-	// TODO: Make them configurable
-	avgRequestsPerSecond := rate.Limit(2)
-	maxRequestsPerSecond := 4
+	avgRequestsPerSecond := rate.Limit(app.config.rateLimit.avg)
+	maxRequestsPerSecond := app.config.rateLimit.max
 
 	limiter := rate.NewLimiter(avgRequestsPerSecond, maxRequestsPerSecond)
 

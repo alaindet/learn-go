@@ -80,12 +80,20 @@ func NewConfig() *config {
 		"PostgreSQL max connection idle time",
 	)
 
-	// Rate limit average
+	// Global rate limiter: average requests/second
 	flag.Float64Var(
 		&cfg.rateLimit.avg,
 		"rate-limit-global-avg",
 		envFloat("GREENLIGHT_RATE_LIMIT_GLOBAL_AVG", 2.0),
 		"Global rate limit average requests/second",
+	)
+
+	// Global rate limiter: max requests/second
+	flag.IntVar(
+		&cfg.rateLimit.max,
+		"rate-limit-global-max",
+		envInt("GREENLIGHT_RATE_LIMIT_GLOBAL_MAX", 4),
+		"Global rate limit maximum requests/second",
 	)
 
 	flag.Parse()
