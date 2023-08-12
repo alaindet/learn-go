@@ -93,7 +93,7 @@ func NewConfig() *config {
 	flag.Float64Var(
 		&cfg.rateLimiter.rps,
 		"limiter-rps",
-		envFloat("GREENLIGHT_RATE_LIMIT_AVG", 2.0),
+		envFloat("GREENLIGHT_RATE_LIMIT_RPS", 2.0),
 		"Rate limiter requests/second to be allowed",
 	)
 

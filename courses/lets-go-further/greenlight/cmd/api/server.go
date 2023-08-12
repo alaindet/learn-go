@@ -12,6 +12,12 @@ import (
 	"time"
 )
 
+var (
+	serverReadTimeout     = 10 * time.Second
+	serverWriteTimeout    = 20 * time.Second
+	serverShutdownTimeout = 20 * time.Second
+)
+
 func (app *application) StartNewServer() error {
 
 	server := &http.Server{
@@ -19,19 +25,19 @@ func (app *application) StartNewServer() error {
 		Handler:      app.routes(),
 		IdleTimeout:  time.Minute,
 		ErrorLog:     log.New(os.Stdout, "", log.Ldate|log.Ltime), // TODO: Use slog
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 30 * time.Second,
+		ReadTimeout:  serverReadTimeout,
+		WriteTimeout: serverWriteTimeout,
 	}
 
 	shutdownErr := make(chan error)
 
 	// Background goroutine for catching signals
 	go func() {
-		quit := make(chan os.Signal)
+		quit := make(chan os.Signal, 1)
 		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 		s := <-quit // Acts as a block until a signal is received
 		app.logger.Info("shutting down server", "signal", s.String())
-		ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), serverShutdownTimeout)
 		defer cancel()
 		shutdownErr <- server.Shutdown(ctx)
 	}()
@@ -42,7 +48,7 @@ func (app *application) StartNewServer() error {
 		"address", server.Addr,
 	)
 
-	// Skip known http.ErrServerClosed false error when starting the server
+	// Skip known initial http.ErrServerClosed false error when starting the server
 	err := server.ListenAndServe()
 	if !errors.Is(err, http.ErrServerClosed) {
 		return err
