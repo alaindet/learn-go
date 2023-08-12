@@ -12,7 +12,7 @@ go mod verify
 docker-compose up -d
 # Install migrate
 migrate -path=./database/migrations -database=$GREENLIGHT_DB_DSN up
-# Load backup
+# Load backup data from ./greenlight/database/sample-data.sql
 # Install make
 make
 # Without make installed
