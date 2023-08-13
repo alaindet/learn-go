@@ -1,8 +1,12 @@
 package main
 
+import "greenlight/cmd/api/core"
+
 func main() {
-	cfg := NewConfig()
-	app := NewApplication(cfg)
+	cfg := core.NewConfig()
+	app := core.NewApplication(cfg)
 	defer app.Shutdown()
-	app.StartNewServer()
+	prefix := "/" + core.ApiVersion
+	router := Routes(app, prefix)
+	app.StartNewServer(router)
 }

@@ -1,36 +1,54 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+
+	h "greenlight/cmd/api/common/http"
+	"greenlight/cmd/api/core"
+	"greenlight/cmd/api/core/middleware"
+	monitoring "greenlight/cmd/api/features/monitoring/handlers"
+	movies "greenlight/cmd/api/features/movies/handlers"
 
 	"github.com/julienschmidt/httprouter"
 )
 
-func (app *application) routes() http.Handler {
+func Routes(app *core.Application, prefix string) http.Handler {
 
-	v := "/v1" // TODO: Move?
 	router := httprouter.New()
+	path := createPathPrefixer(prefix)
 
-	router.NotFound = http.HandlerFunc(app.notFoundResponse)
-	router.MethodNotAllowed = http.HandlerFunc(app.methodNotAllowedResponse)
+	// Standard response
+	router.NotFound = http.HandlerFunc(app.NotFoundResponse)
+	router.MethodNotAllowed = http.HandlerFunc(app.MethodNotAllowedResponse)
 
-	// Metrics
-	Get(router, v+"/healthcheck", app.healthcheckHandler)
+	// Feature: monitoring
+	h.Get(router, path("healthcheck"), monitoring.HealthcheckHandler(app))
 
-	// Movies
-	Get(router, v+"/movies", app.moviesListHandler)
-	Post(router, v+"/movies", app.moviesCreateHandler)
-	Get(router, v+"/movies/:id", app.moviesShowHandler)
-	Patch(router, v+"/movies/:id", app.moviesUpdateHandler)
-	Delete(router, v+"/movies/:id", app.moviesDeleteHandler)
+	// Feature: movies
+	h.Get(router, path("movies"), movies.ListHandler(app))
+	h.Post(router, path("movies"), movies.CreateHandler(app))
+	h.Get(router, path("movies/:id"), movies.ReadHandler(app))
+	h.Patch(router, path("movies/:id"), movies.UpdateHandler(app))
+	h.Delete(router, path("movies/:id"), movies.DeleteHandler(app))
+
+	// Feature: users
+	// ...
 
 	// Middleware
 	var handler http.Handler
 
-	if app.config.rateLimiter.enabled {
-		handler = app.rateLimit(router)
+	// TODO
+	if app.Config.RateLimiter.Enabled {
+		handler = middleware.RateLimiter(app, router)
 	}
-	handler = app.recoverPanic(handler)
+	handler = middleware.RecoverPanic(app, handler)
 
 	return handler
+}
+
+func createPathPrefixer(prefix string) func(string) string {
+	return func(path string) string {
+		return fmt.Sprintf("%s/%s", prefix, path)
+	}
 }

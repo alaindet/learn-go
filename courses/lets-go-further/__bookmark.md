@@ -1,2 +1,2 @@
-276
-User Model Setup and Registration
+279
+Setting up the Users Model
