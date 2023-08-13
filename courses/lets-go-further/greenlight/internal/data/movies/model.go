@@ -33,7 +33,7 @@ func (m *MovieModel) Insert(movie *Movie) error {
 		VALUES
 			($1, $2, $3, $4)
 		RETURNING
-			id, created_at, version;
+			id, created_at, version
 	`
 
 	args := []any{
@@ -116,7 +116,7 @@ func (m *MovieModel) GetAll(
 	// A fixed SQL query is easier to reason about and it works for a low number
 	// of filters, while a dynamically generated query is required for more
 	// complex scenarios (many filters, negations etc.)
-	query := fmt.Sprintf(
+	stmt := fmt.Sprintf(
 		`
 		SELECT
 			count(*) OVER()
@@ -150,7 +150,7 @@ func (m *MovieModel) GetAll(
 
 	rows, err := m.DB.QueryContext(
 		ctx,
-		query,
+		stmt,
 		title,
 		pq.Array(genres),
 		filters.Limit(),
