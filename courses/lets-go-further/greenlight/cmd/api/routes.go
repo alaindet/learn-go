@@ -9,6 +9,7 @@ import (
 	"greenlight/cmd/api/core/middleware"
 	monitoring "greenlight/cmd/api/features/monitoring/handlers"
 	movies "greenlight/cmd/api/features/movies/handlers"
+	users "greenlight/cmd/api/features/users/handlers"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -33,7 +34,8 @@ func Routes(app *core.Application, prefix string) http.Handler {
 	h.Delete(router, path("movies/:id"), movies.DeleteHandler(app))
 
 	// Feature: users
-	// h.Post(router, path("users"), ...)
+	h.Post(router, path("users"), users.SignInHandler(app))
+	// ...
 
 	// Middleware
 	var handler http.Handler

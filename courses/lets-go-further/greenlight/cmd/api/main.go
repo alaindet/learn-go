@@ -6,7 +6,6 @@ func main() {
 	cfg := core.NewConfig()
 	app := core.NewApplication(cfg)
 	defer app.Shutdown()
-	prefix := "/" + core.ApiVersion
-	router := Routes(app, prefix)
+	router := Routes(app, app.UrlPrefix)
 	app.StartNewServer(router)
 }

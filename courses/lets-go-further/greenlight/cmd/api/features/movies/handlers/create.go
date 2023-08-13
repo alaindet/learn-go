@@ -45,7 +45,7 @@ func CreateHandler(app *core.Application) http.HandlerFunc {
 		}
 
 		// Output
-		url := fmt.Sprintf("/v1/movies/%d", movie.ID)
+		url := fmt.Sprintf("%s/movies/%d", app.UrlPrefix, movie.ID)
 		data := commonHttp.JSONPayload{
 			Message: fmt.Sprintf("Movie %q created with ID %d", movie.Title, movie.ID),
 			Data: map[string]any{

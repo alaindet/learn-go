@@ -9,11 +9,12 @@ import (
 )
 
 type Application struct {
-	Version string
-	Config  *Config
-	Db      *sql.DB
-	Logger  *slog.Logger
-	Models  models.Models
+	Version   string
+	UrlPrefix string // Ex.: "/v1"
+	Config    *Config
+	Db        *sql.DB
+	Logger    *slog.Logger
+	Models    models.Models
 }
 
 func NewApplication(cfg *Config) *Application {
@@ -21,13 +22,15 @@ func NewApplication(cfg *Config) *Application {
 	logger := initLogger()
 	db := initDabase(logger, cfg)
 	models := initModels(db)
+	prefix := "/" + ApiVersion
 
 	return &Application{
-		Version: Version,
-		Config:  cfg,
-		Db:      db,
-		Logger:  logger,
-		Models:  models,
+		Version:   Version,
+		UrlPrefix: prefix,
+		Config:    cfg,
+		Db:        db,
+		Logger:    logger,
+		Models:    models,
 	}
 }
 
