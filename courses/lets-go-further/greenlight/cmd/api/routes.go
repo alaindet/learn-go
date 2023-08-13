@@ -18,7 +18,7 @@ func Routes(app *core.Application, prefix string) http.Handler {
 	router := httprouter.New()
 	path := createPathPrefixer(prefix)
 
-	// Standard response
+	// Standard responses
 	router.NotFound = http.HandlerFunc(app.NotFoundResponse)
 	router.MethodNotAllowed = http.HandlerFunc(app.MethodNotAllowedResponse)
 
@@ -33,15 +33,11 @@ func Routes(app *core.Application, prefix string) http.Handler {
 	h.Delete(router, path("movies/:id"), movies.DeleteHandler(app))
 
 	// Feature: users
-	// ...
+	// h.Post(router, path("users"), ...)
 
 	// Middleware
 	var handler http.Handler
-
-	// TODO
-	if app.Config.RateLimiter.Enabled {
-		handler = middleware.RateLimiter(app, router)
-	}
+	handler = middleware.RateLimiter(app, router)
 	handler = middleware.RecoverPanic(app, handler)
 
 	return handler

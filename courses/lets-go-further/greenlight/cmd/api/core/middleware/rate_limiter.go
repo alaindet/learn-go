@@ -17,6 +17,10 @@ var (
 
 func RateLimiter(app *core.Application, next http.Handler) http.Handler {
 
+	if !app.Config.RateLimiter.Enabled {
+		return next
+	}
+
 	type client struct {
 		limiter  *rate.Limiter
 		lastSeen time.Time
