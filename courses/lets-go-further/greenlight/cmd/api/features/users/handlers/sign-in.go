@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"greenlight/cmd/api/common"
 	commonHttp "greenlight/cmd/api/common/http"
 	"greenlight/cmd/api/core"
-	"greenlight/internal/data/common"
+	data "greenlight/internal/data/common"
 	"greenlight/internal/data/users"
 	"greenlight/internal/validator"
 )
@@ -46,7 +47,7 @@ func SignInHandler(app *core.Application) http.HandlerFunc {
 		// Create on database
 		err = app.Models.Users.Insert(user)
 
-		if errors.Is(err, common.ErrDuplicateEmail) {
+		if errors.Is(err, data.ErrDuplicateEmail) {
 			v.AddError("email", "email already in use")
 			app.FailedValidationResponse(w, r, v.Errors)
 			return
@@ -57,19 +58,20 @@ func SignInHandler(app *core.Application) http.HandlerFunc {
 			return
 		}
 
-		// Send success email
-		err = app.Mailer.Send(user.Email, "user_welcome.tmpl", user)
-		if err != nil {
-			app.InternalServerErrorResponse(w, r, err)
-			return
-		}
+		// Send success email in background
+		common.BackgroundTask(app, func() {
+			err = app.Mailer.Send(user.Email, "user_welcome.tmpl", user)
+			if err != nil {
+				app.Logger.Error(err.Error(), nil)
+			}
+		})
 
 		data := commonHttp.JSONPayload{
 			Message: fmt.Sprintf("User %s successfully signed in", user.Email),
 			Data:    user,
 		}
 
-		err = commonHttp.WriteJSON(w, http.StatusCreated, data, nil)
+		err = commonHttp.WriteJSON(w, http.StatusAccepted, data, nil)
 
 		if err != nil {
 			app.InternalServerErrorResponse(w, r, err)
