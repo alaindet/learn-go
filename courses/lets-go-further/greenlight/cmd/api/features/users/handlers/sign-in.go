@@ -43,6 +43,7 @@ func SignInHandler(app *core.Application) http.HandlerFunc {
 			return
 		}
 
+		// Create on database
 		err = app.Models.Users.Insert(user)
 
 		if errors.Is(err, common.ErrDuplicateEmail) {
@@ -51,6 +52,13 @@ func SignInHandler(app *core.Application) http.HandlerFunc {
 			return
 		}
 
+		if err != nil {
+			app.InternalServerErrorResponse(w, r, err)
+			return
+		}
+
+		// Send success email
+		err = app.Mailer.Send(user.Email, "user_welcome.tmpl", user)
 		if err != nil {
 			app.InternalServerErrorResponse(w, r, err)
 			return

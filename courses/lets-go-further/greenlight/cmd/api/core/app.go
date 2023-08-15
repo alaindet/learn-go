@@ -2,10 +2,11 @@ package core
 
 import (
 	"database/sql"
-	"greenlight/internal/data/models"
+	"log/slog"
 	"os"
 
-	"log/slog"
+	"greenlight/internal/data/models"
+	"greenlight/internal/mailer"
 )
 
 type Application struct {
@@ -15,6 +16,7 @@ type Application struct {
 	Db        *sql.DB
 	Logger    *slog.Logger
 	Models    models.Models
+	Mailer    mailer.Mailer
 }
 
 func NewApplication(cfg *Config) *Application {
@@ -23,6 +25,13 @@ func NewApplication(cfg *Config) *Application {
 	db := initDabase(logger, cfg)
 	models := initModels(db)
 	prefix := "/" + ApiVersion
+	mailer := mailer.New(
+		cfg.Mail.Host,
+		cfg.Mail.Port,
+		cfg.Mail.Username,
+		cfg.Mail.Password,
+		cfg.Mail.Sender,
+	)
 
 	return &Application{
 		Version:   Version,
@@ -31,6 +40,7 @@ func NewApplication(cfg *Config) *Application {
 		Db:        db,
 		Logger:    logger,
 		Models:    models,
+		Mailer:    mailer,
 	}
 }
 

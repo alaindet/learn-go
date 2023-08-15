@@ -1,0 +1,22 @@
+{{define "subject"}}Welcome to Greenlight{{end}}
+
+{{define "plainBody"}}
+Hello,
+You successfully signed up on Greenlight.
+Your name is {{ .Name }}.
+{{end}}
+
+{{define "htmlBody"}}
+<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<p>Hello,</p>
+	<p>You successfully signed up on Greenlight.</p>
+	<p>Your name is <strong>{{ .Name }}</strong></p>
+</body>
+</html>
+{{end}}

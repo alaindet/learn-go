@@ -15,11 +15,20 @@ type rateLimiterConfig struct {
 	Enabled bool
 }
 
+type mailConfig struct {
+	Host     string
+	Port     int
+	Username string
+	Password string
+	Sender   string
+}
+
 type Config struct {
 	Port        int
 	Env         string
 	Db          databaseConfig
 	RateLimiter rateLimiterConfig
+	Mail        mailConfig
 }
 
 func NewConfig() *Config {
@@ -96,6 +105,46 @@ func NewConfig() *Config {
 		"limiter-max",
 		envInt("GREENLIGHT_RATE_LIMIT_MAX", 4),
 		"Rate limiter maximum requests/second to be allowed in bursts",
+	)
+
+	// Mail: host
+	flag.StringVar(
+		&cfg.Mail.Host,
+		"mail-host",
+		env("GREENLIGHT_MAIL_HOST", "localhost"),
+		"Mail host",
+	)
+
+	// Mail: port
+	flag.IntVar(
+		&cfg.Mail.Port,
+		"mail-port",
+		envInt("GREENLIGHT_MAIL_PORT", 1025),
+		"Mail port",
+	)
+
+	// Mail: username
+	flag.StringVar(
+		&cfg.Mail.Host,
+		"mail-username",
+		env("GREENLIGHT_MAIL_USERNAME", ""),
+		"Mail username",
+	)
+
+	// Mail: password
+	flag.StringVar(
+		&cfg.Mail.Host,
+		"mail-password",
+		env("GREENLIGHT_MAIL_PASSWORD", ""),
+		"Mail password",
+	)
+
+	// Mail: sender
+	flag.StringVar(
+		&cfg.Mail.Sender,
+		"mail-sender",
+		env("GREENLIGHT_MAIL_SENDER", "Greenlight <no-reply@greenlight.dev>"),
+		"Mail sender",
 	)
 
 	flag.Parse()

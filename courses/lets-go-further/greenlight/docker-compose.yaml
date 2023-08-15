@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+
   db:
     image: postgres:15.3
     environment:
@@ -11,10 +12,12 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
       - ./database/pg-init.sql:/docker-entrypoint-initdb.d/pg-init.sql
+
   adminer:
     image: adminer:4.8.1
     ports:
       - '8081:8080'
+
   # pgadmin:
   #   image: dpage/pgadmin4
   #   ports:
@@ -24,6 +27,14 @@ services:
   #     PGADMIN_DEFAULT_PASSWORD: greenlight
   #   volumes:
   #     - pgadmindata:/var/lib/pgadmin
+
+  # Or docker run -p 8025:8025 -p 1025:1025 mailhog/mailhog
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+
 volumes:
   dbdata: {}
   # pgadmindata: {}
