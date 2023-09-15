@@ -26,9 +26,9 @@ func NewBobbot() *Bobbot {
 
 func (b *Bobbot) WelcomeMessage() string {
 	return strings.Join([]string{
-		"Bobbot v0.2.0",
+		"Bobbot v0.2.1",
 		"===",
-		"Il simulatore realistico di risposte di Bobbers.",
+		"Il simulatore di risposte di Bobbers.",
 		"",
 	}, "\n")
 }
