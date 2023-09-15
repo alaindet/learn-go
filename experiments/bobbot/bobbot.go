@@ -12,7 +12,7 @@ type Bobbot struct {
 var answers []string = []string{
 	"Controllo",
 	"A che ti serve?",
-	"Passa dopo in ufficio",
+	"Te lo dico dopo",
 	"Non lo devi chiedere a me",
 	"Hai fatto una RDA?",
 	"Chiedi a [insert random name]",

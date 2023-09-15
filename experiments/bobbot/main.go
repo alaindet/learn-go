@@ -12,7 +12,8 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
-		fmt.Print("Che vuoi? > ")
+		fmt.Println("Bobbot: Che vuoi?")
+		fmt.Print("Tu: > ")
 		question, _ := reader.ReadString('\n')
 		fmt.Printf("Bobbot: %s\n\n", bobbot.Ask(question))
 	}
