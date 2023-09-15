@@ -1,6 +1,9 @@
-go 1.18
+go 1.21
+
+toolchain go1.21.0
 
 use (
+	./bobbot
 	./chained-channels
 	./chained-channels-2
 	./distributed-sums
