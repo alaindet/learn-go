@@ -5,9 +5,27 @@ use (
 	./bobbot
 	./chained-channels
 	./chained-channels-2
+	./channels
+	./chi
+	./code-gen
 	./distributed-sums
+	./enums
+	./fiber
 	./fibonacci-math-big
+	./file-copy
+	./game-of-life
+	./generators-with-channels
+	./gin
+	./gin-books
+	./json
+	./nodemon
+	./packages
 	./slice-functions
+	./store
+	./struct-tags
 	./struct-to-map
 	./struct-validator
+	./wasm-101
+	./wasm-calculator
+	./wasm-fibonacci
 )
