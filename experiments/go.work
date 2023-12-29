@@ -1,31 +1,30 @@
 go 1.21.3
 
 use (
+	./3rd-party/chi
+	./3rd-party/fiber
+	./3rd-party/gin
+	./3rd-party/gin-books
+	./3rd-party/nodemon
 	./async-await
 	./bobbot
-	./chained-channels
-	./chained-channels-2
-	./channels
-	./chi
+	./channels/chained-channels
+	./channels/chained-channels-2
+	./channels/channels
+	./channels/distributed-sums
+	./channels/generators-with-channels
 	./code-gen
-	./distributed-sums
 	./enums
-	./fiber
 	./fibonacci-math-big
 	./file-copy
 	./game-of-life
-	./generators-with-channels
-	./gin
-	./gin-books
 	./json
-	./nodemon
 	./packages
 	./slice-functions
-	./store
-	./struct-tags
-	./struct-to-map
-	./struct-validator
-	./wasm-101
-	./wasm-calculator
-	./wasm-fibonacci
+	./structs/struct-tags
+	./structs/struct-to-map
+	./structs/struct-validator
+	./wasm/wasm-101
+	./wasm/wasm-calculator
+	./wasm/wasm-fibonacci
 )
