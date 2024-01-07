@@ -55,3 +55,47 @@ func ConcMap[TInput any, TOutput any](
 
 	return result
 }
+
+func ConcMap2[TInput any, TOutput any](
+	input []TInput,
+	mapperFn func(TInput) TOutput,
+	workers int,
+) []TOutput {
+
+	if workers == -1 {
+		workers = runtime.NumCPU()
+	}
+
+	output := make([]TOutput, 0, len(input))
+	jobs := make(chan TInput, workers*2)
+	results := make(chan TOutput, workers*2)
+	var wg sync.WaitGroup
+	wg.Add(workers)
+
+	// Workers
+	for w := 0; w <= workers; w++ {
+		go func() {
+			defer wg.Done()
+			for job := range jobs {
+				results <- mapperFn(job)
+			}
+		}()
+	}
+
+	go func() {
+		wg.Wait()
+		close(jobs)
+	}()
+
+	// Producers
+	for _, element := range input {
+		jobs <- element
+	}
+
+	// Results
+	for result := range results {
+		output = append(output, result)
+	}
+
+	return output
+}
