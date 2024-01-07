@@ -20,7 +20,8 @@ use (
 	./game-of-life
 	./json
 	./packages
-	./slice-functions
+	./slices/concurrent-slice-mapping
+	./slices/slice-functions
 	./structs/struct-tags
 	./structs/struct-to-map
 	./structs/struct-validator
