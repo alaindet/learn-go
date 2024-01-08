@@ -8,49 +8,48 @@ import (
 func ConcMap[TInput any, TOutput any](
 	input []TInput,
 	mapperFn func(TInput) TOutput,
-	threads int,
+	workers int,
 ) []TOutput {
 
-	var wg sync.WaitGroup
-	if threads == -1 {
-		threads = runtime.NumCPU()
+	if workers == -1 {
+		workers = runtime.NumCPU()
 	}
-	inputCh := make(chan []TInput, threads)
-	outputCh := make(chan []TOutput, threads)
-	result := make([]TOutput, 0, len(input))
 
-	// Producers/feeders
-	go func(ch chan<- []TInput) {
-		chunks := Chunk(input, len(input)/threads)
-		for _, chunk := range chunks {
-			ch <- chunk
-		}
-		close(ch)
-	}(inputCh)
+	bufferSize := workers + 1
+	var wg sync.WaitGroup
 
-	// Consumers/workers
-	for chunk := range inputCh {
-		wg.Add(1)
-		go func(wg *sync.WaitGroup, ch chan<- []TOutput, chunk []TInput) {
-			defer wg.Done()
-			outputChunk := make([]TOutput, 0, len(chunk))
-			for _, inputElement := range chunk {
-				outputElement := mapperFn(inputElement)
-				outputChunk = append(outputChunk, outputElement)
+	inputCh := make(chan TInput, bufferSize)
+	outputCh := make(chan TOutput, bufferSize)
+
+	// Workers
+	wg.Add(workers)
+	for w := 0; w < workers; w++ {
+		go func(id int, inputCh <-chan TInput, outputCh chan<- TOutput) {
+			for input := range inputCh {
+				outputCh <- mapperFn(input)
 			}
-			outputCh <- outputChunk
-		}(&wg, outputCh, chunk)
+			wg.Done()
+		}(w, inputCh, outputCh)
 	}
 
 	// Cleanup
-	go func(wg *sync.WaitGroup) {
+	go func() {
 		wg.Wait()
 		close(outputCh)
-	}(&wg)
+	}()
 
-	// Listen to results
-	for outputElements := range outputCh {
-		result = append(result, outputElements...)
+	// Producer - Fan out
+	go func() {
+		for _, i := range input {
+			inputCh <- i
+		}
+		close(inputCh)
+	}()
+
+	// Gather - Fan in
+	result := make([]TOutput, 0, len(input))
+	for output := range outputCh {
+		result = append(result, output)
 	}
 
 	return result

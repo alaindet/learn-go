@@ -1,75 +1,66 @@
 package main
 
-import "testing"
+import (
+	"math/rand"
+	"testing"
+)
 
-func BenchmarkConcMap100(b *testing.B) {
-	b.StopTimer()
-	input := createRange(100)
-	output := make([]int, 0, len(input))
-	b.StartTimer()
+func BenchmarkFasterConcMap1000(b *testing.B) {
+	input, output := createBenchmarkVars(1_000)
 
 	for n := 0; n < b.N; n++ {
-		output = ConcMap2(input, double, -1)
+		output = FasterConcMap(input, rand.Intn, -1)
 	}
 	_ = output
 }
 
-func BenchmarkMap100(b *testing.B) {
-	b.StopTimer()
-	input := createRange(100)
-	output := make([]int, 0, len(input))
-	b.StartTimer()
+func BenchmarkConcMap1000(b *testing.B) {
+	input, output := createBenchmarkVars(1_000)
 
 	for n := 0; n < b.N; n++ {
-		output = Map(input, double)
+		output = ConcMap(input, rand.Intn, -1)
 	}
 	_ = output
 }
 
-func BenchmarkConcMap10000(b *testing.B) {
-	b.StopTimer()
-	input := createRange(10_000)
-	output := make([]int, 0, len(input))
-	b.StartTimer()
+func BenchmarkMap1000(b *testing.B) {
+	input, output := createBenchmarkVars(1_000)
 
 	for n := 0; n < b.N; n++ {
-		output = ConcMap2(input, double, -1)
+		output = Map(input, rand.Intn)
 	}
 	_ = output
 }
 
-func BenchmarkMap10000(b *testing.B) {
-	b.StopTimer()
-	input := createRange(10_000)
-	output := make([]int, 0, len(input))
-	b.StartTimer()
+func BenchmarkFasterConcMap1000000(b *testing.B) {
+	input, output := createBenchmarkVars(1_000_000)
 
 	for n := 0; n < b.N; n++ {
-		output = Map(input, double)
+		output = FasterConcMap(input, rand.Intn, -1)
 	}
 	_ = output
 }
 
 func BenchmarkConcMap1000000(b *testing.B) {
-	b.StopTimer()
-	input := createRange(1_000_000)
-	output := make([]int, 0, len(input))
-	b.StartTimer()
+	input, output := createBenchmarkVars(1_000_000)
 
 	for n := 0; n < b.N; n++ {
-		output = ConcMap2(input, double, -1)
+		output = ConcMap(input, rand.Intn, -1)
 	}
 	_ = output
 }
 
 func BenchmarkMap1000000(b *testing.B) {
-	b.StopTimer()
-	input := createRange(1_000_000)
-	output := make([]int, 0, len(input))
-	b.StartTimer()
+	input, output := createBenchmarkVars(1_000_000)
 
 	for n := 0; n < b.N; n++ {
-		output = Map(input, double)
+		output = Map(input, rand.Intn)
 	}
 	_ = output
+}
+
+func createBenchmarkVars(size int) ([]int, []int) {
+	input := createRange(size)
+	output := make([]int, 0, len(input))
+	return input, output
 }
