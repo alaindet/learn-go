@@ -1,24 +1,26 @@
 package main
 
 import (
-	"fmt"
 	"runtime"
 	"sync"
 )
 
-func main() {
+func ConcMap2[TInput any, TOutput any](
+	input []TInput,
+	mapperFn func(TInput) TOutput,
+	threads int,
+) []TOutput {
 	workers := runtime.NumCPU()
 	bufferSize := workers + 1
-	input := createRange(1_000_000)
 	var wg sync.WaitGroup
 
-	inputCh := make(chan int, bufferSize)
-	outputCh := make(chan int, bufferSize)
+	inputCh := make(chan TInput, bufferSize)
+	outputCh := make(chan TOutput, bufferSize)
 
 	// Workers
 	wg.Add(workers)
 	for w := 0; w < workers; w++ {
-		go func(id int, inputCh <-chan int, outputCh chan<- int) {
+		go func(id int, inputCh <-chan TInput, outputCh chan<- TOutput) {
 			for input := range inputCh {
 				outputCh <- mapperFn(input)
 			}
@@ -41,14 +43,10 @@ func main() {
 	}()
 
 	// Gather - Fan in
-	res := make([]int, 0, len(input))
+	result := make([]TOutput, 0, len(input))
 	for output := range outputCh {
-		res = append(res, output)
+		result = append(result, output)
 	}
 
-	fmt.Println("Result", res)
-}
-
-func mapperFn(data int) int {
-	return data * 2
+	return result
 }
