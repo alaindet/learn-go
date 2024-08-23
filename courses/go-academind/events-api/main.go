@@ -2,24 +2,26 @@ package main
 
 import (
 	"app/core/db"
+	"app/core/server"
 	"app/features/events"
-	"flag"
+	"app/features/users"
 
 	"github.com/gin-gonic/gin"
 )
 
-type ServerConfig struct {
-	Port string
-}
-
 func main() {
+	// Set tu
 	db.InitDB()
-	cfg := ServerConfig{}
-	flag.StringVar(&cfg.Port, "port", "8080", "Server port")
-	flag.Parse()
+	cfg := server.ReadConfigFromCLI()
 
+	// Routes
 	server := gin.Default()
+	users.Routes(server)
 	events.Routes(server)
 
-	server.Run(":" + cfg.Port)
+	// Bootstrap
+	err := server.Run(":" + cfg.Port)
+	if err != nil {
+		panic(err)
+	}
 }
