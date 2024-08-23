@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"app/models"
+	"app/features/events/models"
 	"fmt"
 	"net/http"
 
@@ -10,7 +10,7 @@ import (
 
 func CreateEvent(ctx *gin.Context) {
 
-	var event models.Event
+	var event models.EventModel
 	err := ctx.ShouldBindJSON(&event)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

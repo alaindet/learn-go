@@ -1,8 +1,8 @@
 package main
 
 import (
-	"app/db"
-	"app/handlers"
+	"app/core/db"
+	"app/features/events"
 	"flag"
 
 	"github.com/gin-gonic/gin"
@@ -19,10 +19,7 @@ func main() {
 	flag.Parse()
 
 	server := gin.Default()
-
-	server.POST("/events", handlers.CreateEvent)
-	server.GET("/events", handlers.GetEvents)
-	server.GET("/events/:eventid", handlers.GetEvent)
+	events.Routes(server)
 
 	server.Run(":" + cfg.Port)
 }

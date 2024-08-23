@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"app/models"
+	"app/features/events/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,7 +9,7 @@ import (
 
 func GetEvents(ctx *gin.Context) {
 
-	events, err := models.GetAllEvents()
+	events, err := models.GetAll()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Cannot get events",

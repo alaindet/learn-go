@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"app/models"
+	"app/features/events/models"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -13,7 +13,7 @@ import (
 func GetEvent(ctx *gin.Context) {
 	eventId := ctx.Param("eventid")
 
-	event, err := models.GetEventByID(eventId)
+	event, err := models.GetByID(eventId)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			ctx.JSON(http.StatusNotFound, gin.H{
