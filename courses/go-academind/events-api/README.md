@@ -8,6 +8,7 @@ CGO_ENABLED=1 wgo run . --port=8080
 
 ## Resources
 - https://github.com/bokwoon95/wgo
+- https://jmeubank.github.io/tdm-gcc/
 
 ### Extensions
 
