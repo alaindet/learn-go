@@ -8,5 +8,6 @@ import (
 
 func Routes(server *gin.Engine) {
 	// TODO: Grouping
-	server.POST("/signup", handlers.CreateUser)
+	server.POST("/signup", handlers.SignUpUser)
+	server.POST("/signin", handlers.SignInUser)
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateUser(ctx *gin.Context) {
+func SignUpUser(ctx *gin.Context) {
 
 	var user models.UserModel
 	err := ctx.ShouldBindJSON(&user)
