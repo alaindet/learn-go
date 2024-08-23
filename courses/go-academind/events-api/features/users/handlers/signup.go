@@ -22,8 +22,11 @@ func SignUpUser(ctx *gin.Context) {
 	// event.UserID = 1 // TODO
 	signedUpUser, err := user.Create()
 	if err != nil {
+
+		// TODO: Check for existing user
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "Cannot create event on the database",
+			"message": "Cannot create user on the database",
 		})
 		return
 	}

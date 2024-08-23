@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"app/features/users/models"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +20,7 @@ func SignInUser(ctx *gin.Context) {
 		return
 	}
 
-	err = user.ValidateCredentials()
+	jwt, err := user.ValidateCredentials()
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"message": err.Error(),
@@ -30,6 +31,7 @@ func SignInUser(ctx *gin.Context) {
 	// TODO: Create JWT
 
 	ctx.JSON(http.StatusCreated, gin.H{
-		"message": "Signed in",
+		"message":      fmt.Sprintf("Signed in with %s", user.Email),
+		"access_token": jwt,
 	})
 }

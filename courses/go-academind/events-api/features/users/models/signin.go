@@ -3,32 +3,39 @@ package models
 import (
 	"app/common/utils"
 	"app/core/db"
+	"time"
 )
 
 var fetchUserPasswordSql = `
-	SELECT "password"
+	SELECT "id", "password"
 	FROM "users"
 	WHERE "email" = ?
 `
 
-func (u UserModel) ValidateCredentials() error {
+func (u UserModel) ValidateCredentials() (string, error) {
 
 	stmt, err := db.DB.Prepare(fetchUserPasswordSql)
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer stmt.Close()
 
+	var userId int64
 	var hashedPassword string
 	row := stmt.QueryRow(u.Email)
-	err = row.Scan(&hashedPassword)
+	err = row.Scan(&userId, &hashedPassword)
 	if err != nil {
-		return ErrInvalidCredentials
+		return "", ErrInvalidCredentials
 	}
 
 	if !utils.CheckPasswordHash(hashedPassword, u.Password) {
-		return ErrInvalidCredentials
+		return "", ErrInvalidCredentials
 	}
 
-	return nil
+	jwt, err := utils.GenerateToken(u.Email, userId, 12*time.Hour)
+	if err != nil {
+		return "", err
+	}
+
+	return jwt, nil
 }
