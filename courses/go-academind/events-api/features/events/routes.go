@@ -11,4 +11,6 @@ func Routes(server *gin.Engine) {
 	server.POST("/events", handlers.CreateEvent)
 	server.GET("/events", handlers.GetEvents)
 	server.GET("/events/:eventid", handlers.GetEvent)
+	server.PUT("/events/:eventid", handlers.UpdateEvent)
+	server.DELETE("/events/:eventid", handlers.DeleteEvent)
 }

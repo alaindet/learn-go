@@ -18,7 +18,7 @@ func GetEvents(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "Hello Events",
+		"message": "Get all events",
 		"data":    events,
 	})
 }

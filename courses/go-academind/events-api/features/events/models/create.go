@@ -4,7 +4,7 @@ import (
 	"app/core/db"
 )
 
-var saveSql = `
+var createSql = `
 	INSERT INTO "events" (
 		"name",
 		"description",
@@ -12,12 +12,13 @@ var saveSql = `
 		"date_time",
 		"user_id"
 	)
-	VALUES (?, ?, ?, ?, ?)
+	VALUES
+		(?, ?, ?, ?, ?)
 `
 
-func (e EventModel) Save() (EventModel, error) {
+func (e EventModel) Create() (EventModel, error) {
 
-	stmt, err := db.DB.Prepare(saveSql)
+	stmt, err := db.DB.Prepare(createSql)
 	if err != nil {
 		return e, err
 	}
