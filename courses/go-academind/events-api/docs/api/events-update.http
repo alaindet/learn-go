@@ -1,0 +1,18 @@
+@port = 8080
+@apiPrefix = api/v1
+@baseUrl = http://localhost:{{port}}/{{apiPrefix}}
+@eventId = 1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJleHAiOjE3MjQ1NDc5ODQsInVzZXJJZCI6MX0.Xl4tp3sIpbgQOPzVYBjNBuDvuc_YhDOtp8QgGaBtp14
+
+###
+
+PUT {{baseUrl}}/events/{{eventId}}
+content-type: application/json
+authorization: {{token}}
+
+{
+  "name": "Test event (modified)",
+  "description": "A test event (modified)",
+  "location": "A test location (modified)",
+  "dateTime": "2024-02-02T00:00:00.000Z"
+}
