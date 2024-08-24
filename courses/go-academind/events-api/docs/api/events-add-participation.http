@@ -2,9 +2,9 @@
 @apiPrefix = api/v1
 @baseUrl = http://localhost:{{port}}/{{apiPrefix}}
 @eventId = 5
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJleHAiOjE3MjQ1Nzk5NTksInVzZXJJZCI6MX0.mEbwSDddgv2fUkB2HYB5S6rKHKJOUgZ3xdavE9Eey2Y
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAZXhhbXBsZS5jb20iLCJleHAiOjE3MjQ1ODIwMTMsInVzZXJJZCI6Mn0.xEwf9GZ-vGKN3oJ6ENQ9BKHs0D8NuEc9Tmn0jj5AZ1I
 
 ###
 
-POST {{baseUrl}}/events/{{eventId}}/participation
+POST {{baseUrl}}/events/{{eventId}}/participations
 authorization: {{token}}

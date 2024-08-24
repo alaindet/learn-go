@@ -40,16 +40,22 @@ func Routes(routes *gin.RouterGroup) {
 	)
 
 	routes.POST(
-		"/events/:eventid/participation",
+		"/events/:eventid/participations",
 		usersMiddlewares.Authenticate,
 		eventsMiddlewares.ExistingEvent,
 		handlers.CreateEventParticipation,
 	)
 
 	routes.DELETE(
-		"/events/:eventid/participation",
+		"/events/:eventid/participations",
 		usersMiddlewares.Authenticate,
 		eventsMiddlewares.ExistingEvent,
 		handlers.DeleteEventParticipation,
+	)
+
+	routes.GET(
+		"/events/:eventid/participations",
+		eventsMiddlewares.ExistingEvent,
+		handlers.GetEventParticipations,
 	)
 }

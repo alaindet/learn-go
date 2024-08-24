@@ -6,5 +6,5 @@
 
 ###
 
-DELETE {{baseUrl}}/events/{{eventId}}/participation
+DELETE {{baseUrl}}/events/{{eventId}}/participations
 authorization: {{token}}
