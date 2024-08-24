@@ -1,7 +1,7 @@
 @port = 8080
 @apiPrefix = api/v1
 @baseUrl = http://localhost:{{port}}/{{apiPrefix}}
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJleHAiOjE3MjQ1NDc5ODQsInVzZXJJZCI6MX0.Xl4tp3sIpbgQOPzVYBjNBuDvuc_YhDOtp8QgGaBtp14
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAZXhhbXBsZS5jb20iLCJleHAiOjE3MjQ1NzczMTgsInVzZXJJZCI6Mn0.mhQkuTpQ_6G0W_nI4QnoMNMECv1wal-O_ZHwzqQA3wo
 
 ###
 

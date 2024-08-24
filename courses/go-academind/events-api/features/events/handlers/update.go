@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"app/common/utils"
 	"app/features/events/models"
 	"fmt"
 	"net/http"
@@ -19,12 +20,8 @@ func UpdateEvent(ctx *gin.Context) {
 		})
 	}
 
-	// Parse route param
-	eventId := ctx.Param("eventid")
-	event, err := fetchEvent(ctx, eventId)
-	if err != nil {
-		return
-	}
+	// Fetch event from middleware
+	event, _ := utils.GetFromGinContext[models.EventModel](ctx, "event")
 
 	// Update existing model
 	event.Name = updatedEvent.Name
@@ -42,7 +39,7 @@ func UpdateEvent(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, gin.H{
-		"message": fmt.Sprintf("Event #%s updated", eventId),
+		"message": fmt.Sprintf("Event #%d updated", event.ID),
 		"data":    savedEvent,
 	})
 }

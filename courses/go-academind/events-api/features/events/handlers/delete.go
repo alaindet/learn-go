@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"app/common/utils"
+	"app/features/events/models"
 	"fmt"
 	"net/http"
 
@@ -9,20 +11,12 @@ import (
 
 func DeleteEvent(ctx *gin.Context) {
 
-	// Parse route param
-	eventId := ctx.Param("eventid")
-	event, err := fetchEvent(ctx, eventId)
-	if err != nil {
-		return
-	}
+	// Fetch event from middleware
+	event, _ := utils.GetFromGinContext[models.EventModel](ctx, "event")
 
 	// Delete model
 	deletedEvent, err := event.Delete()
 	if err != nil {
-
-		// TODO: Remove
-		fmt.Printf("%#v\n", err)
-
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Cannot delete event on the database",
 		})
@@ -30,7 +24,7 @@ func DeleteEvent(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, gin.H{
-		"message": fmt.Sprintf("Event #%s deleted", eventId),
+		"message": fmt.Sprintf("Event #%d deleted", event.ID),
 		"data":    deletedEvent,
 	})
 }
