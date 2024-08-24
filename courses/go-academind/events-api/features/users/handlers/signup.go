@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"app/features/users/models"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -19,11 +20,15 @@ func SignUpUser(ctx *gin.Context) {
 		return
 	}
 
-	// event.UserID = 1 // TODO
 	signedUpUser, err := user.Create()
 	if err != nil {
 
-		// TODO: Check for existing user
+		if errors.Is(err, models.ErrUserExists) {
+			ctx.JSON(http.StatusConflict, gin.H{
+				"message": fmt.Sprintf("User %q already exists", user.Email),
+			})
+			return
+		}
 
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "Cannot create user on the database",

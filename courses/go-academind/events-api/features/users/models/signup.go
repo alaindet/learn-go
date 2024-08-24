@@ -3,6 +3,13 @@ package models
 import (
 	"app/common/utils"
 	"app/core/db"
+	"errors"
+
+	"github.com/mattn/go-sqlite3"
+)
+
+var (
+	ErrUserExists = errors.New("user already exists")
 )
 
 var createSql = `
@@ -25,6 +32,14 @@ func (u UserModel) Create() (UserModel, error) {
 
 	result, err := stmt.Exec(u.Email, password)
 	if err != nil {
+
+		var sqliteErr sqlite3.Error
+		if errors.As(err, &sqliteErr) {
+			if errors.Is(sqliteErr.Code, sqlite3.ErrConstraint) {
+				return u, ErrUserExists
+			}
+		}
+
 		return u, err
 	}
 
