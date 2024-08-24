@@ -1,4 +1,4 @@
-package utils
+package jwt
 
 import (
 	"time"
@@ -6,10 +6,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// TODO: Use external value
-const secretKey = "this is not so secret"
-
-func GenerateToken(
+func Generate(
 	email string,
 	userId int64,
 	duration time.Duration,

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"app/common/jwt"
 	"app/common/utils"
 	"app/core/db"
 	"time"
@@ -12,7 +13,7 @@ var fetchUserPasswordSql = `
 	WHERE "email" = ?
 `
 
-func (u UserModel) ValidateCredentials() (string, error) {
+func (u *UserModel) ValidateCredentials() (string, error) {
 
 	stmt, err := db.DB.Prepare(fetchUserPasswordSql)
 	if err != nil {
@@ -32,7 +33,7 @@ func (u UserModel) ValidateCredentials() (string, error) {
 		return "", ErrInvalidCredentials
 	}
 
-	jwt, err := utils.GenerateToken(u.Email, userId, 12*time.Hour)
+	jwt, err := jwt.Generate(u.Email, userId, 12*time.Hour)
 	if err != nil {
 		return "", err
 	}

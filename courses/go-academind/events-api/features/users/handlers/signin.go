@@ -20,6 +20,7 @@ func SignInUser(ctx *gin.Context) {
 		return
 	}
 
+	// Validates credentials and generates a JWT
 	jwt, err := user.ValidateCredentials()
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
@@ -27,8 +28,6 @@ func SignInUser(ctx *gin.Context) {
 		})
 		return
 	}
-
-	// TODO: Create JWT
 
 	ctx.JSON(http.StatusCreated, gin.H{
 		"message":      fmt.Sprintf("Signed in with %s", user.Email),

@@ -1,0 +1,4 @@
+- [ ] Group routes
+- [ ] Add Swagger
+- [ ] Add route versioning
+- [ ] Add make/Task

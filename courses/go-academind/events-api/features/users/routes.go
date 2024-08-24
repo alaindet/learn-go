@@ -6,8 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Routes(server *gin.Engine) {
-	// TODO: Grouping
-	server.POST("/signup", handlers.SignUpUser)
-	server.POST("/signin", handlers.SignInUser)
+func Routes(routes *gin.RouterGroup) {
+	routes.POST("/signup", handlers.SignUpUser)
+	routes.POST("/signin", handlers.SignInUser)
 }

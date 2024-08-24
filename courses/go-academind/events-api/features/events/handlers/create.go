@@ -9,6 +9,8 @@ import (
 
 func CreateEvent(ctx *gin.Context) {
 
+	userId := ctx.GetInt64("userId")
+
 	var event models.EventModel
 	err := ctx.ShouldBindJSON(&event)
 	if err != nil {
@@ -18,7 +20,7 @@ func CreateEvent(ctx *gin.Context) {
 		return
 	}
 
-	event.UserID = 1 // TODO
+	event.UserID = userId
 	savedEvent, err := event.Create()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
