@@ -1,9 +1,8 @@
 package handlers
 
 import (
+	"app/common/utils"
 	"app/features/events/models"
-	"database/sql"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -11,25 +10,11 @@ import (
 )
 
 func GetEvent(ctx *gin.Context) {
-	eventId := ctx.Param("eventid")
-
-	event, err := models.GetByID(eventId)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			ctx.JSON(http.StatusNotFound, gin.H{
-				"message": fmt.Sprintf("Event #%s not found", eventId),
-			})
-			return
-		}
-
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"message": fmt.Sprintf("Cannot get event #%s", eventId),
-		})
-		return
-	}
+	// Fetch event from middleware
+	event, _ := utils.GetFromGinContext[models.EventModel](ctx, "event")
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": fmt.Sprintf("Get event #%s", eventId),
+		"message": fmt.Sprintf("Get event #%s", event.ID),
 		"data":    event,
 	})
 }

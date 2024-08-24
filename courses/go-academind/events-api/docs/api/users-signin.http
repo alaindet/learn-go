@@ -8,6 +8,6 @@ POST {{baseUrl}}/signin
 content-type: application/json
 
 {
-  "email": "jane@example.com",
-  "password": "jane@example.com"
+  "email": "john@example.com",
+  "password": "john@example.com"
 }

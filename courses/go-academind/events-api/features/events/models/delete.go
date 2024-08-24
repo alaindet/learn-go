@@ -8,14 +8,7 @@ import (
 var deleteSql = `DELETE FROM "events" WHERE "id" = ?`
 
 func (e EventModel) Delete() (EventModel, error) {
-
-	stmt, err := db.DB.Prepare(deleteSql)
-	if err != nil {
-		return e, err
-	}
-	defer stmt.Close()
-
-	res, err := stmt.Exec(e.ID)
+	res, err := db.DB.Exec(deleteSql, e.ID)
 	changedRows, err := res.RowsAffected()
 	if err != nil || changedRows == 0 {
 		return e, fmt.Errorf("Cannot delete event #%d", e.ID)

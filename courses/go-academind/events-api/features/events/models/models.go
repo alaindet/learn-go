@@ -12,3 +12,9 @@ type EventModel struct {
 	DateTime    time.Time `binding:"required"`
 	UserID      int64
 }
+
+type EventParticipation struct {
+	ID      int64
+	EventID int64
+	UserID  int64
+}

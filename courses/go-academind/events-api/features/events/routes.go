@@ -9,24 +9,47 @@ import (
 )
 
 func Routes(routes *gin.RouterGroup) {
-	events := routes.Group("/events")
-	events.GET("/", handlers.GetEvents)
-	events.GET("/:eventid", handlers.GetEvent)
+	routes.GET("/events", handlers.GetEvents)
 
-	auth := events.Group("/", usersMiddlewares.Authenticate)
-	auth.POST("/", handlers.CreateEvent)
+	routes.GET(
+		"/events/:eventid",
+		eventsMiddlewares.ExistingEvent,
+		handlers.GetEvent,
+	)
 
-	auth.PUT(
-		"/:eventid",
+	routes.POST(
+		"/events",
+		usersMiddlewares.Authenticate,
+		handlers.CreateEvent,
+	)
+
+	routes.PUT(
+		"/events/:eventid",
+		usersMiddlewares.Authenticate,
 		eventsMiddlewares.ExistingEvent,
 		eventsMiddlewares.IsEventAuthor,
 		handlers.UpdateEvent,
 	)
 
-	auth.DELETE(
-		"/:eventid",
+	routes.DELETE(
+		"/events/:eventid",
+		usersMiddlewares.Authenticate,
 		eventsMiddlewares.ExistingEvent,
 		eventsMiddlewares.IsEventAuthor,
 		handlers.DeleteEvent,
+	)
+
+	routes.POST(
+		"/events/:eventid/participation",
+		usersMiddlewares.Authenticate,
+		eventsMiddlewares.ExistingEvent,
+		handlers.CreateEventParticipation,
+	)
+
+	routes.DELETE(
+		"/events/:eventid/participation",
+		usersMiddlewares.Authenticate,
+		eventsMiddlewares.ExistingEvent,
+		handlers.DeleteEventParticipation,
 	)
 }
