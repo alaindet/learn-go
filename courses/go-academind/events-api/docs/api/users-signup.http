@@ -1,0 +1,13 @@
+@port = 8080
+@apiPrefix = api/v1
+@baseUrl = http://localhost:{{port}}/{{apiPrefix}}
+
+###
+
+POST {{baseUrl}}/signup
+content-type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "john@example.com"
+}

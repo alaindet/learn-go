@@ -1,0 +1,7 @@
+@port = 8080
+@apiPrefix = api/v1
+@baseUrl = http://localhost:{{port}}/{{apiPrefix}}
+
+###
+
+GET {{baseUrl}}/events
