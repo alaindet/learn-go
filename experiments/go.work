@@ -16,6 +16,7 @@ use (
 	./code-gen
 	./embed-react
 	./enums
+	./enums-idiomatic
 	./fibonacci-math-big
 	./file-copy
 	./fscanf
