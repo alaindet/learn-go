@@ -1,18 +1,6 @@
 go 1.18
 
 use (
-	./behavioral-patterns/chain-of-responsibility
-	./behavioral-patterns/command
-	./behavioral-patterns/interpreter
-	./behavioral-patterns/iterator
-	./behavioral-patterns/mediator
-	./behavioral-patterns/memento
-	./behavioral-patterns/observer
-	./behavioral-patterns/state
-	./behavioral-patterns/strategy
-	./behavioral-patterns/template-method
-	./behavioral-patterns/visitor
-
 	./creational-patterns/builder
 	./creational-patterns/factory
 	./creational-patterns/prototype
@@ -30,5 +18,4 @@ use (
 	./structural-patterns/decorator
 	./structural-patterns/facade
 	./structural-patterns/flyweight
-	./structural-patterns/proxy
 )
