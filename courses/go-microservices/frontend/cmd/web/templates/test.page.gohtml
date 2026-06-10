@@ -6,6 +6,10 @@
       <div class="col">
         <h1 class="mt-5">Test microservices</h1>
         <hr>
+        <button class="btn btn-outline-secondary" onclick="onBrokerButtonClick()">
+          Broker
+        </button>
+
         <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
           <span class="text-muted">Output shows here...</span>
         </div>
@@ -31,6 +35,32 @@
 
 {{define "js"}}
   <script>
-        
+    const sent = document.getElementById('payload');
+    const received = document.getElementById('received');
+    const output = document.getElementById('output');
+
+    async function onBrokerButtonClick(event) {
+
+      try {
+        const res = await fetch('http:\/\/localhost:8080', { method: 'POST' });
+        const data = await res.json();
+
+        if (data.error) {
+          console.error(data.message);
+          return;
+        }
+
+        sent.innerHTML = '(No request data)';
+        received.innerHTML = JSON.stringify(data, undefined, 4);
+        output.innerHTML += `
+          <br>
+          <strong>Response from broker service</strong>:
+          ${data.message}
+        `;
+      } catch (err) {
+        console.error(err);
+        output.innerHTML += `<br><br>Error: ${err}`
+      }
+    }
   </script>
 {{end}}
