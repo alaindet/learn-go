@@ -31,7 +31,7 @@ func (app *Config) readJSON(
 		return err
 	}
 
-	err = decoder.Decpde(&struct{}{})
+	err = decoder.Decode(&struct{}{})
 	if err != io.EOF {
 		return ErrMultipleJSON
 	}
