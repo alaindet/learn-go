@@ -2,7 +2,6 @@ package main
 
 import (
 	"authentication/data"
-	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,13 +9,6 @@ import (
 
 // TODO: Move to CLI flags/environment variables
 const webPort = "80"
-
-var dbAttempts int
-
-type Config struct {
-	DB     *sql.DB
-	Models data.Models
-}
 
 func main() {
 	log.Printf("Starting authentication service on port %s\n", webPort)
@@ -26,7 +18,7 @@ func main() {
 		log.Panic("Cannot connect to database")
 	}
 
-	app := Config{
+	app := App{
 		DB:     db,
 		Models: data.New(db),
 	}
@@ -36,9 +28,7 @@ func main() {
 		Handler: app.routes(),
 	}
 
-	err := server.ListenAndServe()
-
-	if err != nil {
+	if err := server.ListenAndServe(); err != nil {
 		log.Panic(err)
 	}
 }
