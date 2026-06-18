@@ -1,8 +1,9 @@
 module authentication
 
-go 1.25.0
+go 1.26.1
 
 require (
+	common v0.0.0
 	github.com/go-chi/chi/v5 v5.3.0 // indirect
 	github.com/go-chi/cors v1.2.2 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -16,3 +17,5 @@ require (
 	golang.org/x/crypto v0.53.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
 )
+
+replace common => ../common

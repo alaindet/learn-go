@@ -1,0 +1,7 @@
+# Per-Dockerfile ignore file (BuildKit honors <dockerfile>.dockerignore).
+# The build context is the project root, so by default every sibling module
+# would be sent to the daemon. Exclude everything, then re-include only what
+# this image needs: the broker service and the shared common module.
+*
+!broker
+!common
