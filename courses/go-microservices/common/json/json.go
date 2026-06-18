@@ -1,62 +1,71 @@
-package main
+package json
 
 import (
 	"encoding/json"
-	"errors"
 	"io"
 	"net/http"
 )
 
-type jsonResponse struct {
+type Response struct {
 	Error   bool   `json:"error"`
 	Message string `json:"message"`
 	Data    any    `json:"data,omitempty"`
 }
 
 var (
-	ErrMultipleJSON = errors.New("body must have only one JSON value")
+	MaxJSONReadBytes = 1024 * 5
 )
 
-func (app *Config) readJSON(
+// Reads JSON payload (< 5 MB) an incoming HTTP request into a variable
+func ReadRequest(
 	w http.ResponseWriter,
 	r *http.Request,
 	data any,
 ) error {
-	maxBytes := 1048576 // 1 MB
-	r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytes))
+	// Read the first 5 MB only
+	r.Body = http.MaxBytesReader(w, r.Body, int64(MaxJSONReadBytes))
 
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(data)
+	// Read the entire body into memory
+	dataBytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		return err
 	}
 
-	err = decoder.Decode(&struct{}{})
-	if err != io.EOF {
-		return ErrMultipleJSON
+	// Unmarshal it into the "data" variable
+	err = json.Unmarshal(dataBytes, data)
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func (app *Config) writeJSON(
+// Writes a JSON response
+func WriteResponse(
 	w http.ResponseWriter,
-	status int, data any,
+	status int,
+	data any,
 	headers ...http.Header,
 ) error {
+
+	// Convert data to JSON
 	out, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
 
+	// Set HTTP headers response
 	if len(headers) > 0 {
 		for key, value := range headers[0] {
 			w.Header()[key] = value
 		}
 	}
 
+	// This is mandatory for JSON
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
+
+	// Sending JSON bytes to the client
 	_, err = w.Write(out)
 	if err != nil {
 		return err
@@ -65,7 +74,7 @@ func (app *Config) writeJSON(
 	return nil
 }
 
-func (app *Config) errorJSON(
+func WriteErrorResponse(
 	w http.ResponseWriter,
 	err error,
 	status ...int, // Here, status is a spread since it's optional and the last arg
@@ -75,9 +84,9 @@ func (app *Config) errorJSON(
 		statusCode = status[0]
 	}
 
-	var payload jsonResponse
+	var payload Response
 	payload.Error = true
 	payload.Message = err.Error()
 
-	return app.writeJSON(w, statusCode, payload)
+	return WriteResponse(w, statusCode, payload)
 }

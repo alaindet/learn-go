@@ -2,9 +2,6 @@ services:
 
   broker:
     build:
-      # Context is the project root so the build can see both the broker
-      # service and the shared "common" module that broker/go.mod points at
-      # via "replace common => ../common".
       context: ../
       dockerfile: broker/Dockerfile
     restart: always
@@ -16,8 +13,6 @@ services:
 
   authentication:
     build:
-      # Context is the project root so the build can also reach the shared
-      # "common" module alongside the authentication service.
       context: ../
       dockerfile: authentication/Dockerfile
     restart: always
