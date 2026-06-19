@@ -2,6 +2,8 @@ package main
 
 import (
 	"authentication/data"
+	"common/json"
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +11,12 @@ import (
 
 // TODO: Move to CLI flags/environment variables
 const webPort = "80"
+
+type App struct {
+	DB     *sql.DB
+	Models data.Models
+	json.HTTPClient
+}
 
 func main() {
 	log.Printf("Starting authentication service on port %s\n", webPort)

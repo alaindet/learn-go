@@ -11,6 +11,8 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
+var dbAttempts int
+
 // TODO: Move to CLI flags/environment variables
 const dbMaxAttempts = 10
 const dbBackoffSeconds = 2

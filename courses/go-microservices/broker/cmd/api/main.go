@@ -1,6 +1,7 @@
 package main
 
 import (
+	"common/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,13 +9,14 @@ import (
 
 const webPort = "80"
 
-type Config struct {
+type App struct {
+	json.HTTPClient
 }
 
 func main() {
 	log.Printf("Starting broker service on port %s\n", webPort)
 
-	app := Config{}
+	app := App{}
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
@@ -23,7 +25,7 @@ func main() {
 
 	err := server.ListenAndServe()
 
-    if err != nil {
+	if err != nil {
 		log.Panic(err)
 	}
 }

@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-func (app *Config) Broker(w http.ResponseWriter, r *http.Request) {
-	commonJSON.WriteResponse(w, http.StatusOK, commonJSON.Response{
+func (app *App) Broker(w http.ResponseWriter, r *http.Request) {
+	app.WriteJSON(w, http.StatusOK, commonJSON.Response{
 		Message: "Hit the broker",
 	})
 }
