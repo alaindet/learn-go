@@ -6,8 +6,12 @@
       <div class="col">
         <h1 class="mt-5">Test microservices</h1>
         <hr>
-        <button class="btn btn-outline-secondary" onclick="onBrokerButtonClick()">
-          Broker
+        <button class="btn btn-outline-secondary" id="brokerBtn">
+          Test Broker
+        </button>
+
+        <button class="btn btn-outline-secondary" id="authBtn">
+          Test Auth
         </button>
 
         <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
@@ -35,32 +39,99 @@
 
 {{define "js"}}
   <script>
-    const sent = document.getElementById('payload');
-    const received = document.getElementById('received');
-    const output = document.getElementById('output');
+    document.getElementById('brokerBtn').addEventListener('click', async event => {
+      sendHttpRequest({
+        serviceName: 'broker',
+        url: 'http://localhost:8080',
+        method: 'POST',
+      });
+    });
 
-    async function onBrokerButtonClick(event) {
+    document.getElementById('authBtn').addEventListener('click', async event => {
+      sendHttpRequest({
+        serviceName: 'authentication',
+        url: 'http://localhost:8080/handle',
+        method: 'POST',
+        headers: jsonHeaders(),
+        payload: {
+          action: 'auth',
+          auth: {
+            email: 'admin@example.com',
+            password: 'verysecret',
+          },
+        },
+      });
+    });
+
+    async function sendHttpRequest({
+      serviceName,
+      url,
+      method,
+      headers,
+      payload,
+    }) {
+      const body = {
+        method: method.toUpperCase(),
+      };
+
+      if (payload) {
+        body.body = JSON.stringify(payload);
+      }
+
+      if (headers) {
+        body.headers = headers;
+      }
 
       try {
-        const res = await fetch('http:\/\/localhost:8080', { method: 'POST' });
-        const data = await res.json();
-
-        if (data.error) {
-          console.error(data.message);
-          return;
-        }
-
-        sent.innerHTML = '(No request data)';
-        received.innerHTML = JSON.stringify(data, undefined, 4);
-        output.innerHTML += `
-          <br>
-          <strong>Response from broker service</strong>:
-          ${data.message}
-        `;
+        const res = await fetch(url, body);
+        const resData = await res.json();
+        updateHtml({
+          serviceName,
+          sent: body,
+          received: resData,
+          error: resData.error,
+        });
       } catch (err) {
-        console.error(err);
-        output.innerHTML += `<br><br>Error: ${err}`
+        updateHtml({
+          serviceName,
+          sent: body,
+          received: null,
+          error: err,
+        });
       }
     }
+
+    function updateHtml({
+      serviceName,
+      sent,
+      received,
+      error,
+    }) {
+      const sentEl = document.getElementById('payload');
+      const receivedEl = document.getElementById('received');
+      const outputEl = document.getElementById('output');
+
+      sentEl.innerHTML = JSON.stringify(sent, undefined, 4);
+      receivedEl.innerHTML = JSON.stringify(received, undefined, 4);
+
+      if (error) {
+        console.error(error);
+        outputEl.innerHTML += `<br><br>Error: ${error}`
+        return;
+      }
+
+      outputEl.innerHTML += `
+        <br>
+        <strong>Response from service: ${serviceName}</strong>:
+        ${received.message}
+      `;
+    }
+
+    function jsonHeaders() {
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      return headers;
+    }
+
   </script>
 {{end}}
