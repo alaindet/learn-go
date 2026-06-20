@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+	"logger/data"
+	"net/http"
+)
 
 type CreateLogPayload struct {
 	Name string `json:"name"`
@@ -24,6 +27,4 @@ func (app *App) WriteLog(w http.ResponseWriter, r *http.Request) {
 		app.WriteJSONError(w, err)
 		return
 	}
-
-	resData
 }

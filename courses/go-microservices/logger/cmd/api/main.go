@@ -3,17 +3,20 @@ package main
 import (
 	"common/json"
 	"context"
+	"fmt"
 	"log"
-	"time"
 	"logger/data"
+	"net/http"
+	"time"
 
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 const (
 	webPort  = "80"
 	rpcPort  = "5001"
-	mongoURL = "mongodb://mongo:27017"
+	mongoURL = "mongodb://localhost:27017"
 	grpcPort = "50001"
 
 	mongoUsername = "admin"
@@ -42,22 +45,18 @@ func main() {
 		if err = client.Disconnect(ctx); err != nil {
 			panic(err)
 		}
-	}
+	}()
 
 	app := App{
 		Models: data.New(client),
 	}
 
-	go app.serve()
-}
-
-func (app *App) serve() {
 	server := &http.Server{
-		Addr: fmt.Sprintf(":%s", webPort),
+		Addr:    fmt.Sprintf(":%s", webPort),
 		Handler: app.routes(),
 	}
 
-	if err := ListenAndServe(); err != nil {
+	if err := server.ListenAndServe(); err != nil {
 		log.Panic(err)
 	}
 }
@@ -65,11 +64,11 @@ func (app *App) serve() {
 func connectoToMongoDB() (*mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(mongoURL)
 	clientOptions.SetAuth(options.Credential{
-		UserName: mongoUsername,
+		Username: mongoUsername,
 		Password: mongoPassword,
 	})
 
-	connection, err := mongo.Connect(context.TODO(), clientOptions)
+	connection, err := mongo.Connect(clientOptions)
 	if err != nil {
 		log.Println("Error connecting:", err)
 		return nil, err

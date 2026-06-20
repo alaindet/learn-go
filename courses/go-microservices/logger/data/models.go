@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
-	"go.mongodb.org/mongo-driver/v2/bson/primitive"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -63,7 +62,7 @@ func (le *LogEntry) All() ([]*LogEntry, error) {
 
 	collection := client.Database(mongoDatabase).Collection(mongoCollection)
 	opts := options.Find()
-	options.SetSort(bson.D{"created_at", -1})
+	opts.SetSort(bson.D{{"created_at", -1}})
 
 	cursor, err := collection.Find(context.TODO(), bson.D{}, opts)
 	if err != nil {
@@ -95,7 +94,7 @@ func (le *LogEntry) GetOne(id string) (*LogEntry, error) {
 
 	collection := client.Database(mongoDatabase).Collection(mongoCollection)
 
-	docID, err := primitive.ObjectIDFromHex(id)
+	docID, err := bson.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +127,7 @@ func (le *LogEntry) Update() (*mongo.UpdateResult, error) {
 
 	collection := client.Database(mongoDatabase).Collection(mongoCollection)
 
-	docID, err := primitive.ObjectIDFromHex(le.ID)
+	docID, err := bson.ObjectIDFromHex(le.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -138,9 +137,9 @@ func (le *LogEntry) Update() (*mongo.UpdateResult, error) {
 		bson.M{"_id": docID},
 		bson.D{
 			{"$set", bson.D{
-				{"name": le.Name},
-				{"data": le.Data},
-				{"updated_at": time.Now()},
+				{"name", le.Name},
+				{"data", le.Data},
+				{"updated_at", time.Now()},
 			}},
 		},
 	)
