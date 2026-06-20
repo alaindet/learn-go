@@ -7,13 +7,15 @@ import (
 	"net/http"
 )
 
+type AuthenticatePayload struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 var ErrInvalidCredentials = errors.New("Invalid credentials")
 
 func (app *App) Authenticate(w http.ResponseWriter, r *http.Request) {
-	var requestPayload struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
+	var requestPayload AuthenticatePayload
 
 	if err := app.ReadJSON(w, r, &requestPayload); err != nil {
 		app.WriteJSONError(w, err, http.StatusBadRequest)
