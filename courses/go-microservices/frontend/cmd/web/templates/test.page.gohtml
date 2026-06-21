@@ -14,6 +14,10 @@
           Test Auth
         </button>
 
+        <button class="btn btn-outline-secondary" id="logBtn">
+          Test Log
+        </button>
+
         <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
           <span class="text-muted">Output shows here...</span>
         </div>
@@ -44,6 +48,22 @@
         serviceName: 'broker',
         url: 'http://localhost:8080',
         method: 'POST',
+      });
+    });
+
+    document.getElementById('logBtn').addEventListener('click', async event => {
+      sendHttpRequest({
+        serviceName: 'logger',
+        url: 'http://localhost:8080/handle',
+        method: 'POST',
+        headers: jsonHeaders(),
+        payload: {
+          action: 'log',
+          log: {
+            name: 'Some event name',
+            data: 'Some event data',
+          },
+        },
       });
     });
 

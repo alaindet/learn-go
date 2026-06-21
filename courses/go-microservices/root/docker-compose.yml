@@ -24,6 +24,15 @@ services:
     environment:
       DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
 
+  logger:
+    build:
+      context: ../
+      dockerfile: logger/Dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+
   postgres:
     image: 'postgres:14.2'
     # restart: 'always'
