@@ -2,7 +2,8 @@ package main
 
 import (
 	"bytes"
-	"common/json"
+	commonJSON "common/json"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -28,20 +29,22 @@ func (app *App) Authenticate(w http.ResponseWriter, r *http.Request) {
 	user, err := app.Models.User.GetByEmail(requestPayload.Email)
 	if err != nil {
 		app.WriteJSONError(w, ErrInvalidCredentials, http.StatusBadRequest)
+		return
 	}
 
 	valid, err := user.PasswordMatches(requestPayload.Password)
 	if err != nil || !valid {
 		app.WriteJSONError(w, ErrInvalidCredentials, http.StatusBadRequest)
+		return
 	}
 
 	logMessage := fmt.Sprintf("%s logged in", user.Email)
-	err := app.logRequest("authentication", logMessage)
-	if err != nil {
+	if err := app.logRequest("authentication", logMessage); err != nil {
 		app.WriteJSONError(w, err)
+		return
 	}
 
-	responsePayload := json.Response{
+	responsePayload := commonJSON.Response{
 		Message: fmt.Sprintf("Logged in user %s", user.Email),
 		Data:    user,
 	}
@@ -58,7 +61,7 @@ func (app *App) logRequest(name, data string) error {
 	entry.Name = name
 	entry.Data = data
 
-	jsonData, _ := json.MarshalIndex(entry, "", "\t")
+	jsonData, _ := json.MarshalIndent(entry, "", "\t")
 
 	req, err := http.NewRequest("POST", logUrl, bytes.NewBuffer(jsonData))
 	if err != nil {
@@ -66,8 +69,8 @@ func (app *App) logRequest(name, data string) error {
 	}
 
 	client := &http.Client{}
-	_, err := client.Do(req)
-	if err != nil {
+
+	if _, err := client.Do(req); err != nil {
 		return err
 	}
 
