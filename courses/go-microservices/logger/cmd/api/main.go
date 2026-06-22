@@ -31,11 +31,15 @@ type App struct {
 }
 
 func main() {
+	log.Println("Starting logger service")
+
 	// Connect to Mongo
 	mongoClient, err := connectoToMongoDB()
 	if err != nil {
 		log.Panic(err)
 	}
+
+	log.Println("Connected to MongoDB")
 
 	client = mongoClient
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
@@ -56,12 +60,19 @@ func main() {
 		Handler: app.routes(),
 	}
 
+	log.Println("Created server")
+
 	if err := server.ListenAndServe(); err != nil {
 		log.Panic(err)
 	}
+
+	log.Println("Shutting down logger service")
 }
 
 func connectoToMongoDB() (*mongo.Client, error) {
+
+	log.Printf("Connecting MongoDB... %s\n", mongoURL)
+
 	clientOptions := options.Client().ApplyURI(mongoURL)
 	clientOptions.SetAuth(options.Credential{
 		Username: mongoUsername,
