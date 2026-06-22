@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	commonJSON "common/json"
 	"logger/data"
 	"net/http"
 )
@@ -12,17 +12,12 @@ type CreateLogPayload struct {
 }
 
 func (app *App) WriteLog(w http.ResponseWriter, r *http.Request) {
-
-	log.Println("Attempting to write log")
-
 	var reqData CreateLogPayload
 
 	if err := app.ReadJSON(w, r, &reqData); err != nil {
 		app.WriteJSONError(w, err, http.StatusBadRequest)
 		return
 	}
-
-	log.Printf("Log entry: name: %s, data: %v\n", reqData.Name, reqData.Data)
 
 	event := data.LogEntry{
 		Name: reqData.Name,
@@ -34,5 +29,8 @@ func (app *App) WriteLog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("Inserted log entry")
+	app.WriteJSON(w, http.StatusAccepted, commonJSON.Response{
+		Message: "Log entry created",
+		Data:    event,
+	})
 }

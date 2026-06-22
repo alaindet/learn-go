@@ -23,9 +23,7 @@ func main() {
 		Handler: app.routes(),
 	}
 
-	err := server.ListenAndServe()
-
-	if err != nil {
+	if err := server.ListenAndServe(); err != nil {
 		log.Panic(err)
 	}
 }
