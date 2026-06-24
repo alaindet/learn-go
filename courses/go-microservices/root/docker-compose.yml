@@ -33,6 +33,15 @@ services:
       mode: replicated
       replicas: 1
 
+  mail:
+    build:
+      context: ../
+      dockerfile: mail/Dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+
   postgres:
     image: 'postgres:18'
     # restart: 'always'

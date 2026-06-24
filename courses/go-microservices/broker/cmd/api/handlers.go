@@ -14,8 +14,8 @@ var (
 
 type RequestPayload struct {
 	Action string      `json:"action"`
-	Auth   AuthPayload `json:"auth,omiempty"`
-	Log    LogPayload  `json:"log,omiempty"`
+	Auth   AuthPayload `json:"auth,omitempty"`
+	Log    LogPayload  `json:"log,omitempty"`
 }
 
 type AuthPayload struct {

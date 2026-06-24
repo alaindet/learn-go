@@ -16,7 +16,7 @@ type App struct {
 }
 
 func main() {
-	log.Printf("Starting broker service on port %s\n", webPort)
+	log.Printf("Starting mail service on port %s\n", webPort)
 
 	app := App{}
 
