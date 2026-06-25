@@ -9,6 +9,11 @@ import (
 
 const authenticateUrl = "http://authentication/authenticate"
 
+type AuthPayload struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func (app *App) authenticate(w http.ResponseWriter, p AuthPayload) {
 	// Convert auth payload to JSON
 	jsonReq, err := json.MarshalIndent(p, "", "\t")

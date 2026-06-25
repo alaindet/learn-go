@@ -7,14 +7,16 @@ import (
 	"net/http"
 )
 
-const logUrl = "http://logger/log"
-
-type LogPayload struct {
-	Name string `json:"name"`
-	Data string `json:"data"`
+type MailPayload struct {
+	From    string `json:"from"`
+	To      string `json:"to"`
+	Subject string `json:"subject"`
+	Message string `json:"message"`
 }
 
-func (app *App) logItem(w http.ResponseWriter, p LogPayload) {
+const mailUrl = "http://mail/send"
+
+func (app *App) sendMail(w http.ResponseWriter, p MailPayload) {
 	// Convert auth payload to JSON
 	jsonReq, err := json.MarshalIndent(p, "", "\t")
 	if err != nil {
@@ -23,7 +25,7 @@ func (app *App) logItem(w http.ResponseWriter, p LogPayload) {
 	}
 
 	// Build a direct HTTP request
-	req, err := http.NewRequest("POST", logUrl, bytes.NewBuffer(jsonReq))
+	req, err := http.NewRequest("POST", mailUrl, bytes.NewBuffer(jsonReq))
 	if err != nil {
 		app.WriteJSONError(w, err)
 		return
@@ -48,7 +50,7 @@ func (app *App) logItem(w http.ResponseWriter, p LogPayload) {
 	}
 
 	var resData commonJSON.Response
-	resData.Message = "logged"
+	resData.Message = "email sent"
 
 	app.WriteJSON(w, http.StatusAccepted, resData)
 }

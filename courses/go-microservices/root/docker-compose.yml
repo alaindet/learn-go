@@ -41,6 +41,15 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      MAIL_DOMAIN: localhost
+      MAIL_PORT: 1025
+      MAIL_HOST: mailhog
+      MAIL_USERNAME: ""
+      MAIL_PASSWORD: ""
+      MAIL_ENCRYPTION: none
+      MAIL_FROM_NAME: "John Smith"
+      MAIL_FROM_ADDRESS: john.smith@example.com
 
   postgres:
     image: 'postgres:18'

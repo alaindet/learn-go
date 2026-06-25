@@ -18,6 +18,10 @@
           Test Log
         </button>
 
+        <button class="btn btn-outline-secondary" id="mailBtn">
+          Test Mail
+        </button>
+
         <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
           <span class="text-muted">Output shows here...</span>
         </div>
@@ -78,6 +82,24 @@
           auth: {
             email: 'admin@example.com',
             password: 'verysecret',
+          },
+        },
+      });
+    });
+
+    document.getElementById('mailBtn').addEventListener('click', async event => {
+      sendHttpRequest({
+        serviceName: 'mail',
+        url: 'http://localhost:8080/handle',
+        method: 'POST',
+        headers: jsonHeaders(),
+        payload: {
+          action: 'mail',
+          auth: {
+            from: 'sender@example.com',
+            to: 'receiver@example.com',
+            subject: 'An important message',
+            message: 'And its content',
           },
         },
       });
