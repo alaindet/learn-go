@@ -5,6 +5,7 @@ use (
 	./broker
 	./common
 	./frontend
+	./listener
 	./logger
 	./mail
 )
