@@ -14,9 +14,9 @@ var (
 
 type RequestPayload struct {
 	Action string      `json:"action"`
-	Auth   AuthPayload `json:"auth,omitempty"`
-	Log    LogPayload  `json:"log,omitempty"`
-	Mail   MailPayload `json:"mail,omitempty"`
+	Auth   AuthPayload `json:"auth"`
+	Log    LogPayload  `json:"log"`
+	Mail   MailPayload `json:"mail"`
 }
 
 func (app *App) Broker(w http.ResponseWriter, r *http.Request) {

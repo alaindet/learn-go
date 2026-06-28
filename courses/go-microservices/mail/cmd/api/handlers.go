@@ -3,6 +3,7 @@ package main
 import (
 	commonJSON "common/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -17,6 +18,7 @@ func (app *App) SendMail(w http.ResponseWriter, r *http.Request) {
 	var requestPayload mailMessage
 
 	if err := app.ReadJSON(w, r, &requestPayload); err != nil {
+		log.Println(err) // TODO: Remove
 		app.WriteJSONError(w, err)
 		return
 	}
@@ -29,6 +31,7 @@ func (app *App) SendMail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := app.Mailer.SendSMTPMessage(message); err != nil {
+		log.Println(err) // TODO: Remove
 		app.WriteJSONError(w, err)
 		return
 	}

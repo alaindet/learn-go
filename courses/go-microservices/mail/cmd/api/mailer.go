@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"embed"
 	"html/template"
 	"os"
 	"strconv"
@@ -32,8 +33,10 @@ type Message struct {
 	DataMap     map[string]any
 }
 
-func NewMail() (Mail, error) {
+//go:embed templates/*.gohtml
+var embeddedTemplates embed.FS
 
+func NewMail() (Mail, error) {
 	port, err := strconv.Atoi(os.Getenv("MAIL_PORT"))
 	if err != nil {
 		return Mail{}, err
@@ -112,14 +115,13 @@ func (m *Mail) SendSMTPMessage(message Message) error {
 }
 
 func (m *Mail) buildHTMLMessage(message Message) (string, error) {
-	templateToRender := "./templates/mail.html.gohtml"
-	t, err := template.New("email-html").ParseFiles(templateToRender)
+	t, err := template.ParseFS(embeddedTemplates, "templates/mail.html.gohtml")
 	if err != nil {
 		return "", err
 	}
 
 	var tmpl bytes.Buffer
-	if err := t.ExecuteTemplate(&tmpl, "body", message.DataMap); err != nil {
+	if err = t.ExecuteTemplate(&tmpl, "body", message.DataMap); err != nil {
 		return "", err
 	}
 
@@ -152,8 +154,7 @@ func (m *Mail) inlineCSS(formattedMessage string) (string, error) {
 }
 
 func (m *Mail) buildPlainTextMessage(message Message) (string, error) {
-	templateToRender := "./templates/mail.plain.gohtml"
-	t, err := template.New("email-plain").ParseFiles(templateToRender)
+	t, err := template.ParseFS(embeddedTemplates, "templates/mail.plain.gohtml")
 	if err != nil {
 		return "", err
 	}
