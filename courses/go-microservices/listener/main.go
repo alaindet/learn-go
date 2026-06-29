@@ -1,6 +1,7 @@
 package main
 
 import (
+	"listener/event"
 	"log"
 	"os"
 )
@@ -15,7 +16,15 @@ func main() {
 
 	log.Println("Connected to RabbitMQ")
 
-	// Start listening for messages from RabbitMQ
-	// Create a consumer
-	// Watch the queue and consume events
+	consumer, err := event.NewConsumer(rabbitMQConn)
+	if err != nil {
+		log.Panic("Cannot create a RabbitMQ consumer")
+		os.Exit(1)
+	}
+
+	topics := []string{"log.INFO", "log.WARNING", "log.ERROR"}
+
+	if err := consumer.Listen(topics); err != nil {
+		log.Println(err)
+	}
 }

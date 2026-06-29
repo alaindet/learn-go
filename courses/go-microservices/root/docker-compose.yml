@@ -51,6 +51,15 @@ services:
       MAIL_FROM_NAME: "John Smith"
       MAIL_FROM_ADDRESS: john.smith@example.com
 
+  listener:
+    build:
+      context: ../
+      dockerfile: listener/Dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+
   postgres:
     image: 'postgres:18'
     # restart: 'always'
