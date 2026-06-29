@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 const (
@@ -13,6 +15,7 @@ const (
 
 type App struct {
 	json.HTTPClient
+	RabbitMQ *amqp.Connection
 }
 
 func main() {
