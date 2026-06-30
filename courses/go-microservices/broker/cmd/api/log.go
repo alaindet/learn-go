@@ -5,6 +5,8 @@ import (
 	commonJSON "common/json"
 	"encoding/json"
 	"net/http"
+
+	"broker/event"
 )
 
 const logUrl = "http://logger/log"
@@ -51,4 +53,38 @@ func (app *App) logItem(w http.ResponseWriter, p LogPayload) {
 	resData.Message = "logged"
 
 	app.WriteJSON(w, http.StatusAccepted, resData)
+}
+
+func (app *App) logEventViaRabbitMQ(w http.ResponseWriter, p LogPayload) {
+	if err := app.pushToQueue(p.Name, p.Data); err != nil {
+		app.WriteJSONError(w, err)
+		return
+	}
+
+	var payload commonJSON.Response
+	payload.Message = "logged via RabbitMQ"
+	app.WriteJSON(w, http.StatusAccepted, payload)
+}
+
+func (app *App) pushToQueue(name, message string) error {
+	emitter, err := event.NewEventEmitter(app.RabbitMQ)
+	if err != nil {
+		return err
+	}
+
+	payload := LogPayload{
+		Name: name,
+		Data: message,
+	}
+
+	jsonData, err := json.Marshal(&payload)
+	if err != nil {
+		return err
+	}
+
+	if err := emitter.Push(string(jsonData), event.SeverityInfo); err != nil {
+		return err
+	}
+
+	return nil
 }

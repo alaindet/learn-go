@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -21,7 +22,17 @@ type App struct {
 func main() {
 	log.Printf("Starting broker service on port %s\n", webPort)
 
-	app := App{}
+	rabbitMQConn, err := connectToRabbitMQ()
+	if err != nil {
+		log.Panic("Cannot connect to RabbitMQ")
+		os.Exit(1)
+	}
+	defer rabbitMQConn.Close()
+	log.Println("Connected to RabbitMQ")
+
+	app := App{
+		RabbitMQ: rabbitMQConn,
+	}
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
