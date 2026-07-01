@@ -9,7 +9,9 @@ import (
 func main() {
 	app := fyApp.New()
 	window := app.NewWindow("Markdown Editor")
-	ui.setup()
+
+	ui.setupUI()
+	ui.setupMenuItems(window)
 
 	window.SetContent(
 		fyContainer.NewHSplit(
