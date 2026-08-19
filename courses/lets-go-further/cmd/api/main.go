@@ -28,15 +28,7 @@ func main() {
 	// Initialize app
 	logger := initLogger()
 	app := initApplication(config, logger)
-
-	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", config.port),
-		Handler:      app.routes(),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		ErrorLog:     slog.NewLogLogger(logger.Handler(), slog.LevelError),
-	}
+	server := initServer(app)
 
 	// Bootstrap app
 	logger.Info("starting server", "addr", server.Addr, "env", config.env)
@@ -61,5 +53,16 @@ func initApplication(cfg config, logger *slog.Logger) *application {
 	return &application{
 		config: cfg,
 		logger: logger,
+	}
+}
+
+func initServer(app *application) *http.Server {
+	return &http.Server{
+		Addr:         fmt.Sprintf(":%d", app.config.port),
+		Handler:      app.routes(),
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		ErrorLog:     slog.NewLogLogger(app.logger.Handler(), slog.LevelError),
 	}
 }
