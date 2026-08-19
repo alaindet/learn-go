@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -27,4 +28,29 @@ func readIDParam(r *http.Request) (int, error) {
 	}
 
 	return id, nil
+}
+
+func writeJSON(
+	w http.ResponseWriter,
+	status int,
+	data any,
+	headers http.Header,
+) error {
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	jsonData = append(jsonData, '\n')
+
+	for key, values := range headers {
+		for _, value := range values {
+			w.Header().Add(key, value)
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	w.Write(jsonData)
+	return nil
 }
