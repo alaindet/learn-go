@@ -11,7 +11,7 @@ func (app *application) routes() http.Handler {
 
 	router.Handler(http.MethodGet, "/v1/healthcheck", handleHealthcheck(app))
 	router.Handler(http.MethodPost, "/v1/movies", handleCreateMovie())
-	router.Handler(http.MethodGet, "/v1/movies/:id", handleGetMovie())
+	router.Handler(http.MethodGet, "/v1/movies/:id", handleGetMovie(app))
 
 	return router
 }

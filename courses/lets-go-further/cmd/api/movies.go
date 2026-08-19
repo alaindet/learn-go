@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
+
+	"app/internal/data"
 )
 
 func handleCreateMovie() http.Handler {
@@ -11,7 +14,7 @@ func handleCreateMovie() http.Handler {
 	})
 }
 
-func handleGetMovie() http.Handler {
+func handleGetMovie(app *application) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		id, err := readIDParam(r)
 		if err != nil {
@@ -19,6 +22,20 @@ func handleGetMovie() http.Handler {
 			return
 		}
 
-		fmt.Fprintf(w, "show details for the movie: %d\n", id)
+		movie := data.Movie{
+			ID:        id,
+			CreatedAt: time.Now(),
+			Title:     "Casablanca",
+			Runtime:   102,
+			Genres:    []string{"drama", "romance", "war"},
+			Version:   1,
+		}
+
+		err = writeJSON(w, http.StatusOK, movie, nil)
+		if err != nil {
+			app.logger.Error(err.Error())
+			errMessage := "The server encountered a problem and could not process your request"
+			http.Error(w, errMessage, http.StatusInternalServerError)
+		}
 	})
 }
