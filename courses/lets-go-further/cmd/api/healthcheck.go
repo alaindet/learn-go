@@ -6,9 +6,11 @@ import (
 )
 
 func handleHealthcheck(app *application) http.Handler {
+	jsonTemplate := `{"status": "available", "environment": %q, "version": %q}`
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "status: available")
-		fmt.Fprintf(w, "environment: %s\n", app.config.env)
-		fmt.Fprintf(w, "version: %s\n", version)
+		jsonData := fmt.Sprintf(jsonTemplate, app.config.env, version)
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(jsonData))
 	})
 }

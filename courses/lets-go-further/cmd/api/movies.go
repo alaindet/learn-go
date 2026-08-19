@@ -3,9 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strconv"
-
-	"github.com/julienschmidt/httprouter"
 )
 
 func handleCreateMovie() http.Handler {
@@ -16,11 +13,8 @@ func handleCreateMovie() http.Handler {
 
 func handleGetMovie() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		params := httprouter.ParamsFromContext(r.Context())
-
-		idParam := params.ByName("id") // It's an empty string if param is missing
-		id, err := strconv.Atoi(idParam)
-		if err != nil || id < 1 {
+		id, err := readIDParam(r)
+		if err != nil {
 			http.NotFound(w, r)
 			return
 		}
