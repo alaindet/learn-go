@@ -3,11 +3,11 @@ package data
 import "time"
 
 type Movie struct {
-	ID        int
-	CreatedAt time.Time
-	Title     string
-	Year      int
-	Runtime   int // minutes
-	Genres    []string
-	Version   int
+	ID        int       `json:"id"`
+	CreatedAt time.Time `json:"-"` // Always hide
+	Title     string    `json:"title"`
+	Year      int       `json:"year,omitzero"`
+	Runtime   int       `json:"runtime,omitzero"` // Minutes
+	Genres    []string  `json:"genres,omitzero"`
+	Version   int       `json:"version"`
 }
