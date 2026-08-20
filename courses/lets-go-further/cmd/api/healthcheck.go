@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/internal/helpers"
 	"net/http"
 )
 
@@ -13,7 +14,7 @@ func handleHealthcheck(app *application) http.Handler {
 			"version":     version,
 		}
 
-		err := writeJSON(w, http.StatusOK, data, nil)
+		err := helpers.WriteJSON(w, http.StatusOK, data, nil)
 
 		if err != nil {
 			app.logger.Error(err.Error())

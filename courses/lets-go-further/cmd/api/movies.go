@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"app/internal/data"
+	"app/internal/helpers"
 )
 
 func handleCreateMovie() http.Handler {
@@ -16,7 +17,7 @@ func handleCreateMovie() http.Handler {
 
 func handleGetMovie(app *application) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		id, err := readIDParam(r)
+		id, err := helpers.ReadIDParam(r)
 		if err != nil {
 			http.NotFound(w, r)
 			return
@@ -31,7 +32,7 @@ func handleGetMovie(app *application) http.Handler {
 			Version:   1,
 		}
 
-		err = writeJSON(w, http.StatusOK, movie, nil)
+		err = helpers.WriteJSON(w, http.StatusOK, movie, nil)
 		if err != nil {
 			app.logger.Error(err.Error())
 			errMessage := "The server encountered a problem and could not process your request"
