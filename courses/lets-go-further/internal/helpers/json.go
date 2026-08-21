@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"encoding/json/jsontext"
+	// "encoding/json/jsontext"
 	"encoding/json/v2"
 	"net/http"
 )
@@ -13,10 +13,10 @@ func WriteJSON(
 	headers http.Header,
 ) error {
 	// Prod
-	// jsonData, err := json.Marshal(data)
+	jsonData, err := json.Marshal(data)
 
 	// Dev
-	jsonData, err := json.Marshal(data, jsontext.Multiline(true))
+	// jsonData, err := json.Marshal(data, jsontext.Multiline(true))
 
 	if err != nil {
 		return err
