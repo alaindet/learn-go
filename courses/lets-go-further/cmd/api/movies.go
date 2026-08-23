@@ -9,21 +9,36 @@ import (
 	"app/internal/helpers"
 )
 
-func handleCreateMovie() http.Handler {
+func handleCreateMovie(app *application) http.Handler {
+	type requestData struct {
+		Title   string   `json:"title"`
+		Year    int      `json:"year"`
+		Runtime int      `json:"runtime"`
+		Genres  []string `json:"genres"`
+	}
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Create movie")
+		var input requestData
+		err := helpers.ReadJSON(w, r, &input)
+		if err != nil {
+			app.httpErr.BadRequest(w, r, err)
+			return
+		}
+
+		// Temporary
+		fmt.Fprintf(w, "%+v\n", input)
 	})
 }
 
-type GetMovieResponse struct {
-	Movie data.Movie `json:"movie"`
-}
-
 func handleGetMovie(app *application) http.Handler {
+	type responseData struct {
+		Movie data.Movie `json:"movie"`
+	}
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		id, err := helpers.ReadIDParam(r)
 		if err != nil {
-			http.NotFound(w, r)
+			app.httpErr.NotFound(w, r, err)
 			return
 		}
 
@@ -36,11 +51,9 @@ func handleGetMovie(app *application) http.Handler {
 			Version:   1,
 		}
 
-		err = helpers.WriteJSON(w, http.StatusOK, GetMovieResponse{Movie: movie}, nil)
+		err = helpers.WriteJSON(w, http.StatusOK, responseData{Movie: movie}, nil)
 		if err != nil {
-			app.logger.Error(err.Error())
-			errMessage := "The server encountered a problem and could not process your request"
-			http.Error(w, errMessage, http.StatusInternalServerError)
+			app.httpErr.InternalServerError(w, r, err)
 		}
 	})
 }

@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"app/internal/helpers/httperr"
 )
 
 const version = "1.0.0"
@@ -16,18 +18,14 @@ type config struct {
 	env  string
 }
 
-type application struct {
-	config config
-	logger *slog.Logger
-}
-
 func main() {
 	// Input
 	config := readConfig()
 
 	// Initialize app
 	logger := initLogger()
-	app := initApplication(config, logger)
+	httpErr := httperr.New(logger)
+	app := initApplication(config, logger, httpErr)
 	server := initServer(app)
 
 	// Bootstrap app
@@ -47,13 +45,6 @@ func readConfig() config {
 
 func initLogger() *slog.Logger {
 	return slog.New(slog.NewTextHandler(os.Stdout, nil))
-}
-
-func initApplication(cfg config, logger *slog.Logger) *application {
-	return &application{
-		config: cfg,
-		logger: logger,
-	}
 }
 
 func initServer(app *application) *http.Server {
