@@ -11,15 +11,14 @@ import (
 
 func handleCreateMovie(app *application) http.Handler {
 	type requestData struct {
-		Title   string   `json:"title"`
-		Year    int      `json:"year"`
-		Runtime int      `json:"runtime"`
-		Genres  []string `json:"genres"`
+		Title   string       `json:"title"`
+		Year    int          `json:"year"`
+		Runtime data.Runtime `json:"runtime"`
+		Genres  []string     `json:"genres"`
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var input requestData
-		err := helpers.ReadJSON(w, r, &input, nil)
+		input, err := helpers.ReadJSON[requestData](w, r)
 		if err != nil {
 			app.httpErr.BadRequest(w, r, err)
 			return
