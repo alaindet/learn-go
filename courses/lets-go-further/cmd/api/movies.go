@@ -24,6 +24,18 @@ func handleCreateMovie(app *application) http.Handler {
 			return
 		}
 
+		movie := data.Movie{
+			Title:   input.Title,
+			Year:    input.Year,
+			Runtime: input.Runtime,
+			Genres:  input.Genres,
+		}
+
+		if errs := data.ValidateMovie(movie); len(errs) > 0 {
+			app.httpErr.FailedValidation(w, r, errs)
+			return
+		}
+
 		// Temporary
 		fmt.Fprintf(w, "%+v\n", input)
 	})

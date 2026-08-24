@@ -1,8 +1,11 @@
 package httperr
 
 import (
+	"errors"
+	"fmt"
 	"log/slog"
 	"net/http"
+	"strings"
 
 	"app/internal/helpers"
 )
@@ -59,6 +62,31 @@ func (e HTTPErr) MethodNotAllowed(
 	err error,
 ) {
 	e.Send(w, r, http.StatusMethodNotAllowed, err)
+}
+
+func (e HTTPErr) UnprocessableEntity(
+	w http.ResponseWriter,
+	r *http.Request,
+	err error,
+) {
+	e.Send(w, r, http.StatusUnprocessableEntity, err)
+}
+
+func (e HTTPErr) FailedValidation(
+	w http.ResponseWriter,
+	r *http.Request,
+	errs map[string]string,
+) {
+	pairs := make([]string, 0)
+
+	for key, message := range errs {
+		pair := fmt.Sprintf("%s=%s", key, message)
+		pairs = append(pairs, pair)
+	}
+
+	serialized := strings.Join(pairs, ";")
+	err := errors.New(serialized)
+	e.Send(w, r, http.StatusUnprocessableEntity, err)
 }
 
 func (e HTTPErr) InternalServerError(
