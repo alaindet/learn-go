@@ -19,7 +19,7 @@ func handleCreateMovie(app *application) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var input requestData
-		err := helpers.ReadJSON(w, r, &input)
+		err := helpers.ReadJSON(w, r, &input, nil)
 		if err != nil {
 			app.httpErr.BadRequest(w, r, err)
 			return

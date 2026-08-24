@@ -49,10 +49,14 @@ func ReadJSON(
 	w http.ResponseWriter,
 	r *http.Request,
 	dest any,
+	maxBytes *int64,
 ) error {
-	// Set a hard limit of 2 MB
-	// TODO: Make this configurable?
-	r.Body = http.MaxBytesReader(w, r.Body, 2_097_152)
+	var _maxBytes int64 = 2_097_152 // 2 Megabytes
+	if maxBytes != nil {
+		_maxBytes = *maxBytes
+	}
+
+	r.Body = http.MaxBytesReader(w, r.Body, _maxBytes)
 
 	err := json.UnmarshalRead(
 		r.Body,
@@ -65,9 +69,11 @@ func ReadJSON(
 		return nil
 	}
 
-	var semanticError *json.SemanticError
-	var syntacticError *jsontext.SyntacticError
-	var maxBytesError *http.MaxBytesError
+	var (
+		semanticError  *json.SemanticError
+		syntacticError *jsontext.SyntacticError
+		maxBytesError  *http.MaxBytesError
+	)
 
 	switch {
 	case errors.Is(err, io.EOF):
@@ -76,18 +82,16 @@ func ReadJSON(
 	case errors.Is(err, io.ErrUnexpectedEOF):
 		return ErrMalformedJSON
 
-	case errors.As(err, &semanticError):
-		return fmt.Errorf(
-			"semantic error at byte offset %d: %w",
-			semanticError.ByteOffset,
-			semanticError,
-		)
-
 	case errors.As(err, &syntacticError):
 		return fmt.Errorf(
-			"syntax error at byte offset %d: %w",
+			"body contains badly-formed JSON (at character %d)",
+			syntacticError.ByteOffset,
+		)
+
+	case errors.As(err, &semanticError):
+		return fmt.Errorf(
+			"body contains badly-formed JSON (at character %d)",
 			semanticError.ByteOffset,
-			semanticError,
 		)
 
 	case errors.As(err, &maxBytesError):

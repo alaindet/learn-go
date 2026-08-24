@@ -1,0 +1,1 @@
+- [ ] Improve helpers.ReadJSON by removing the max size and using generics so that you don't need to declare the destination struct outside
