@@ -16,6 +16,9 @@ const version = "1.0.0"
 type config struct {
 	port int
 	env  string
+	db   struct {
+		dsn string
+	}
 }
 
 func main() {
@@ -25,12 +28,21 @@ func main() {
 	// Initialize app
 	logger := initLogger()
 	httpErr := httperr.New(logger)
-	app := initApplication(config, logger, httpErr)
+
+	db, err := openDB(config)
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+	db.Close()
+	logger.Info("database connection pool established")
+
+	app := initApplication(config, logger, httpErr, db)
 	server := initServer(app)
 
 	// Bootstrap app
 	logger.Info("starting server", "addr", server.Addr, "env", config.env)
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	logger.Error(err.Error())
 	os.Exit(1)
 }
@@ -39,6 +51,7 @@ func readConfig() config {
 	var cfg config
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Environment (development|staging|production)")
+	flag.StringVar(&cfg.db.dsn, "db-dsn", os.Getenv("GREENLIGHT_DB_DSN"), "PostgreSQL DSN")
 	flag.Parse()
 	return cfg
 }

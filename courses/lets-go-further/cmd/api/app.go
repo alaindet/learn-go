@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"errors"
 	"log/slog"
 	"net/http"
@@ -12,17 +13,20 @@ type application struct {
 	config  config
 	logger  *slog.Logger
 	httpErr *httperr.HTTPErr
+	db      *sql.DB
 }
 
 func initApplication(
 	cfg config,
 	logger *slog.Logger,
 	httpErr *httperr.HTTPErr,
+	db *sql.DB,
 ) *application {
 	return &application{
 		config:  cfg,
 		logger:  logger,
 		httpErr: httpErr,
+		db:      db,
 	}
 }
 

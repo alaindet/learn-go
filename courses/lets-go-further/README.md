@@ -10,18 +10,46 @@ go run ./cmd/api
 ```
 
 ### Database
-To start the database
+
+Control database container
 ```
-docker run --name greenlight-db \
-  -e POSTGRES_USER=admin \
-  -e POSTGRES_PASSWORD=admin \
-  -e POSTGRES_DB=greenlight \
-  -p 5432:5432 \
-  -v greenlight_pgdata:/var/lib/postgresql/data \
-  -d postgres:16-alpine
+# Start
+docker compose up -d
+
+# Stop
+docker compose down
+
+# Show logs
+docker compose logs -f postgres
+
+# Reset database data by wiping the Docker volume
+docker compose down -v
 ```
 
-To run `psql`
+Feed dsn to app
 ```
-docker exec -it greenlight-db psql -U admin -d greenlight
+# Directly
+go run ./cmd/api -db-dsn="postgres://greenlight_usr:greenlight_pwd@localhost:5432/greenlight_db?sslmode=disable"
+
+# View env
+export GREENLIGHT_DB_DSN="postgres://greenlight_usr:greenlight_pwd@localhost:5432/greenlight_db?sslmode=disable"
+go run ./cmd/api
+```
+
+How to execute `psql` commands
+```
+# This
+psql -d greenlight_db
+
+# Becomes this
+docker exec -it greenlight_container psql -U greenlight_usr -d greenlight_db
+```
+
+Migrations
+```
+# Apply migrations UP
+migrate -path=./migrations -database="postgres://greenlight_usr:greenlight_pwd@localhost:5432/greenlight_db?sslmode=disable" up
+
+# Apply migrations DOWN
+migrate -path=./migrations -database="postgres://greenlight_usr:greenlight_pwd@localhost:5432/greenlight_db?sslmode=disable" down
 ```
