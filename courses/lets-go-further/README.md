@@ -6,7 +6,7 @@ This repo is used to learn how to create a solid JSON RESTful API in Go via Alex
 
 ### Code in development mode
 ```
-go run ./cmd/api
+go run ./cmd/api -db-dsn="postgres://greenlight_usr:greenlight_pwd@localhost:5432/greenlight_db?sslmode=disable"
 ```
 
 ### Database

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"os"
 
 	"app/internal/helpers/httperr"
 )
@@ -16,18 +17,34 @@ type application struct {
 	db      *sql.DB
 }
 
-func initApplication(
-	cfg config,
-	logger *slog.Logger,
-	httpErr *httperr.HTTPErr,
-	db *sql.DB,
-) *application {
+func initApplication(cfg config) *application {
+
+	// Logger
+	logger := initLogger()
+
+	// HTTP Error
+	httpErr := httperr.New(logger)
+
+	// Database
+	db, err := openDB(logger, cfg.database)
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+	db.Close()
+	logger.Info("database connection pool established")
+
+	// App
 	return &application{
 		config:  cfg,
 		logger:  logger,
 		httpErr: httpErr,
 		db:      db,
 	}
+}
+
+func initLogger() *slog.Logger {
+	return slog.New(slog.NewTextHandler(os.Stdout, nil))
 }
 
 var (
