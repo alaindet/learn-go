@@ -1,15 +1,11 @@
 info:
-  name: Hello World
+  name: Orders
   type: http
   seq: 1
 
 http:
   method: GET
-  url: http://127.0.0.1:8080/person?id=1
-  params:
-    - name: id
-      value: "1"
-      type: query
+  url: http://localhost:3000/orders
   auth: inherit
 
 settings:
