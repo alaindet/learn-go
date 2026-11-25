@@ -1,7 +1,7 @@
 opencollection: 1.0.0
 
 info:
-  name: Simple API
+  name: simpleapi
 bundled: false
 extensions:
   bruno:

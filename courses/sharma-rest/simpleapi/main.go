@@ -32,9 +32,9 @@ func main() {
 
 	server := &http.Server{
 		Addr:    address,
-		Handler: nil,
+		Handler: nil, // TODO
 		TLSConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12, // Acceptable
+			MinVersion: tls.VersionTLS12, // Acceptable today
 		},
 		Protocols:    serverProtocols,
 		ReadTimeout:  5 * time.Second,
@@ -43,8 +43,7 @@ func main() {
 	}
 
 	fmt.Printf("Starting server on %s\n", address)
-	err := server.ListenAndServeTLS(cert, key)
-	if err != nil {
+	if err := server.ListenAndServeTLS(cert, key); err != nil {
 		log.Fatalln("could not start server", err)
 		panic(err)
 	}
