@@ -2,6 +2,12 @@
 
 This repo is used to learn how to create a solid JSON RESTful API in Go via Alex Edward's book "Let's Go Further".
 
+## Dependencies
+- https://github.com/rakyll/hey
+  `go install github.com/rakyll/hey@latest`
+- https://github.com/golang-migrate/migrate
+  `go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest`
+
 ## How to run
 
 ### Code in development mode
