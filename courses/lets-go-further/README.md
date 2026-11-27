@@ -28,6 +28,13 @@ docker compose logs -f postgres
 
 # Reset database data by wiping the Docker volume
 docker compose down -v
+
+# Run migrations
+# This is because golang-migrate cannot currently run as a "tool dependency" due to build tags not being accepted
+go run -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate \
+  -path=./database/migrations \
+  -database=postgres://greenlight_usr:greenlight_pwd@localhost:5432/greenlight_db?sslmode=disable \
+  up
 ```
 
 Feed dsn to app

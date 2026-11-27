@@ -47,7 +47,7 @@ func handleGetMovie(app *application) http.Handler {
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		id, err := helpers.ReadIDParam(r)
+		id, err := helpers.ReadInt64Param(r, "id")
 		if err != nil {
 			app.httpErr.NotFound(w, r, err)
 			return
