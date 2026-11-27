@@ -31,7 +31,7 @@ func handleCreateMovie(app *application) http.Handler {
 			Genres:  input.Genres,
 		}
 
-		if errs := data.ValidateMovie(movie); len(errs) > 0 {
+		if errs := movie.Validate(); len(errs) > 0 {
 			app.httpErr.FailedValidation(w, r, errs)
 			return
 		}

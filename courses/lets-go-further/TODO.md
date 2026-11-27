@@ -1,0 +1,2 @@
+- [ ] Make the movie genres a standalone entity
+- [ ] Migrate to sqlx/sqlc mix

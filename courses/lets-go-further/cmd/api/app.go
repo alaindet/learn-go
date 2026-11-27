@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"app/internal/data"
 	"app/internal/helpers/httperr"
 )
 
@@ -15,6 +16,7 @@ type application struct {
 	logger  *slog.Logger
 	httpErr *httperr.HTTPErr
 	db      *sql.DB
+	models  data.Models
 }
 
 func initApplication(cfg config) *application {
@@ -40,6 +42,7 @@ func initApplication(cfg config) *application {
 		logger:  logger,
 		httpErr: httpErr,
 		db:      db,
+		models:  data.NewModels(db),
 	}
 }
 
